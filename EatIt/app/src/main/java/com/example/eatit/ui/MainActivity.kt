@@ -1,4 +1,4 @@
-package com.example.eatit
+package com.example.eatit.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
