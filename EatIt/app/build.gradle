@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -53,15 +54,53 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation 'androidx.activity:activity-compose:1.7.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.compose.ui:ui:1.4.1"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.4.1"
     implementation 'androidx.compose.material3:material3:1.0.1'
+    implementation 'androidx.navigation:navigation-runtime-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-compose:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+    implementation 'com.google.dagger:hilt-android:2.45'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation "androidx.compose.material:material-icons-extended:1.4.1"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation 'com.google.dagger:hilt-android:2.46'
-    kapt 'com.google.dagger:hilt-compiler:2.46'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.4.1"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.4.1"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.1"
+    kapt 'com.google.dagger:hilt-compiler:2.45'//con ksp non funziona
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation "androidx.room:room-runtime:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    ksp "androidx.room:room-compiler:2.5.1"
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation "io.coil-kt:coil-compose:2.3.0"
+}
+class RoomSchemaArgProvider implements CommandLineArgumentProvider {
+
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    File schemaDir
+
+    RoomSchemaArgProvider(File schemaDir) {
+        this.schemaDir = schemaDir
+    }
+
+    @Override
+    Iterable<String> asArguments() {
+        // Note: If you're using KSP, you should change the line below to return
+        // ["room.schemaLocation=${schemaDir.path}"]
+        return ["room.schemaLocation=${schemaDir.path}".toString()]
+    }
+}
+kapt {
+    correctErrorTypes true
+}
+
+ksp {
+    arg(new RoomSchemaArgProvider(new File(projectDir, "schemas")))
 }
