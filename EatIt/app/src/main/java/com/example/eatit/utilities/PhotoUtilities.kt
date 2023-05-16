@@ -1,4 +1,4 @@
-package com.example.eatit
+package com.example.eatit.utilities
 
 import android.content.ContentResolver
 import android.content.ContentValues

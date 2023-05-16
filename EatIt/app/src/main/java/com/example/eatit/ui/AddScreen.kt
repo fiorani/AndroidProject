@@ -27,9 +27,9 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.createImageFile
+import com.example.eatit.utilities.createImageFile
 import com.example.eatit.data.Place
-import com.example.eatit.saveImage
+import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.PlacesViewModel
 import java.util.*
 

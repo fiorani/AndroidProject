@@ -1,7 +1,9 @@
-package com.example.eatit.data
+package com.example.eatit.di
 
 import android.content.Context
 import com.example.eatit.EatItApp
+import com.example.eatit.data.PlacesRepository
+import com.example.eatit.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
