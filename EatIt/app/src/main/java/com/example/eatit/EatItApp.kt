@@ -148,7 +148,7 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            HomeScreen(
+            /*HomeScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.Add.name)
                 },
@@ -156,7 +156,8 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Details.name)
                 },
                 placesViewModel = placesViewModel
-            )
+            )*/
+            UserProfileScreen()
         }
         composable(route = AppScreen.Add.name) {
             AddScreen(
