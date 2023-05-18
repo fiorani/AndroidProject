@@ -3,9 +3,12 @@ package com.example.eatit
 import android.app.Application
 import android.net.ConnectivityManager
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -31,10 +34,11 @@ import com.example.eatit.viewModel.WarningViewModel
 import dagger.hilt.android.HiltAndroidApp
 
 sealed class AppScreen(val name: String) {
-    object Home : AppScreen("Home")
+    object Home : AppScreen("EatIt")
     object Add : AppScreen("Add Screen")
     object Details : AppScreen("Details Screen")
     object Settings : AppScreen("Settings Screen")
+    object UserProfile : AppScreen("User Profile Screen")
 }
 
 
@@ -49,14 +53,18 @@ fun TopAppBarFunction(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    onSettingsButtonClicked: () -> Unit
+    onSettingsButtonClicked: () -> Unit,
+    onUserProfileButtonClicked: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Text(
-                text = currentScreen,
-                fontWeight = FontWeight.Medium,
-            )
+            Row(){
+                Icon(Icons.Filled.LunchDining, contentDescription = stringResource(id = R.string.back))
+                Text(
+                    text = currentScreen,
+                    fontWeight = FontWeight.Medium,
+                )
+            }
         },
         modifier = modifier,
         navigationIcon = {
@@ -71,9 +79,12 @@ fun TopAppBarFunction(
             }
         },
         actions = {
-            if (currentScreen == AppScreen.Home.name) {
-                IconButton(onClick = { /* doSomething() */ }) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search")
+            if (currentScreen != AppScreen.UserProfile.name) {
+                IconButton(onClick = onUserProfileButtonClicked) {
+                    Icon(
+                        Icons.Filled.AccountCircle,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
                 }
             }
             if (currentScreen != AppScreen.Settings.name) {
@@ -84,10 +95,7 @@ fun TopAppBarFunction(
                     )
                 }
             }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        }
     )
 }
 
@@ -112,7 +120,8 @@ fun NavigationApp(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
-                onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) }
+                onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
+                onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) }
             )
         }
     ) { innerPadding ->
@@ -148,7 +157,7 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            /*HomeScreen(
+            HomeScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.Add.name)
                 },
@@ -156,8 +165,7 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Details.name)
                 },
                 placesViewModel = placesViewModel
-            )*/
-            UserProfileScreen()
+            )
         }
         composable(route = AppScreen.Add.name) {
             AddScreen(
@@ -174,6 +182,9 @@ private fun NavigationGraph(
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             SettingsScreen(settingsViewModel)
+        }
+        composable(route = AppScreen.UserProfile.name) {
+            UserProfileScreen()
         }
     }
 }
