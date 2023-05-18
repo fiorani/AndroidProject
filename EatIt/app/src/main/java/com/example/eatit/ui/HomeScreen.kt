@@ -3,17 +3,24 @@ package com.example.eatit.ui
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,11 +51,70 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
+        var active by remember { mutableStateOf(false) }
+        var query by remember { mutableStateOf("") }
+        val data = remember {
+            listOf(
+                "Ristorante A",
+                "Ristorante B",
+                "Ristorante C",
+                "Ristorante D",
+                "Ristorante E",
+                "Ristorante F",
+                "Ristorante G",
+                "Ristorante H",
+                "Ristorante I",
+                "Ristorante J"
+            )
+        }
         Column (modifier.padding(innerPadding)) {
-            TravelsList(onItemClicked, placesViewModel)
+            SearchBar(
+                query = query,
+                onQueryChange = { query = it },
+                onSearch = { active = false },
+                active = active,
+                onActiveChange = { active = it }
+            ) {
+                val filteredData = data.filter { item ->
+                    item.contains(query, ignoreCase = true)
+                }
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    items(filteredData) { item ->
+                        ristorantCard(item)
+                    }
+                }
+            }
         }
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ristorantCard(item: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Filled.AccountCircle, contentDescription = stringResource(id = R.string.back), modifier = Modifier.size(100.dp))
+            Text(
+                text = item,
+                modifier = Modifier.padding(8.dp),
+                fontSize = 32.sp
+            )
+            Text(
+                text = "address",
+                modifier = Modifier.padding(8.dp),
+                fontSize = 32.sp
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
