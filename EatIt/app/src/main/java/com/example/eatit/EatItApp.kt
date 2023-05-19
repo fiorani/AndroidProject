@@ -166,6 +166,8 @@ private fun NavigationGraph(
                 },
                 placesViewModel = placesViewModel
             )
+            //TODO: Refactor
+            //UserRegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
         }
         composable(route = AppScreen.Add.name) {
             AddScreen(
@@ -173,7 +175,7 @@ private fun NavigationGraph(
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
                 placesViewModel = placesViewModel,
-                startLocationUpdates
+            startLocationUpdates
             )
         }
         composable(route = AppScreen.Details.name) {
