@@ -22,28 +22,82 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserRegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewModel, startLocationUpdates: () -> Unit) {
+fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewModel, startLocationUpdates: () -> Unit) {
     Scaffold () { innerPadding ->
         Column (modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
+            val isUserRegister = remember { mutableStateOf(true) }
+            var strTitle = "User registration"
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(50.dp, 0.dp),
+                text = "Do you want to register as a customer or as a restaurant?",
+                fontSize = 20.sp
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ){
+                Button(
+                    modifier = Modifier.padding(10.dp),
+                    onClick = {
+                        isUserRegister.value = true
+                        strTitle = "User registration"
+                    },
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                ) {
+                    Text(
+                        text = "Customer",
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp
+                    )
+                }
+                Button(
+                    modifier = Modifier.padding(10.dp),
+                    onClick = {
+                        isUserRegister.value = false
+                        strTitle = "Restaurant registration"
+                    },
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+                ) {
+                    Text(
+                        text = "Restaurant",
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(40.dp,50.dp,40.dp, 40.dp),
+                    .padding(40.dp,20.dp,40.dp, 0.dp),
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Register",
-                        fontSize = 32.sp
+                        text = strTitle,
+                        fontSize = 25.sp
                     )
 
-                    var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
+                    if (isUserRegister.value) {
+                        var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                            mutableStateOf(TextFieldValue(""))
+                        }
+                        OutlinedTextField(
+                            value = txtNickname,
+                            onValueChange = { txtNickname = it },
+                            label = { Text("Nickname") }
+                        )
                     }
-                    OutlinedTextField(
-                        value = txtNickname,
-                        onValueChange = { txtNickname = it },
-                        label = { Text("Nickname") }
-                    )
+
+                    if (!isUserRegister.value) {
+                        var txtDenomination by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                            mutableStateOf(TextFieldValue(""))
+                        }
+                        OutlinedTextField(
+                            value = txtDenomination,
+                            onValueChange = { txtDenomination = it },
+                            label = { Text("Denomination") }
+                        )
+                    }
 
                     var txtName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
@@ -72,54 +126,69 @@ fun UserRegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesVie
                         label = { Text("Password") }
                     )
 
-                    // date picker not fully working: 'ok' button broken, not checking for future dates.
-                    var txtBirth by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
+                    if (!isUserRegister.value) {
+                        var txtPIVA by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                            mutableStateOf(TextFieldValue(""))
+                        }
+                        OutlinedTextField(
+                            value = txtPIVA,
+                            onValueChange = { txtPIVA = it },
+                            label = { Text("P.IVA") }
+                        )
                     }
-                    val openDialog = remember { mutableStateOf(false) }
 
-                    OutlinedTextField(
-                        value = txtBirth,
-                        onValueChange = {//from the second time on you select the text field
-                            openDialog.value = true
-                        },
-                        modifier = Modifier.onFocusEvent {//for the first time you select the text field
-                            if(it.isFocused){
+                    if (isUserRegister.value) {
+                        // date picker not fully working: 'ok' button broken, not checking for future dates.
+                        var txtBirth by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                            mutableStateOf(TextFieldValue(""))
+                        }
+                        val openDialog = remember { mutableStateOf(false) }
+
+                        OutlinedTextField(
+                            value = txtBirth,
+                            onValueChange = {//from the second time on you select the text field
                                 openDialog.value = true
-                            }
-                        },
-                        label = { Text("Birthday") }
-                    )
+                            },
+                            modifier = Modifier.onFocusEvent {//for the first time you select the text field
+                                if (it.isFocused) {
+                                    openDialog.value = true
+                                }
+                            },
+                            label = { Text("Birthday") }
+                        )
 
-                    if (openDialog.value) {
-                        val datePickerState = rememberDatePickerState()
-                        val confirmEnabled = remember {derivedStateOf { datePickerState.selectedDateMillis != null }}
-                        DatePickerDialog(
-                            onDismissRequest = {
-                                openDialog.value = false
-                            },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        openDialog.value = false
-                                        txtBirth = TextFieldValue(getDate(datePickerState.selectedDateMillis))
-                                    },
-                                    enabled = confirmEnabled.value
-                                ) {
-                                    Text("OK")
-                                }
-                            },
-                            dismissButton = {
-                                TextButton(
-                                    onClick = {
-                                        openDialog.value = false
+                        if (openDialog.value) {
+                            val datePickerState = rememberDatePickerState()
+                            val confirmEnabled =
+                                remember { derivedStateOf { datePickerState.selectedDateMillis != null } }
+                            DatePickerDialog(
+                                onDismissRequest = {
+                                    openDialog.value = false
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            openDialog.value = false
+                                            txtBirth =
+                                                TextFieldValue(getDate(datePickerState.selectedDateMillis))
+                                        },
+                                        enabled = confirmEnabled.value
+                                    ) {
+                                        Text("OK")
                                     }
-                                ) {
-                                    Text("Cancel")
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = {
+                                            openDialog.value = false
+                                        }
+                                    ) {
+                                        Text("Cancel")
+                                    }
                                 }
+                            ) {
+                                DatePicker(state = datePickerState)
                             }
-                        ) {
-                            DatePicker(state = datePickerState)
                         }
                     }
 
@@ -184,7 +253,7 @@ fun UserRegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesVie
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(70.dp, 0.dp),
+                    .padding(70.dp, 40.dp),
                 horizontalArrangement= Arrangement.Center,
             ){
                 Column() {

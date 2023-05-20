@@ -94,7 +94,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     Button(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(60.dp, 5.dp),
+                            .padding(55.dp, 5.dp),
                         onClick = { /* Do something! */ },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {

@@ -167,7 +167,8 @@ private fun NavigationGraph(
                 placesViewModel = placesViewModel
             )
             //TODO: Refactor
-            //UserRegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
+            //RegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
+            //LoginScreen()
         }
         composable(route = AppScreen.Add.name) {
             AddScreen(
