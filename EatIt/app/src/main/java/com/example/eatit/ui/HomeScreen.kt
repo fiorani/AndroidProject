@@ -30,15 +30,15 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.data.Place
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.data.Restaurant
+import com.example.eatit.viewModel.RestaurantsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onAddButtonClicked: () -> Unit,
     onItemClicked:  () -> Unit,
-    placesViewModel: PlacesViewModel,
+    restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier) {
 
     Scaffold (
@@ -49,15 +49,15 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         Column (modifier.padding(innerPadding)) {
-            ristorantList(onItemClicked, placesViewModel)
+            ristorantList(onItemClicked, restaurantsViewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
-    val places = placesViewModel.places.collectAsState(initial = listOf()).value
+fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
+    val restaurants = restaurantsViewModel.restaurants.collectAsState(initial = listOf()).value
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     Column() {
@@ -69,14 +69,14 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
             onActiveChange = { active = it },
             modifier = Modifier.fillMaxWidth()
         ) {
-            val filteredData = places.filter { item ->
-                item.placeName.contains(query, ignoreCase = true)
+            val filteredData = restaurants.filter { item ->
+                item.restaurantName.contains(query, ignoreCase = true)
             }
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(filteredData) { item ->
-                    ristorantCard(item,onItemClicked, placesViewModel)
+                    ristorantCard(item,onItemClicked, restaurantsViewModel)
                 }
             }
         }
@@ -84,18 +84,18 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        items(items = places) { place ->
-            ristorantCard(place,onItemClicked, placesViewModel)
+        items(items = restaurants) { restaurant ->
+            ristorantCard(restaurant,onItemClicked, restaurantsViewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ristorantCard(place: Place,onItemClicked: () -> Unit,placesViewModel: PlacesViewModel) {
+fun ristorantCard(restaurant: Restaurant,onItemClicked: () -> Unit,restaurantsViewModel: RestaurantsViewModel) {
     Card(
         onClick = {
-            placesViewModel.selectPlace(place)
+            restaurantsViewModel.selectRestaurant(restaurant)
             onItemClicked()
         },
         modifier = Modifier
@@ -111,7 +111,7 @@ fun ristorantCard(place: Place,onItemClicked: () -> Unit,placesViewModel: Places
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (place.placePhoto.isEmpty()) {
+            if (restaurant.restaurantPhoto.isEmpty()) {
                 Image(
 
                     painter = painterResource(id = R.drawable.baseline_android_24),
@@ -123,21 +123,21 @@ fun ristorantCard(place: Place,onItemClicked: () -> Unit,placesViewModel: Places
                 )
             } else {
                 AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(place.placePhoto))
+                    .data(Uri.parse(restaurant.restaurantPhoto))
                     .crossfade(true)
                     .build(),
-                    contentDescription = "image of the place",
+                    contentDescription = "image of the restaurant",
                     modifier = Modifier
                         .clip(shape = CircleShape)
                         .size(size = 50.dp))
             }
             Text(
-                text = place.placeName,
+                text = restaurant.restaurantName,
                 modifier = Modifier.padding(8.dp),
                 fontSize = 32.sp
             )
             Text(
-                text = place.placeAddress,
+                text = restaurant.restaurantAddress,
                 modifier = Modifier.padding(8.dp),
                 fontSize = 16.sp
             )

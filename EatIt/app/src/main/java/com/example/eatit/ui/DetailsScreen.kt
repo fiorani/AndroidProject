@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.data.Place
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.data.Restaurant
+import com.example.eatit.viewModel.RestaurantsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () -> Unit) {
+fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddButtonClicked: () -> Unit) {
     val context = LocalContext.current
-    val selectedPlace = placesViewModel.placeSelected
+    val selectedRestaurant = restaurantsViewModel.restaurantSelected
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick =  onAddButtonClicked ) {
@@ -43,10 +43,10 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () 
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            if (selectedPlace?.placePhoto?.isEmpty() == true) {
+            if (selectedRestaurant?.restaurantPhoto?.isEmpty() == true) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_android_24),
-                    contentDescription = "image placeholder",
+                    contentDescription = "image restaurantholder",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),
@@ -56,10 +56,10 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () 
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(selectedPlace?.placePhoto))
+                        .data(Uri.parse(selectedRestaurant?.restaurantPhoto))
                         .crossfade(true)
                         .build(),
-                    contentDescription = "image of the place",
+                    contentDescription = "image of the restaurant",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
@@ -69,7 +69,7 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () 
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = selectedPlace?.placeName?:stringResource(id = R.string.place_name),
+                text = selectedRestaurant?.restaurantName?:stringResource(id = R.string.restaurant_name),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -77,7 +77,7 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () 
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = selectedPlace?.placeDescription?:stringResource(id = R.string.place_description),
+                text = selectedRestaurant?.restaurantDescription?:stringResource(id = R.string.restaurant_description),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -85,10 +85,10 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () 
     }
 }
 
-private fun shareDetails(context: Context, place: Place?){
+private fun shareDetails(context: Context, restaurant: Restaurant?){
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, place?.placeName?:"No place")
+        putExtra(Intent.EXTRA_TEXT, restaurant?.restaurantName?:"No restaurant")
         type = "text/plain"
     }
 

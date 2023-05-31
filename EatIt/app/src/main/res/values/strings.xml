@@ -5,8 +5,8 @@
     <string name="restaurant_details">Travel Details</string>
     <string name="settings">Settings</string>
 
-    <string name="place_name">Name</string>
-    <string name="place_description">Description</string>
-    <string name="place_address">Address</string>
+    <string name="restaurant_name">Name</string>
+    <string name="restaurant_description">Description</string>
+    <string name="restaurant_address">Address</string>
     <string name="back">Back</string>
 </resources>

@@ -23,9 +23,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eatit.data.PlacesDatabase
+import com.example.eatit.data.RestaurantsDatabase
 import com.example.eatit.ui.*
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import dagger.hilt.android.HiltAndroidApp
@@ -42,7 +42,7 @@ sealed class AppScreen(val name: String) {
 
 @HiltAndroidApp
 class EatItApp : Application() {
-    val database by lazy { PlacesDatabase.getDatabase(this) }
+    val database by lazy { RestaurantsDatabase.getDatabase(this) }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -148,7 +148,7 @@ private fun NavigationGraph(
     startLocationUpdates: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val placesViewModel = hiltViewModel<PlacesViewModel>()
+    val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -162,19 +162,19 @@ private fun NavigationGraph(
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
-                placesViewModel = placesViewModel
+                restaurantsViewModel = restaurantsViewModel
             )
             //TODO: Refactor
-            //RegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
+            //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
             //RestaurantHomeScreen()
         }
         composable(route = AppScreen.AddRestaurant.name) {
-            AddPlaceScreen(
+            AddRestaurantScreen(
                 onNextButtonClicked = {
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
-                placesViewModel = placesViewModel,
+                restaurantsViewModel = restaurantsViewModel,
             startLocationUpdates
             )
         }
@@ -182,10 +182,10 @@ private fun NavigationGraph(
             AddProductScreen(onNextButtonClicked = {
                 navController.popBackStack(AppScreen.Home.name, inclusive = false)
             },
-                placesViewModel = placesViewModel)
+                restaurantsViewModel = restaurantsViewModel)
         }
         composable(route = AppScreen.Details.name) {
-            DetailsPlaceScreen(placesViewModel = placesViewModel,onAddButtonClicked = {
+            DetailsRestaurantScreen(restaurantsViewModel = restaurantsViewModel,onAddButtonClicked = {
                 navController.navigate(AppScreen.AddProduct.name)
             } )
         }

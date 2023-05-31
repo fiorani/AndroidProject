@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2b22453bffb3df92d4bbfe99770d2279",
+    "identityHash": "83e6e850b11462d5f219836a25889b55",
     "entities": [
       {
         "tableName": "restaurants",
@@ -33,7 +33,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "travelPhoto",
+            "fieldPath": "restaurantPhoto",
             "columnName": "travel_photo",
             "affinity": "TEXT",
             "notNull": true
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2b22453bffb3df92d4bbfe99770d2279')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83e6e850b11462d5f219836a25889b55')"
     ]
   }
 }

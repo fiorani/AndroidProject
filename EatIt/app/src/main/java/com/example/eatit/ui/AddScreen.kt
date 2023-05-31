@@ -28,20 +28,20 @@ import coil.request.ImageRequest
 import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
 import com.example.eatit.utilities.createImageFile
-import com.example.eatit.data.Place
+import com.example.eatit.data.Restaurant
 import com.example.eatit.utilities.saveImage
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlaceScreen(
+fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
-    placesViewModel: PlacesViewModel,
+    restaurantsViewModel: RestaurantsViewModel,
     startLocationUpdates: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { placesViewModel.placeFromGPS }
+    var address by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
     var description by rememberSaveable { mutableStateOf("") }
     var photoURI by rememberSaveable { mutableStateOf("") }
 
@@ -65,7 +65,7 @@ fun AddPlaceScreen(
                         address = newText
                     },
                     label = {
-                        Text(stringResource(id = R.string.place_address))
+                        Text(stringResource(id = R.string.restaurant_address))
                     },
                     modifier = Modifier.weight(4f)
                 )
@@ -83,7 +83,7 @@ fun AddPlaceScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text(stringResource(id = R.string.place_name)) },
+                label = { Text(stringResource(id = R.string.restaurant_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -92,7 +92,7 @@ fun AddPlaceScreen(
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text(stringResource(id = R.string.place_description)) },
+                label = { Text(stringResource(id = R.string.restaurant_description)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -160,8 +160,8 @@ fun AddPlaceScreen(
 
             Button(
                 onClick = {
-                    placesViewModel.addNewPlace(
-                        Place(placeName = name, placeAddress = address, placeDescription = description, placePhoto = photoURI)
+                    restaurantsViewModel.addNewRestaurant(
+                        Restaurant(restaurantName = name, restaurantAddress = address, restaurantDescription = description, restaurantPhoto = photoURI)
                     )
                     onNextButtonClicked()
                 },
@@ -179,7 +179,7 @@ fun AddPlaceScreen(
 @Composable
 fun AddProductScreen(
     onNextButtonClicked: () -> Unit,
-    placesViewModel: PlacesViewModel,
+    restaurantsViewModel: RestaurantsViewModel,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
@@ -199,7 +199,7 @@ fun AddProductScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text(stringResource(id = R.string.place_name)) },
+                label = { Text(stringResource(id = R.string.restaurant_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -208,7 +208,7 @@ fun AddProductScreen(
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text(stringResource(id = R.string.place_description)) },
+                label = { Text(stringResource(id = R.string.restaurant_description)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -218,7 +218,7 @@ fun AddProductScreen(
             OutlinedTextField(
                 value = price,
                 onValueChange = { price = it },
-                label = { Text(stringResource(id = R.string.place_description)) },
+                label = { Text(stringResource(id = R.string.restaurant_description)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(15.dp))

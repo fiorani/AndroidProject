@@ -3,42 +3,42 @@ package com.example.eatit.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eatit.data.Place
-import com.example.eatit.data.PlacesRepository
+import com.example.eatit.data.Restaurant
+import com.example.eatit.data.RestaurantsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlacesViewModel @Inject constructor(
-    private val repository: PlacesRepository
+class RestaurantsViewModel @Inject constructor(
+    private val repository: RestaurantsRepository
 ) : ViewModel() {
 
-    val places = repository.places
+    val restaurants = repository.restaurants
 
-    fun addNewPlace(place: Place) = viewModelScope.launch {
-        repository.insertNewPlace(place)
-        resetGPSPlace()
+    fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
+        repository.insertNewRestaurant(restaurant)
+        resetGPSRestaurant()
     }
 
-    private var _placeSelected: Place? = null
-    val placeSelected
-        get() = _placeSelected
+    private var _restaurantSelected: Restaurant? = null
+    val restaurantSelected
+        get() = _restaurantSelected
 
-    fun selectPlace(place: Place) {
-        _placeSelected = place
+    fun selectRestaurant(restaurant: Restaurant) {
+        _restaurantSelected = restaurant
     }
 
 
-    private var _placeFromGPS = mutableStateOf("")
-    val placeFromGPS
-        get() = _placeFromGPS
+    private var _restaurantFromGPS = mutableStateOf("")
+    val restaurantFromGPS
+        get() = _restaurantFromGPS
 
-    fun setGPSPlace(place: String) {
-        _placeFromGPS.value = place
+    fun setGPSRestaurant(restaurant: String) {
+        _restaurantFromGPS.value = restaurant
     }
 
-    private fun resetGPSPlace() {
-        _placeFromGPS.value = ""
+    private fun resetGPSRestaurant() {
+        _restaurantFromGPS.value = ""
     }
 }

@@ -16,12 +16,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewModel, startLocationUpdates: () -> Unit) {
+fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: RestaurantsViewModel, startLocationUpdates: () -> Unit) {
     Scaffold () { innerPadding ->
         Column (modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
             OrderCard(customerName = "Marco", customerAddress= "Via O. Brobrio", total = 14.60f, orderDate = "19-10-2023")
@@ -194,7 +194,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewMod
 
                     //Maps: Don't know if it's working correctly
                     Row() {
-                        var title by rememberSaveable { placesViewModel.placeFromGPS }
+                        var title by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
                         OutlinedTextField(
                             value = title,
                             onValueChange = { newText ->
