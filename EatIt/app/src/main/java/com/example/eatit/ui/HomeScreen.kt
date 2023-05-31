@@ -1,6 +1,7 @@
 package com.example.eatit.ui
 
 import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -103,6 +105,10 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
+                colors = CardDefaults.cardColors(Color.White),
+                elevation = CardDefaults.cardElevation(8.dp),
+                shape = CardDefaults.shape,
+
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
