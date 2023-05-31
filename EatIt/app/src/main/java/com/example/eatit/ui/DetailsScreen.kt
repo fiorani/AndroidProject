@@ -25,7 +25,7 @@ import com.example.eatit.viewModel.PlacesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(placesViewModel: PlacesViewModel) {
+fun DetailsPlaceScreen(placesViewModel: PlacesViewModel) {
     val context = LocalContext.current
     val selectedPlace = placesViewModel.placeSelected
     Scaffold(

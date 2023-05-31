@@ -33,7 +33,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(
+fun AddPlaceScreen(
     onNextButtonClicked: () -> Unit,
     placesViewModel: PlacesViewModel,
     startLocationUpdates: () -> Unit,

@@ -1,7 +1,6 @@
 package com.example.eatit
 
 import android.app.Application
-import android.net.ConnectivityManager
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LunchDining
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eatit.data.LocationDetails
 import com.example.eatit.data.PlacesDatabase
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.PlacesViewModel
@@ -171,7 +168,7 @@ private fun NavigationGraph(
             //LoginScreen()
         }
         composable(route = AppScreen.Add.name) {
-            AddScreen(
+            AddPlaceScreen(
                 onNextButtonClicked = {
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
@@ -180,7 +177,7 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.Details.name) {
-            DetailsScreen(placesViewModel = placesViewModel)
+            DetailsPlaceScreen(placesViewModel = placesViewModel)
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
