@@ -218,7 +218,7 @@ fun AddProductScreen(
             OutlinedTextField(
                 value = price,
                 onValueChange = { price = it },
-                label = { Text(stringResource(id = R.string.restaurant_description)) },
+                label = { Text(stringResource(id = R.string.restaurant_price)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(15.dp))
