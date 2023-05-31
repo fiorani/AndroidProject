@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.data.Place
@@ -69,7 +71,7 @@ fun AddPlaceScreen(
                 )
 
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
+                    Icons.Filled.LocationSearching,
                     contentDescription = "get gps",
                     modifier = Modifier
                         .weight(1f)
@@ -163,6 +165,7 @@ fun AddPlaceScreen(
                     )
                     onNextButtonClicked()
                 },
+                colors = ButtonDefaults.buttonColors(Color.Green),
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Text(text = stringResource(id = R.string.save))

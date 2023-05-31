@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -207,7 +209,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewMod
                         )
 
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
+                            Icons.Filled.LocationSearching,
                             contentDescription = "get gps",
                             modifier = Modifier.weight(1f).padding(20.dp).clickable(onClick = startLocationUpdates)
                         )

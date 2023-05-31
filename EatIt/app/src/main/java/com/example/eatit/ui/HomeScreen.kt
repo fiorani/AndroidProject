@@ -105,7 +105,7 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                colors = CardDefaults.cardColors(Color.White),
+                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(8.dp),
                 shape = CardDefaults.shape,
 
