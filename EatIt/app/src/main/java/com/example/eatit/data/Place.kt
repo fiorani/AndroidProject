@@ -14,11 +14,11 @@ data class Place (
     @ColumnInfo(name = "place_name")
     var placeName: String,
 
+    @ColumnInfo(name = "place_address")
+    var placeAddress: String,
+
     @ColumnInfo(name = "place_description")
     var placeDescription: String,
-
-    @ColumnInfo(name = "travel_date")
-    var travelDate: String,
 
     @ColumnInfo(name = "travel_photo")
     var travelPhoto: String

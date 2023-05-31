@@ -5,14 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +31,7 @@ fun DetailsScreen(placesViewModel: PlacesViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { shareDetails(context, selectedPlace) }) {
-                Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.add_travel))
+                Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.add_restaurant))
             }
         }
     ) { paddingValues ->
@@ -70,17 +68,9 @@ fun DetailsScreen(placesViewModel: PlacesViewModel) {
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = selectedPlace?.placeName?:stringResource(id = R.string.place_title),
+                text = selectedPlace?.placeName?:stringResource(id = R.string.place_name),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            Text(
-                text = selectedPlace?.travelDate?:stringResource(id = R.string.place_date),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodySmall
             )
 
             Spacer(modifier = Modifier.size(15.dp))
@@ -90,7 +80,6 @@ fun DetailsScreen(placesViewModel: PlacesViewModel) {
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium
             )
-
         }
     }
 }

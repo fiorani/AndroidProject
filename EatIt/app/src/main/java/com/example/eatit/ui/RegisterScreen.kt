@@ -201,7 +201,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewMod
                                 title = newText
                             },
                             label = {
-                                Text(stringResource(id = R.string.place_title))
+                                Text(stringResource(id = R.string.place_name))
                             },
                             modifier = Modifier.weight(4f)
                         )

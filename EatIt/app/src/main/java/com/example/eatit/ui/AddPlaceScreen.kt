@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -40,21 +38,20 @@ fun AddScreen(
     placesViewModel: PlacesViewModel,
     startLocationUpdates: () -> Unit,
 ) {
-    var title by rememberSaveable { placesViewModel.placeFromGPS }
-    var travelDate by rememberSaveable { mutableStateOf("") }
-    var travelDescription by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var address by rememberSaveable { placesViewModel.placeFromGPS }
+    var description by rememberSaveable { mutableStateOf("") }
     var photoURI by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick =  {
                 placesViewModel.addNewPlace(
-                    Place(placeName = title, travelDate = travelDate,
-                        placeDescription = travelDescription, travelPhoto = photoURI)
+                    Place(placeName = name, placeAddress = address, placeDescription = description, travelPhoto = photoURI)
                 )
                 onNextButtonClicked()
             } ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_travel))
+                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_restaurant))
             }
         }
     ) { paddingValues ->
@@ -71,12 +68,12 @@ fun AddScreen(
 
             ) {
                 OutlinedTextField(
-                    value = title,
+                    value = address,
                     onValueChange = { newText ->
-                        title = newText
+                        address = newText
                     },
                     label = {
-                        Text(stringResource(id = R.string.place_title))
+                        Text(stringResource(id = R.string.place_address))
                     },
                     modifier = Modifier.weight(4f)
                 )
@@ -87,22 +84,20 @@ fun AddScreen(
                     modifier = Modifier.weight(1f).clickable(onClick = startLocationUpdates)
                 )
             }
-
             Spacer(modifier = Modifier.size(15.dp))
 
             OutlinedTextField(
-                value = travelDate,
-                onValueChange = { travelDate = it },
-                label = { Text(stringResource(id = R.string.place_date)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource(id = R.string.place_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.size(15.dp))
 
             OutlinedTextField(
-                value = travelDescription,
-                onValueChange = { travelDescription = it },
+                value = description,
+                onValueChange = { description = it },
                 label = { Text(stringResource(id = R.string.place_description)) },
                 modifier = Modifier.fillMaxWidth()
             )
