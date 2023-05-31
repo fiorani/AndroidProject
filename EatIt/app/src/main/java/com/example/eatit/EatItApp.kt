@@ -32,7 +32,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("EatIt")
-    object Add : AppScreen("Add Restaurant")
+    object AddRestaurant : AppScreen("Add Restaurant")
+    object AddProduct : AppScreen("Add Product")
     object Details : AppScreen("Details Screen")
     object Settings : AppScreen("Settings Screen")
     object UserProfile : AppScreen("User Profile Screen")
@@ -156,7 +157,7 @@ private fun NavigationGraph(
         composable(route = AppScreen.Home.name) {
             HomeScreen(
                 onAddButtonClicked = {
-                    navController.navigate(AppScreen.Add.name)
+                    navController.navigate(AppScreen.AddRestaurant.name)
                 },
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
@@ -167,7 +168,7 @@ private fun NavigationGraph(
             //RegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
         }
-        composable(route = AppScreen.Add.name) {
+        composable(route = AppScreen.AddRestaurant.name) {
             AddPlaceScreen(
                 onNextButtonClicked = {
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
@@ -176,8 +177,16 @@ private fun NavigationGraph(
             startLocationUpdates
             )
         }
+        composable(route = AppScreen.AddProduct.name) {
+            AddProductScreen(onNextButtonClicked = {
+                navController.popBackStack(AppScreen.Home.name, inclusive = false)
+            },
+                placesViewModel = placesViewModel)
+        }
         composable(route = AppScreen.Details.name) {
-            DetailsPlaceScreen(placesViewModel = placesViewModel)
+            DetailsPlaceScreen(placesViewModel = placesViewModel,onAddButtonClicked = {
+                navController.navigate(AppScreen.AddProduct.name)
+            } )
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()

@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,15 +26,15 @@ import com.example.eatit.viewModel.PlacesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsPlaceScreen(placesViewModel: PlacesViewModel) {
+fun DetailsPlaceScreen(placesViewModel: PlacesViewModel, onAddButtonClicked: () -> Unit) {
     val context = LocalContext.current
     val selectedPlace = placesViewModel.placeSelected
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { shareDetails(context, selectedPlace) }) {
-                Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.add_restaurant))
+            FloatingActionButton(onClick =  onAddButtonClicked ) {
+                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_restaurant))
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
