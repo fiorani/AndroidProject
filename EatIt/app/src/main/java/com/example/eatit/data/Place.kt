@@ -21,5 +21,5 @@ data class Place (
     var placeDescription: String,
 
     @ColumnInfo(name = "travel_photo")
-    var travelPhoto: String
+    var placePhoto: String
 )

@@ -161,7 +161,7 @@ fun AddPlaceScreen(
             Button(
                 onClick = {
                     placesViewModel.addNewPlace(
-                        Place(placeName = name, placeAddress = address, placeDescription = description, travelPhoto = photoURI)
+                        Place(placeName = name, placeAddress = address, placeDescription = description, placePhoto = photoURI)
                     )
                     onNextButtonClicked()
                 },

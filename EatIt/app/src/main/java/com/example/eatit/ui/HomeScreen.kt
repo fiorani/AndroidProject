@@ -115,8 +115,9 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (place.travelPhoto.isEmpty()) {
+                    if (place.placePhoto.isEmpty()) {
                         Image(
+
                             painter = painterResource(id = R.drawable.baseline_android_24),
                             contentDescription = "travel image",
                             modifier = Modifier
@@ -126,7 +127,7 @@ fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
                         )
                     } else {
                         AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                            .data(Uri.parse(place.travelPhoto))
+                            .data(Uri.parse(place.placePhoto))
                             .crossfade(true)
                             .build(),
                             contentDescription = "image of the place",

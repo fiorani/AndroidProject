@@ -42,7 +42,7 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel) {
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            if (selectedPlace?.travelPhoto?.isEmpty() == true) {
+            if (selectedPlace?.placePhoto?.isEmpty() == true) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_android_24),
                     contentDescription = "image placeholder",
@@ -55,7 +55,7 @@ fun DetailsPlaceScreen(placesViewModel: PlacesViewModel) {
             } else {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(selectedPlace?.travelPhoto))
+                        .data(Uri.parse(selectedPlace?.placePhoto))
                         .crossfade(true)
                         .build(),
                     contentDescription = "image of the place",
