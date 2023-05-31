@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
+import com.example.eatit.data.Place
 import com.example.eatit.viewModel.PlacesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,131 +48,98 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
-        var active by remember { mutableStateOf(false) }
-        var query by remember { mutableStateOf("") }
-        val data = remember {
-            listOf(
-                "Ristorante A",
-                "Ristorante B",
-                "Ristorante C",
-                "Ristorante D",
-                "Ristorante E",
-                "Ristorante F",
-                "Ristorante G",
-                "Ristorante H",
-                "Ristorante I",
-                "Ristorante J"
-            )
-        }
         Column (modifier.padding(innerPadding)) {
-            SearchBar(
-                query = query,
-                onQueryChange = { query = it },
-                onSearch = { active = false },
-                active = active,
-                onActiveChange = { active = it },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                val filteredData = data.filter { item ->
-                    item.contains(query, ignoreCase = true)
-                }
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    items(filteredData) { item ->
-                        ristorantCard(item)
-                    }
-                }
-            }
             ristorantList(onItemClicked, placesViewModel)
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ristorantList(onItemClicked: () -> Unit, placesViewModel: PlacesViewModel) {
     val places = placesViewModel.places.collectAsState(initial = listOf()).value
+    var active by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    Column() {
+        SearchBar(
+            query = query,
+            onQueryChange = { query = it },
+            onSearch = { active = false },
+            active = active,
+            onActiveChange = { active = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            val filteredData = places.filter { item ->
+                item.placeName.contains(query, ignoreCase = true)
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                items(filteredData) { item ->
+                    ristorantCard(item,onItemClicked, placesViewModel)
+                }
+            }
+        }
+    }
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
     ) {
         items(items = places) { place ->
-            Card(
-                onClick = {
-                    placesViewModel.selectPlace(place)
-                    onItemClicked()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(8.dp),
-                shape = CardDefaults.shape,
-
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (place.placePhoto.isEmpty()) {
-                        Image(
-
-                            painter = painterResource(id = R.drawable.baseline_android_24),
-                            contentDescription = "travel image",
-                            modifier = Modifier
-                                .clip(shape = CircleShape)
-                                .size(size = 50.dp),
-                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSecondaryContainer)
-                        )
-                    } else {
-                        AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                            .data(Uri.parse(place.placePhoto))
-                            .crossfade(true)
-                            .build(),
-                            contentDescription = "image of the place",
-                            modifier = Modifier
-                                .clip(shape = CircleShape)
-                                .size(size = 50.dp))
-                    }
-                    Text(
-                        text = place.placeName,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 32.sp
-                    )
-                    Text(
-                        text = place.placeAddress,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 16.sp
-                    )
-                }
-            }
+            ristorantCard(place,onItemClicked, placesViewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ristorantCard(item: String) {
+fun ristorantCard(place: Place,onItemClicked: () -> Unit,placesViewModel: PlacesViewModel) {
     Card(
+        onClick = {
+            placesViewModel.selectPlace(place)
+            onItemClicked()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = CardDefaults.shape,
+
         ) {
-            Icon(Icons.Filled.AccountCircle, contentDescription = stringResource(id = R.string.back), modifier = Modifier.size(100.dp))
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (place.placePhoto.isEmpty()) {
+                Image(
+
+                    painter = painterResource(id = R.drawable.baseline_android_24),
+                    contentDescription = "travel image",
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(size = 50.dp),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSecondaryContainer)
+                )
+            } else {
+                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                    .data(Uri.parse(place.placePhoto))
+                    .crossfade(true)
+                    .build(),
+                    contentDescription = "image of the place",
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(size = 50.dp))
+            }
             Text(
-                text = item,
+                text = place.placeName,
                 modifier = Modifier.padding(8.dp),
                 fontSize = 32.sp
             )
             Text(
-                text = "address",
+                text = place.placeAddress,
                 modifier = Modifier.padding(8.dp),
-                fontSize = 32.sp
+                fontSize = 16.sp
             )
         }
     }
