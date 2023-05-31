@@ -44,16 +44,6 @@ fun AddPlaceScreen(
     var photoURI by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick =  {
-                placesViewModel.addNewPlace(
-                    Place(placeName = name, placeAddress = address, placeDescription = description, travelPhoto = photoURI)
-                )
-                onNextButtonClicked()
-            } ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_restaurant))
-            }
-        }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,7 +71,9 @@ fun AddPlaceScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
                     contentDescription = "get gps",
-                    modifier = Modifier.weight(1f).clickable(onClick = startLocationUpdates)
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable(onClick = startLocationUpdates)
                 )
             }
             Spacer(modifier = Modifier.size(15.dp))
@@ -162,6 +154,18 @@ fun AddPlaceScreen(
                     .build(), contentDescription = "image taken")
 
                 photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+            }
+
+            Button(
+                onClick = {
+                    placesViewModel.addNewPlace(
+                        Place(placeName = name, placeAddress = address, placeDescription = description, travelPhoto = photoURI)
+                    )
+                    onNextButtonClicked()
+                },
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+            ) {
+                Text(text = stringResource(id = R.string.save))
             }
         }
     }

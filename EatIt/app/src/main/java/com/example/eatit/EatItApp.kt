@@ -32,7 +32,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("EatIt")
-    object Add : AppScreen("Add Screen")
+    object Add : AppScreen("Add Restaurant")
     object Details : AppScreen("Details Screen")
     object Settings : AppScreen("Settings Screen")
     object UserProfile : AppScreen("User Profile Screen")

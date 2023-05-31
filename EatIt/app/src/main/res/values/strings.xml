@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">EatIt</string>
-    <string name="add_restaurant">Add Travel</string>
+    <string name="add_restaurant">Add Restaurant</string>
+    <string name="save">SAVE</string>
     <string name="restaurant_details">Travel Details</string>
     <string name="settings">Settings</string>
 
