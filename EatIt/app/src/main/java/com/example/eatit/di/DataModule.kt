@@ -2,7 +2,7 @@ package com.example.eatit.di
 
 import android.content.Context
 import com.example.eatit.EatItApp
-import com.example.eatit.data.PlacesRepository
+import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
@@ -20,6 +20,6 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providePlacesRepository(@ApplicationContext context: Context) =
-        PlacesRepository((context.applicationContext as EatItApp).database.itemDAO())
+    fun provideRestaurantsRepository(@ApplicationContext context: Context) =
+        RestaurantsRepository((context.applicationContext as EatItApp).database.itemDAO())
 }

@@ -28,7 +28,7 @@ import com.android.volley.toolbox.Volley
 import com.example.eatit.NavigationApp
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.ui.theme.EatItTheme
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
     }
 
     fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
-        val placesViewModel by viewModels<PlacesViewModel>()
+        val restaurantsViewModel by viewModels<RestaurantsViewModel>()
         queue = Volley.newRequestQueue(this)
         val url = "https://nominatim.openstreetmap.org/reverse?lat=" + location.latitude +
                 "&lon="+ location.longitude + "&format=jsonv2&limit=1"
@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
-                placesViewModel.setGPSPlace(response.getString("display_name"))
+                restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
                 connectivityManager.unregisterNetworkCallback(networkCallback)
                 requestingLocationUpdates.value = false
             },

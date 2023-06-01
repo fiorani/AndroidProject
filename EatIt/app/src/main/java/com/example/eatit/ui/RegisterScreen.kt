@@ -12,21 +12,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.R
-import com.example.eatit.viewModel.PlacesViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewModel, startLocationUpdates: () -> Unit) {
+fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: RestaurantsViewModel, startLocationUpdates: () -> Unit) {
     Scaffold () { innerPadding ->
         Column (modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
+            OrderCard(customerName = "Marco", customerAddress= "Via O. Brobrio", total = 14.60f, orderDate = "19-10-2023")
             val isUserRegister = remember { mutableStateOf(true) }
             var strTitle = "User registration"
             Text(
@@ -140,7 +138,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewMod
                     }
 
                     if (isUserRegister.value) {
-                        // date picker not fully working: 'ok' button broken, not checking for future dates.
+                        // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
                         var txtBirth by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                             mutableStateOf(TextFieldValue(""))
                         }
@@ -196,14 +194,14 @@ fun RegisterScreen(modifier: Modifier = Modifier, placesViewModel: PlacesViewMod
 
                     //Maps: Don't know if it's working correctly
                     Row() {
-                        var title by rememberSaveable { placesViewModel.placeFromGPS }
+                        var title by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
                         OutlinedTextField(
                             value = title,
                             onValueChange = { newText ->
                                 title = newText
                             },
                             label = {
-                                Text(stringResource(id = R.string.place_name))
+                                Text("Location")
                             },
                             modifier = Modifier.weight(4f)
                         )

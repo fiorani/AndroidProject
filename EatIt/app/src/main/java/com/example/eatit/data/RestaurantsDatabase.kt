@@ -4,20 +4,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Place::class], version = 1, exportSchema = true)
-abstract class PlacesDatabase : RoomDatabase() {
+@Database(entities = [Restaurant::class], version = 1, exportSchema = true)
+abstract class RestaurantsDatabase : RoomDatabase() {
 
-    abstract fun itemDAO(): PlacesDAO
+    abstract fun itemDAO(): RestaurantsDAO
 
     companion object {
         @Volatile
-        private var INSTANCE: PlacesDatabase ?= null
+        private var INSTANCE: RestaurantsDatabase ?= null
 
-        fun getDatabase(context: Context): PlacesDatabase {
+        fun getDatabase(context: Context): RestaurantsDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    PlacesDatabase::class.java,
+                    RestaurantsDatabase::class.java,
                     "items_database"
                 ).build()
                 INSTANCE = instance
