@@ -77,10 +77,17 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
             onActiveChange = { active = it },
             modifier = Modifier.fillMaxWidth()
         ) {
-
-            LazyColumn() {
-                items(restaurants.size) { index ->
-                    val restaurant = restaurants[index]
+            var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
+            restaurantsCollection.whereEqualTo("name",query).get()
+                .addOnSuccessListener { querySnapshot ->
+                    searchResults.addAll(querySnapshot.documents)
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting restaurants: $exception")
+                }
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(searchResults.size) { index ->
+                    val restaurant = searchResults[index]
                     ristorantCard(restaurant,onItemClicked, restaurantsViewModel)
                 }
             }
@@ -119,13 +126,33 @@ fun ristorantCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if (restaurant.data?.get("photo").toString() == "") {
+                Image(
+
+                    painter = painterResource(id = R.drawable.baseline_android_24),
+                    contentDescription = "travel image",
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(size = 50.dp),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSecondaryContainer)
+                )
+            } else {
+                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                    .data(Uri.parse(restaurant.data?.get("photo").toString()))
+                    .crossfade(true)
+                    .build(),
+                    contentDescription = "image of the restaurant",
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(size = 100.dp))
+            }
             Text(
                 text = restaurant.data!!["name"].toString(),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 32.sp
             )
             Text(
-                text = restaurant.data!!["address"].toString(),
+                text = restaurant.data!!["city"].toString(),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 16.sp
             )
