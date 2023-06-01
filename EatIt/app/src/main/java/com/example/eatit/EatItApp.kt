@@ -154,7 +154,7 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            HomeScreen(
+            /*HomeScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.Add.name)
                 },
@@ -162,10 +162,11 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Details.name)
                 },
                 placesViewModel = placesViewModel
-            )
+            )*/
             //TODO: Refactor
             //RegisterScreen(placesViewModel = placesViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
+            RestaurantProfileScreen()
         }
         composable(route = AppScreen.Add.name) {
             AddPlaceScreen(
