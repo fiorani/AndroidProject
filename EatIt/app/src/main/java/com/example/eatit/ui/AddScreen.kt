@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
@@ -18,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -28,7 +26,6 @@ import coil.request.ImageRequest
 import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
 import com.example.eatit.utilities.createImageFile
-import com.example.eatit.data.Restaurant
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
@@ -41,7 +38,7 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+    var address by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var photoURI by rememberSaveable { mutableStateOf("") }
 
@@ -160,9 +157,6 @@ fun AddRestaurantScreen(
 
             Button(
                 onClick = {
-                    restaurantsViewModel.addNewRestaurant(
-                        Restaurant(restaurantName = name, restaurantAddress = address, restaurantDescription = description, restaurantPhoto = photoURI)
-                    )
                     onNextButtonClicked()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Green),

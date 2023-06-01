@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,14 +20,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.data.Restaurant
 import com.example.eatit.viewModel.RestaurantsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddButtonClicked: () -> Unit) {
-    val context = LocalContext.current
-    val selectedRestaurant = restaurantsViewModel.restaurantSelected
+    /*val context = LocalContext.current
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick =  onAddButtonClicked ) {
@@ -64,7 +61,7 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
                         .fillMaxWidth()
                         .height(200.dp)
                 )
-            }
+        }
 
             Spacer(modifier = Modifier.size(15.dp))
 
@@ -82,9 +79,9 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-    }
+    }*/
 }
-
+/*
 private fun shareDetails(context: Context, restaurant: Restaurant?){
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
@@ -96,4 +93,4 @@ private fun shareDetails(context: Context, restaurant: Restaurant?){
     if (shareIntent.resolveActivity(context.packageManager) != null) {
         context.startActivity(shareIntent)
     }
-}
+}*/
