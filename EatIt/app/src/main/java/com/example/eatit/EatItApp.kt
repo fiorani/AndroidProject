@@ -168,9 +168,9 @@ private fun NavigationGraph(
             //TODO: Refactor
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
-            //RestaurantProfileScreen()
+            RestaurantProfileScreen()
         }
-        /*composable(route = AppScreen.AddRestaurant.name) {
+        composable(route = AppScreen.AddRestaurant.name) {
             AddRestaurantScreen(
                 onNextButtonClicked = {
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
@@ -189,7 +189,7 @@ private fun NavigationGraph(
             DetailsRestaurantScreen(restaurantsViewModel = restaurantsViewModel,onAddButtonClicked = {
                 navController.navigate(AppScreen.AddProduct.name)
             } )
-        }*/
+        }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             SettingsScreen(settingsViewModel)
