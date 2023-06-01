@@ -21,11 +21,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.firestore.DocumentSnapshot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddButtonClicked: () -> Unit) {
-    /*val context = LocalContext.current
+    val context = LocalContext.current
+    val restaurant = restaurantsViewModel.restaurantSelected
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick =  onAddButtonClicked ) {
@@ -40,20 +42,10 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            if (selectedRestaurant?.restaurantPhoto?.isEmpty() == true) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_android_24),
-                    contentDescription = "image restaurantholder",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp),
-                    contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSecondaryContainer)
-                )
-            } else {
+            if (restaurant?.photo != "") {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(selectedRestaurant?.restaurantPhoto))
+                        .data(Uri.parse(restaurant?.photo))
                         .crossfade(true)
                         .build(),
                     contentDescription = "image of the restaurant",
@@ -66,7 +58,7 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = selectedRestaurant?.restaurantName?:stringResource(id = R.string.restaurant_name),
+                text = restaurant?.name?:stringResource(id = R.string.restaurant_name),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -74,23 +66,10 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = selectedRestaurant?.restaurantDescription?:stringResource(id = R.string.restaurant_description),
+                text = restaurant?.city?:stringResource(id = R.string.restaurant_description),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-    }*/
+    }
 }
-/*
-private fun shareDetails(context: Context, restaurant: Restaurant?){
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, restaurant?.restaurantName?:"No restaurant")
-        type = "text/plain"
-    }
-
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    if (shareIntent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(shareIntent)
-    }
-}*/

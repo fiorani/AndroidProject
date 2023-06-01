@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
+import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -38,9 +39,12 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { mutableStateOf("") }
-    var description by rememberSaveable { mutableStateOf("") }
-    var photoURI by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("") }
+    var photo by rememberSaveable { mutableStateOf("") }
+    var price = 0
+    var numRatings = 0
+    var avgRating = 0.toDouble()
 
     Scaffold(
     ) { paddingValues ->
@@ -51,18 +55,27 @@ fun AddRestaurantScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource(id = R.string.restaurant_name)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.size(15.dp))
+
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
 
             ) {
                 OutlinedTextField(
-                    value = address,
+                    value = city,
                     onValueChange = { newText ->
-                        address = newText
+                        city = newText
                     },
                     label = {
-                        Text(stringResource(id = R.string.restaurant_address))
+                        Text(stringResource(id = R.string.label_city))
                     },
                     modifier = Modifier.weight(4f)
                 )
@@ -75,21 +88,13 @@ fun AddRestaurantScreen(
                         .clickable(onClick = startLocationUpdates)
                 )
             }
-            Spacer(modifier = Modifier.size(15.dp))
-
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
 
             Spacer(modifier = Modifier.size(15.dp))
 
             OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text(stringResource(id = R.string.restaurant_description)) },
+                value = category,
+                onValueChange = { category = it },
+                label = { Text(stringResource(id = R.string.label_category)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -146,17 +151,30 @@ fun AddRestaurantScreen(
 
             Spacer(modifier = Modifier.size(15.dp))
 
+
+
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 AsyncImage(model = ImageRequest.Builder(context)
                     .data(capturedImageUri)
                     .crossfade(true)
                     .build(), contentDescription = "image taken")
 
-                photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+                photo = saveImage(context.applicationContext.contentResolver, capturedImageUri)
             }
 
             Button(
                 onClick = {
+                    restaurantsViewModel.addNewRestaurant(
+                        Restaurant(
+                            name = name,
+                            city = city,
+                            category = category,
+                            photo = photo,
+                            price = price,
+                            numRatings = numRatings,
+                            avgRating = avgRating
+                        )
+                    )
                     onNextButtonClicked()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Green),

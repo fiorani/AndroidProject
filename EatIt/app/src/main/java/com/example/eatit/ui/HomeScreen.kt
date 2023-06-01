@@ -85,7 +85,7 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
                 .addOnFailureListener { exception ->
                     println("Error getting restaurants: $exception")
                 }
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            LazyColumn() {
                 items(searchResults.size) { index ->
                     val restaurant = searchResults[index]
                     ristorantCard(restaurant,onItemClicked, restaurantsViewModel)
@@ -111,6 +111,7 @@ fun ristorantCard(
     restaurantsViewModel: RestaurantsViewModel) {
     Card(
         onClick = {
+            restaurantsViewModel.selectRestaurant(restaurant.toObject(Restaurant::class.java)!!)
             onItemClicked()
         },
         modifier = Modifier
@@ -126,24 +127,13 @@ fun ristorantCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (restaurant.data?.get("photo").toString() == "") {
-                Image(
-
-                    painter = painterResource(id = R.drawable.baseline_android_24),
-                    contentDescription = "travel image",
-                    modifier = Modifier
-                        .clip(shape = CircleShape)
-                        .size(size = 50.dp),
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSecondaryContainer)
-                )
-            } else {
+            if (restaurant.data?.get("photo").toString() != "") {
                 AsyncImage(model = ImageRequest.Builder(LocalContext.current)
                     .data(Uri.parse(restaurant.data?.get("photo").toString()))
                     .crossfade(true)
                     .build(),
                     contentDescription = "image of the restaurant",
                     modifier = Modifier
-                        .clip(shape = CircleShape)
                         .size(size = 100.dp))
             }
             Text(
