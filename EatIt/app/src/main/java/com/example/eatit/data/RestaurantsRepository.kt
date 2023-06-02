@@ -1,16 +1,21 @@
 package com.example.eatit.data
 
 import androidx.annotation.WorkerThread
-import kotlinx.coroutines.flow.Flow
+import com.example.eatit.EatItApp
+import com.example.eatit.model.Product
+import com.example.eatit.model.Restaurant
+import com.google.firebase.firestore.FirebaseFirestore
 
-class RestaurantsRepository(private val restaurantsDAO:RestaurantsDAO) {
 
-    val restaurants: Flow<List<Restaurant>> = restaurantsDAO.getRestaurants()
+class RestaurantsRepository(eatItApp: EatItApp) {
 
-    //@WorkerThread Denotes that the annotated method should only be called on a worker thread.
-    //By default Room runs suspend queries off the main thread
     @WorkerThread
     suspend fun insertNewRestaurant(restaurant: Restaurant) {
-        restaurantsDAO.insert(restaurant)
+        FirebaseFirestore.getInstance().collection("restaurants").add(restaurant)
+    }
+
+    @WorkerThread
+    suspend fun insertNewProduct(restaurantId: String,product: Product) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("products").add(product)
     }
 }

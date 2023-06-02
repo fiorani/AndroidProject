@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
@@ -18,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -27,8 +25,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
+import com.example.eatit.model.Product
+import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.createImageFile
-import com.example.eatit.data.Restaurant
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
@@ -41,9 +40,12 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
-    var description by rememberSaveable { mutableStateOf("") }
-    var photoURI by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { mutableStateOf("") }
+    var category by rememberSaveable { mutableStateOf("") }
+    var photo by rememberSaveable { mutableStateOf("") }
+    var price = 0
+    var numRatings = 0
+    var avgRating = 0.toDouble()
 
     Scaffold(
     ) { paddingValues ->
@@ -54,18 +56,27 @@ fun AddRestaurantScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource(id = R.string.restaurant_name)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.size(15.dp))
+
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
 
             ) {
                 OutlinedTextField(
-                    value = address,
+                    value = city,
                     onValueChange = { newText ->
-                        address = newText
+                        city = newText
                     },
                     label = {
-                        Text(stringResource(id = R.string.restaurant_address))
+                        Text(stringResource(id = R.string.label_city))
                     },
                     modifier = Modifier.weight(4f)
                 )
@@ -78,21 +89,13 @@ fun AddRestaurantScreen(
                         .clickable(onClick = startLocationUpdates)
                 )
             }
-            Spacer(modifier = Modifier.size(15.dp))
-
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
 
             Spacer(modifier = Modifier.size(15.dp))
 
             OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text(stringResource(id = R.string.restaurant_description)) },
+                value = category,
+                onValueChange = { category = it },
+                label = { Text(stringResource(id = R.string.label_category)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -149,19 +152,29 @@ fun AddRestaurantScreen(
 
             Spacer(modifier = Modifier.size(15.dp))
 
+
+
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 AsyncImage(model = ImageRequest.Builder(context)
                     .data(capturedImageUri)
                     .crossfade(true)
                     .build(), contentDescription = "image taken")
 
-                photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+                photo = saveImage(context.applicationContext.contentResolver, capturedImageUri)
             }
 
             Button(
                 onClick = {
                     restaurantsViewModel.addNewRestaurant(
-                        Restaurant(restaurantName = name, restaurantAddress = address, restaurantDescription = description, restaurantPhoto = photoURI)
+                        Restaurant(
+                            name = name,
+                            city = city,
+                            category = category,
+                            photo = photo,
+                            price = price,
+                            numRatings = numRatings,
+                            avgRating = avgRating
+                        )
                     )
                     onNextButtonClicked()
                 },
@@ -272,6 +285,23 @@ fun AddProductScreen(
             }
 
             Spacer(modifier = Modifier.size(15.dp))
+
+            Button(
+                onClick = {
+                    restaurantsViewModel.addNewProduct(
+                        Product(
+                            name = name,
+                            description = description,
+                            price = price,
+                            photo = photoURI
+                        ))
+                    onNextButtonClicked()
+                },
+                colors = ButtonDefaults.buttonColors(Color.Green),
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+            ) {
+                Text(text = stringResource(id = R.string.save))
+            }
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 AsyncImage(model = ImageRequest.Builder(context)

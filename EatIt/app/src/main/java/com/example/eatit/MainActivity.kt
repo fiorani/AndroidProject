@@ -1,4 +1,4 @@
-package com.example.eatit.ui
+package com.example.eatit
 
 import android.Manifest
 import android.content.Context
@@ -25,7 +25,6 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.eatit.NavigationApp
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -130,9 +129,9 @@ class MainActivity : ComponentActivity() {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
-                restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
+                /*restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
                 connectivityManager.unregisterNetworkCallback(networkCallback)
-                requestingLocationUpdates.value = false
+                requestingLocationUpdates.value = false*/
             },
             { error ->
                 Log.d("MAINACTIVITY-SENDREQUEST", error.toString())

@@ -3,24 +3,22 @@ package com.example.eatit.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.eatit.data.Restaurant
 import com.example.eatit.data.RestaurantsRepository
+import com.example.eatit.model.Product
+import com.example.eatit.model.Restaurant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RestaurantsViewModel @Inject constructor(
-    private val repository: RestaurantsRepository
-) : ViewModel() {
-
-    val restaurants = repository.restaurants
-
-    fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
+    private val repository: RestaurantsRepository) : ViewModel() {
+    fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch{
         repository.insertNewRestaurant(restaurant)
-        resetGPSRestaurant()
     }
-
+    fun addNewProduct(product: Product) = viewModelScope.launch{
+        repository.insertNewProduct(_restaurantSelected?.id.toString(), product)
+    }
     private var _restaurantSelected: Restaurant? = null
     val restaurantSelected
         get() = _restaurantSelected
@@ -41,4 +39,8 @@ class RestaurantsViewModel @Inject constructor(
     private fun resetGPSRestaurant() {
         _restaurantFromGPS.value = ""
     }
+
+
+
+
 }

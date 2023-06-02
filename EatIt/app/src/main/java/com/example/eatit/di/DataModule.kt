@@ -17,9 +17,8 @@ object DataModule {
     @Singleton
     @Provides
     fun provideSettingsRepository(@ApplicationContext context: Context) = SettingsRepository(context)
-
     @Singleton
     @Provides
     fun provideRestaurantsRepository(@ApplicationContext context: Context) =
-        RestaurantsRepository((context.applicationContext as EatItApp).database.itemDAO())
+        RestaurantsRepository((context.applicationContext as EatItApp))
 }

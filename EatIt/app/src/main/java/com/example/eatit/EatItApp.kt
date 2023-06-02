@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eatit.data.RestaurantsDatabase
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
@@ -42,7 +41,6 @@ sealed class AppScreen(val name: String) {
 
 @HiltAndroidApp
 class EatItApp : Application() {
-    val database by lazy { RestaurantsDatabase.getDatabase(this) }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -155,20 +153,19 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            /*HomeScreen(
+            HomeScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.AddRestaurant.name)
                 },
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
-                placesViewModel = placesViewModel,
                 restaurantsViewModel = restaurantsViewModel
-            )*/
+            )
             //TODO: Refactor
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
-            RestaurantMenuScreen()
+            //RestaurantMenuScreen()
         }
         composable(route = AppScreen.AddRestaurant.name) {
             AddRestaurantScreen(

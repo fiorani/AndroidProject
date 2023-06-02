@@ -194,7 +194,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
 
                     //Maps: Don't know if it's working correctly
                     Row() {
-                        var title by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+                        var title by rememberSaveable { mutableStateOf("") }
                         OutlinedTextField(
                             value = title,
                             onValueChange = { newText ->
