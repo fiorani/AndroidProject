@@ -78,13 +78,13 @@ fun HomeScreen(
                     }
                 }
             }
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            items(restaurants.size) { index ->
-                val restaurant = restaurants[index]
-                RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                items(restaurants.size) { index ->
+                    val restaurant = restaurants[index]
+                    RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
+                }
             }
         }
     }
