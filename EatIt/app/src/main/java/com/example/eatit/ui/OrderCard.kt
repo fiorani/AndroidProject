@@ -98,7 +98,7 @@ fun OrderCard(
                 overflow = TextOverflow.Ellipsis
             )
             Column(
-//Non si possono utilizzare lazycolumn qui :(
+                //Non si possono utilizzare lazycolumn qui :(
                 modifier = Modifier.padding(20.dp, 0.dp),
             ) {
                 Row(

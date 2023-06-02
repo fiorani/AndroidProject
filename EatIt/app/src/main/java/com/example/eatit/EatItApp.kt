@@ -169,6 +169,7 @@ private fun NavigationGraph(
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
             //RestaurantMenuScreen()
+            //UserOrderingMenuScreen()
 
         }
         composable(route = AppScreen.AddRestaurant.name) {
