@@ -32,11 +32,11 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val db = FirebaseFirestore.getInstance()
-    val restaurantsCollection = db.collection("restaurants")
+    val restaurantsCollection = FirebaseFirestore.getInstance().collection("restaurants")
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     val restaurants = remember { mutableStateListOf<DocumentSnapshot>() }
+    restaurants.clear()
     restaurantsCollection.get()
         .addOnSuccessListener { querySnapshot ->
             restaurants.addAll(querySnapshot.documents)
@@ -64,9 +64,17 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
-                restaurantsCollection.whereEqualTo("name", query).get()
+                searchResults.clear()
+                restaurantsCollection.get()
                     .addOnSuccessListener { querySnapshot ->
-                        searchResults.addAll(querySnapshot.documents)
+                        for (document in querySnapshot)
+                        {
+                            if (document.data?.get("name").toString()
+                                    .contains(query, ignoreCase = true)
+                            ) {
+                                searchResults.add(document)
+                            }
+                        }
                     }
                     .addOnFailureListener { exception ->
                         println("Error getting restaurants: $exception")
@@ -74,17 +82,17 @@ fun HomeScreen(
                 LazyColumn {
                     items(searchResults.size) { index ->
                         val restaurant = searchResults[index]
-                        ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+                        RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
                     }
                 }
             }
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            items(restaurants.size) { index ->
-                val restaurant = restaurants[index]
-                ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                items(restaurants.size) { index ->
+                    val restaurant = restaurants[index]
+                    RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
+                }
             }
         }
     }
@@ -92,7 +100,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ristorantCard(
+fun RestaurantCard(
     restaurant: DocumentSnapshot,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel

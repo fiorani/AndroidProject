@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,12 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,25 +47,27 @@ fun DetailsRestaurantScreen(
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
 
-    val db = FirebaseFirestore.getInstance()
-    val restaurantCollection = db.collection("restaurants").document(restaurant?.id.toString())
+    val restaurantCollection = FirebaseFirestore.getInstance().collection("restaurants")
+        .document(restaurant?.id.toString())
 
     val productCollection = restaurantCollection.collection("products")
     val products = remember { mutableStateListOf<DocumentSnapshot>() }
+    products.clear()
     productCollection.get().addOnSuccessListener { querySnapshot ->
         products.addAll(querySnapshot.documents)
     }.addOnFailureListener { exception ->
         println("Error getting restaurants: $exception")
     }
 
+
     val ratingsCollection = restaurantCollection.collection("ratings")
     val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
+    ratings.clear()
     ratingsCollection.get().addOnSuccessListener { querySnapshot ->
         ratings.addAll(querySnapshot.documents)
     }.addOnFailureListener { exception ->
         println("Error getting restaurants: $exception")
     }
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {
@@ -113,9 +112,7 @@ fun DetailsRestaurantScreen(
             )
             Spacer(modifier = Modifier.size(15.dp))
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+            LazyColumn {
                 Log.d("TAG", "entrato:")
                 items(products.size) { index ->
                     val product = products[index]
