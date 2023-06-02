@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
+import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
@@ -284,6 +285,23 @@ fun AddProductScreen(
             }
 
             Spacer(modifier = Modifier.size(15.dp))
+
+            Button(
+                onClick = {
+                    restaurantsViewModel.addNewProduct(
+                        Product(
+                            name = name,
+                            description = description,
+                            price = price,
+                            photo = photoURI
+                        ))
+                    onNextButtonClicked()
+                },
+                colors = ButtonDefaults.buttonColors(Color.Green),
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+            ) {
+                Text(text = stringResource(id = R.string.save))
+            }
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 AsyncImage(model = ImageRequest.Builder(context)

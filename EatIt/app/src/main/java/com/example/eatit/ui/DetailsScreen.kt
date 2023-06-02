@@ -84,6 +84,18 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
             )
             Spacer(modifier = Modifier.size(15.dp))
             val db = FirebaseFirestore.getInstance()
+
+            val productCollection = db.collection("restaurants").document(restaurant?.id.toString())
+                .collection("products")
+            val products = remember { mutableStateListOf<DocumentSnapshot>() }
+            productCollection.get()
+                .addOnSuccessListener { querySnapshot ->
+                    products.addAll(querySnapshot.documents)
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting restaurants: $exception")
+                }
+
             val ratingsCollection = db.collection("restaurants").document(restaurant?.id.toString())
                 .collection("ratings")
             val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
@@ -97,6 +109,10 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                items(products.size) { index ->
+                    val product = products[index]
+                    productCard(product, restaurantsViewModel)
+                }
                 items(ratings.size) { index ->
                     val rating = ratings[index]
                     ratingCard(rating, restaurantsViewModel)
@@ -105,7 +121,43 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun productCard(
+    product: DocumentSnapshot,
+    restaurantsViewModel: RestaurantsViewModel) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = CardDefaults.shape,
 
+        ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = product.data!!["name"].toString(),
+                modifier = Modifier.padding(8.dp),
+                fontSize = 20.sp
+            )
+            Text(
+                text = product.data!!["description"].toString(),
+                modifier = Modifier.padding(8.dp),
+                fontSize = 15.sp
+            )
+            Text(
+                text = product.data!!["price"].toString(),
+                modifier = Modifier.padding(8.dp),
+                fontSize = 15.sp
+            )
+        }
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ratingCard(
