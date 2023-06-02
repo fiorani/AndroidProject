@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -140,23 +141,17 @@ fun productCard(
         shape = CardDefaults.shape,
 
         ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = product.data!!["name"].toString(),
+                text = product.data!!["name"].toString()+"("+product.data!!["description"].toString()+")",
                 modifier = Modifier.padding(8.dp),
                 fontSize = 20.sp
             )
             Text(
-                text = product.data!!["description"].toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 15.sp
-            )
-            Text(
-                text = product.data!!["price"].toString(),
+                text = product.data!!["price"].toString()+"€",
                 modifier = Modifier.padding(8.dp),
                 fontSize = 15.sp
             )
@@ -180,29 +175,34 @@ fun ratingCard(
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = rating.data!!["text"].toString(),
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(4.dp),
                 fontSize = 20.sp
             )
-            Text(
-                text = rating.data!!["userName"].toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 15.sp
-            )
-            var valrating: Float by remember { mutableStateOf(3.2f) }
-            RatingBar(
-                value = rating.data!!["rating"].toString().toFloat(),
-                style = RatingBarStyle.Fill(),
-                onValueChange = {
-                    valrating = it
-                },
-                onRatingChanged = {
-                    Log.d("TAG", "onRatingChanged: $it")
-                }
-            )
+            Row() {
+                Text(
+                    text = rating.data!!["userName"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 15.sp
+                )
+                var valrating: Float by remember { mutableStateOf(3.2f) }
+                RatingBar(
+                    value = rating.data!!["rating"].toString().toFloat(),
+                    style = RatingBarStyle.Fill(),
+                    onValueChange = {
+                        valrating = it
+                    },
+                    onRatingChanged = {
+                        Log.d("TAG", "onRatingChanged: $it")
+                    },
+                    modifier = Modifier.padding(4.dp),
+                    size = 20.dp
+                )
+            }
+
 
         }
     }

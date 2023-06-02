@@ -86,9 +86,7 @@ fun HomeScreen(
                     }
                 }
             }
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+            LazyColumn() {
                 items(restaurants.size) { index ->
                     val restaurant = restaurants[index]
                     RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
@@ -120,11 +118,7 @@ fun RestaurantCard(
         shape = CardDefaults.shape,
 
         ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Row(modifier = Modifier.fillMaxWidth()){
             if (restaurant.data?.get("photo").toString() != "") {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -136,29 +130,37 @@ fun RestaurantCard(
                         .size(size = 100.dp)
                 )
             }
-            Text(
-                text = restaurant.data!!["name"].toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 32.sp
-            )
-            Text(
-                text = restaurant.data!!["city"].toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 16.sp
-            )
-            var rating: Float by remember { mutableStateOf(3.2f) }
-            RatingBar(
-                value = restaurant.data!!["avgRating"].toString().toFloat(),
-                style = RatingBarStyle.Fill(),
-                onValueChange = {
-                    rating = it
-                },
-                onRatingChanged = {
-                    Log.d("TAG", "onRatingChanged: $it")
-                }
-            )
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = restaurant.data!!["name"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 28.sp
+                )
+                Text(
+                    text = restaurant.data!!["city"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 16.sp
+                )
+                var rating: Float by remember { mutableStateOf(3.2f) }
+                RatingBar(
+                    value = restaurant.data!!["avgRating"].toString().toFloat(),
+                    style = RatingBarStyle.Fill(),
+                    onValueChange = {
+                        rating = it
+                    },
+                    onRatingChanged = {
+                        Log.d("TAG", "onRatingChanged: $it")
+                    },
+                    modifier = Modifier.padding(4.dp),
+                    size = 20.dp
+                )
 
+            }
         }
+
     }
 }
 
