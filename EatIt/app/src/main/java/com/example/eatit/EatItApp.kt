@@ -184,6 +184,7 @@ private fun NavigationGraph(
             //RestaurantMenuScreen()
             //MapScreen(startLocationUpdates = startLocationUpdates)
             //UserOrderingMenuScreen()
+            //OrderSummaryScreen()
 
         }
         composable(route = AppScreen.AddRestaurant.name) {
