@@ -192,7 +192,7 @@ private fun NavigationGraph(
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
                 restaurantsViewModel = restaurantsViewModel,
-                startLocationUpdates
+                startLocationUpdates = startLocationUpdates
             )
         }
         composable(route = AppScreen.AddProduct.name) {
@@ -215,7 +215,8 @@ private fun NavigationGraph(
             SettingsScreen(settingsViewModel)
         }
         composable(route = AppScreen.Map.name) {
-            MapScreen(startLocationUpdates, restaurantsViewModel = restaurantsViewModel)
+            MapScreen(startLocationUpdates = startLocationUpdates,
+                restaurantsViewModel = restaurantsViewModel)
         }
         composable(route = AppScreen.UserProfile.name) {
             UserProfileScreen()

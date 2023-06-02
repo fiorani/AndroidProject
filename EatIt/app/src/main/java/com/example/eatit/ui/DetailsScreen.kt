@@ -2,11 +2,26 @@ package com.example.eatit.ui
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -28,14 +43,32 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
     onAddButtonClicked: () -> Unit
 ) {
-    val context = LocalContext.current
     val restaurant = restaurantsViewModel.restaurantSelected
+
+    val db = FirebaseFirestore.getInstance()
+    val restaurantCollection = db.collection("restaurants").document(restaurant?.id.toString())
+
+    val productCollection = restaurantCollection.collection("products")
+    val products = remember { mutableStateListOf<DocumentSnapshot>() }
+    productCollection.get().addOnSuccessListener { querySnapshot ->
+        products.addAll(querySnapshot.documents)
+    }.addOnFailureListener { exception ->
+        println("Error getting restaurants: $exception")
+    }
+
+    val ratingsCollection = restaurantCollection.collection("ratings")
+    val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
+    ratingsCollection.get().addOnSuccessListener { querySnapshot ->
+        ratings.addAll(querySnapshot.documents)
+    }.addOnFailureListener { exception ->
+        println("Error getting restaurants: $exception")
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {
@@ -48,10 +81,7 @@ fun DetailsRestaurantScreen(
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(10.dp)
-                .fillMaxSize()
+            modifier = Modifier.padding(paddingValues)
         ) {
             if (restaurant?.photo != "") {
                 AsyncImage(
@@ -82,50 +112,27 @@ fun DetailsRestaurantScreen(
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.size(15.dp))
-            val db = FirebaseFirestore.getInstance()
 
-            val productCollection = db.collection("restaurants").document(restaurant?.id.toString())
-                .collection("products")
-            val products = remember { mutableStateListOf<DocumentSnapshot>() }
-            productCollection.get()
-                .addOnSuccessListener { querySnapshot ->
-                    products.addAll(querySnapshot.documents)
-                }
-                .addOnFailureListener { exception ->
-                    println("Error getting restaurants: $exception")
-                }
-
-            val ratingsCollection = db.collection("restaurants").document(restaurant?.id.toString())
-                .collection("ratings")
-            val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
-            ratingsCollection.get()
-                .addOnSuccessListener { querySnapshot ->
-                    ratings.addAll(querySnapshot.documents)
-                }
-                .addOnFailureListener { exception ->
-                    println("Error getting restaurants: $exception")
-                }
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                Log.d("TAG", "entrato:")
                 items(products.size) { index ->
                     val product = products[index]
-                    productCard(product, restaurantsViewModel)
+                    productCard(product)
                 }
                 items(ratings.size) { index ->
                     val rating = ratings[index]
-                    ratingCard(rating, restaurantsViewModel)
+                    ratingCard(rating)
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun productCard(
-    product: DocumentSnapshot,
-    restaurantsViewModel: RestaurantsViewModel
+    product: DocumentSnapshot
 ) {
     Card(
         modifier = Modifier
@@ -160,11 +167,9 @@ fun productCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ratingCard(
-    rating: DocumentSnapshot,
-    restaurantsViewModel: RestaurantsViewModel
+    rating: DocumentSnapshot
 ) {
     Card(
         modifier = Modifier

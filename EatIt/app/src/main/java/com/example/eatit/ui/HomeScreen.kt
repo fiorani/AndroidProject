@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onAddButtonClicked: () -> Unit,
@@ -31,25 +32,6 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = onAddButtonClicked) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.add_restaurant)
-                )
-            }
-        },
-    ) { innerPadding ->
-        Column(modifier.padding(innerPadding)) {
-            ristorantList(onItemClicked, restaurantsViewModel)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
     val db = FirebaseFirestore.getInstance()
     val restaurantsCollection = db.collection("restaurants")
     var active by remember { mutableStateOf(false) }
@@ -62,37 +44,48 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
         .addOnFailureListener { exception ->
             println("Error getting restaurants: $exception")
         }
-    Column {
-        SearchBar(
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = { active = false },
-            active = active,
-            onActiveChange = { active = it },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
-            restaurantsCollection.whereEqualTo("name", query).get()
-                .addOnSuccessListener { querySnapshot ->
-                    searchResults.addAll(querySnapshot.documents)
-                }
-                .addOnFailureListener { exception ->
-                    println("Error getting restaurants: $exception")
-                }
-            LazyColumn {
-                items(searchResults.size) { index ->
-                    val restaurant = searchResults[index]
-                    ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddButtonClicked) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(id = R.string.add_restaurant)
+                )
+            }
+        },
+    ) { innerPadding ->
+        Column(modifier.padding(innerPadding)) {
+            SearchBar(
+                query = query,
+                onQueryChange = { query = it },
+                onSearch = { active = false },
+                active = active,
+                onActiveChange = { active = it },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
+                restaurantsCollection.whereEqualTo("name", query).get()
+                    .addOnSuccessListener { querySnapshot ->
+                        searchResults.addAll(querySnapshot.documents)
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Error getting restaurants: $exception")
+                    }
+                LazyColumn {
+                    items(searchResults.size) { index ->
+                        val restaurant = searchResults[index]
+                        ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+                    }
                 }
             }
         }
-    }
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        items(restaurants.size) { index ->
-            val restaurant = restaurants[index]
-            ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            items(restaurants.size) { index ->
+                val restaurant = restaurants[index]
+                ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+            }
         }
     }
 }
