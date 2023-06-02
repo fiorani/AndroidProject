@@ -32,7 +32,8 @@ fun RegisterScreen(
         Column(
             modifier
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())) {
+                .verticalScroll(rememberScrollState())
+        ) {
             OrderCard(
                 customerName = "Marco",
                 customerAddress = "Via O. Brobrio",

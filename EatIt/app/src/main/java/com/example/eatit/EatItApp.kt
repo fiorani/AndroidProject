@@ -38,7 +38,6 @@ sealed class AppScreen(val name: String) {
     object Details : AppScreen("Details Screen")
     object Settings : AppScreen("Settings Screen")
     object UserProfile : AppScreen("User Profile Screen")
-
     object Map : AppScreen("Map Screen")
 }
 
@@ -184,6 +183,7 @@ private fun NavigationGraph(
             //LoginScreen()
             //RestaurantMenuScreen()
             //MapScreen(startLocationUpdates = startLocationUpdates)
+            //UserOrderingMenuScreen()
 
         }
         composable(route = AppScreen.AddRestaurant.name) {
