@@ -1,6 +1,7 @@
 package com.example.eatit
 
 import android.app.Application
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LunchDining
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -36,6 +38,8 @@ sealed class AppScreen(val name: String) {
     object Details : AppScreen("Details Screen")
     object Settings : AppScreen("Settings Screen")
     object UserProfile : AppScreen("User Profile Screen")
+
+    object Map : AppScreen("Map Screen")
 }
 
 
@@ -50,7 +54,8 @@ fun TopAppBarFunction(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     onSettingsButtonClicked: () -> Unit,
-    onUserProfileButtonClicked: () -> Unit
+    onUserProfileButtonClicked: () -> Unit,
+    onMapButtonClicked: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -78,6 +83,14 @@ fun TopAppBarFunction(
             }
         },
         actions = {
+            if (currentScreen != AppScreen.Settings.name) {
+                IconButton(onClick = onSettingsButtonClicked) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
+            }
             if (currentScreen != AppScreen.UserProfile.name) {
                 IconButton(onClick = onUserProfileButtonClicked) {
                     Icon(
@@ -86,11 +99,11 @@ fun TopAppBarFunction(
                     )
                 }
             }
-            if (currentScreen != AppScreen.Settings.name) {
-                IconButton(onClick = onSettingsButtonClicked) {
+            if (currentScreen != AppScreen.Map.name) {
+                IconButton(onClick = onMapButtonClicked) {
                     Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = stringResource(id = R.string.settings)
+                        Icons.Filled.Map,
+                        contentDescription = stringResource(id = R.string.settings),
                     )
                 }
             }
@@ -120,7 +133,8 @@ fun NavigationApp(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
-                onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) }
+                onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
+                onMapButtonClicked = { navController.navigate(AppScreen.Map.name) }
             )
         }
     ) { innerPadding ->
@@ -169,6 +183,7 @@ private fun NavigationGraph(
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
             //RestaurantMenuScreen()
+            //MapScreen(startLocationUpdates = startLocationUpdates)
 
         }
         composable(route = AppScreen.AddRestaurant.name) {
@@ -198,6 +213,9 @@ private fun NavigationGraph(
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             SettingsScreen(settingsViewModel)
+        }
+        composable(route = AppScreen.Map.name) {
+            MapScreen(startLocationUpdates, restaurantsViewModel = restaurantsViewModel)
         }
         composable(route = AppScreen.UserProfile.name) {
             UserProfileScreen()
