@@ -2,12 +2,12 @@ package com.example.eatit.ui
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,17 +27,21 @@ import com.gowtham.ratingbar.RatingBarStyle
 @Composable
 fun HomeScreen(
     onAddButtonClicked: () -> Unit,
-    onItemClicked:  () -> Unit,
+    onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-    modifier: Modifier = Modifier) {
-    Scaffold (
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick =  onAddButtonClicked ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_restaurant))
+            FloatingActionButton(onClick = onAddButtonClicked) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(id = R.string.add_restaurant)
+                )
             }
         },
     ) { innerPadding ->
-        Column (modifier.padding(innerPadding)) {
+        Column(modifier.padding(innerPadding)) {
             ristorantList(onItemClicked, restaurantsViewModel)
         }
     }
@@ -58,7 +62,7 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
         .addOnFailureListener { exception ->
             println("Error getting restaurants: $exception")
         }
-    Column() {
+    Column {
         SearchBar(
             query = query,
             onQueryChange = { query = it },
@@ -68,17 +72,17 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
             modifier = Modifier.fillMaxWidth()
         ) {
             var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
-            restaurantsCollection.whereEqualTo("name",query).get()
+            restaurantsCollection.whereEqualTo("name", query).get()
                 .addOnSuccessListener { querySnapshot ->
                     searchResults.addAll(querySnapshot.documents)
                 }
                 .addOnFailureListener { exception ->
                     println("Error getting restaurants: $exception")
                 }
-            LazyColumn() {
+            LazyColumn {
                 items(searchResults.size) { index ->
                     val restaurant = searchResults[index]
-                    ristorantCard(restaurant,onItemClicked, restaurantsViewModel)
+                    ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
                 }
             }
         }
@@ -88,7 +92,7 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
     ) {
         items(restaurants.size) { index ->
             val restaurant = restaurants[index]
-            ristorantCard(restaurant,onItemClicked, restaurantsViewModel)
+            ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
         }
     }
 }
@@ -98,10 +102,11 @@ fun ristorantList(onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsVi
 fun ristorantCard(
     restaurant: DocumentSnapshot,
     onItemClicked: () -> Unit,
-    restaurantsViewModel: RestaurantsViewModel) {
+    restaurantsViewModel: RestaurantsViewModel
+) {
     Card(
         onClick = {
-            val restaurantt= restaurant.toObject(Restaurant::class.java)
+            val restaurantt = restaurant.toObject(Restaurant::class.java)
             restaurantt?.id = restaurant.id
             restaurantsViewModel.selectRestaurant(restaurantt!!)
             onItemClicked()
@@ -120,13 +125,15 @@ fun ristorantCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (restaurant.data?.get("photo").toString() != "") {
-                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(restaurant.data?.get("photo").toString()))
-                    .crossfade(true)
-                    .build(),
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(Uri.parse(restaurant.data?.get("photo").toString()))
+                        .crossfade(true)
+                        .build(),
                     contentDescription = "image of the restaurant",
                     modifier = Modifier
-                        .size(size = 100.dp))
+                        .size(size = 100.dp)
+                )
             }
             Text(
                 text = restaurant.data!!["name"].toString(),

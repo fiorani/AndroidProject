@@ -21,21 +21,35 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: RestaurantsViewModel, startLocationUpdates: () -> Unit) {
-    Scaffold () { innerPadding ->
-        Column (modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
-            OrderCard(customerName = "Marco", customerAddress= "Via O. Brobrio", total = 14.60f, orderDate = "19-10-2023")
+fun RegisterScreen(
+    modifier: Modifier = Modifier,
+    restaurantsViewModel: RestaurantsViewModel,
+    startLocationUpdates: () -> Unit
+) {
+    Scaffold { innerPadding ->
+        Column(
+            modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())) {
+            OrderCard(
+                customerName = "Marco",
+                customerAddress = "Via O. Brobrio",
+                total = 14.60f,
+                orderDate = "19-10-2023"
+            )
             val isUserRegister = remember { mutableStateOf(true) }
             var strTitle = "User registration"
             Text(
-                modifier = Modifier.fillMaxWidth().padding(50.dp, 0.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(50.dp, 0.dp),
                 text = "Do you want to register as a customer or as a restaurant?",
                 fontSize = 20.sp
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Button(
                     modifier = Modifier.padding(10.dp),
                     onClick = {
@@ -69,7 +83,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(40.dp,20.dp,40.dp, 0.dp),
+                    .padding(40.dp, 20.dp, 40.dp, 0.dp),
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
@@ -193,7 +207,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
                     }
 
                     //Maps: Don't know if it's working correctly
-                    Row() {
+                    Row {
                         var title by rememberSaveable { mutableStateOf("") }
                         OutlinedTextField(
                             value = title,
@@ -209,7 +223,10 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
                         Icon(
                             Icons.Filled.LocationSearching,
                             contentDescription = "get gps",
-                            modifier = Modifier.weight(1f).padding(20.dp).clickable(onClick = startLocationUpdates)
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(20.dp)
+                                .clickable(onClick = startLocationUpdates)
                         )
                     }
 
@@ -254,9 +271,9 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(70.dp, 40.dp),
-                horizontalArrangement= Arrangement.Center,
-            ){
-                Column() {
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Column {
                     Text(
                         text = "Already have an account?",
                         fontSize = 20.sp
@@ -281,11 +298,11 @@ fun RegisterScreen(modifier: Modifier = Modifier, restaurantsViewModel: Restaura
     }
 }
 
-fun getDate(timestamp: Long?) :String {
-    if (timestamp != null){
+fun getDate(timestamp: Long?): String {
+    if (timestamp != null) {
         val calendar = Calendar.getInstance(Locale.ITALIAN)
         calendar.timeInMillis = timestamp
-        val date = DateFormat.format("dd-MM-yyyy",calendar).toString()
+        val date = DateFormat.format("dd-MM-yyyy", calendar).toString()
         return date
     }
     return ""

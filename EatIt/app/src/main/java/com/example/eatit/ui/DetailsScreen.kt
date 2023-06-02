@@ -1,10 +1,7 @@
 package com.example.eatit.ui
 
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -18,17 +15,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.model.Restaurant
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,13 +30,19 @@ import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddButtonClicked: () -> Unit) {
+fun DetailsRestaurantScreen(
+    restaurantsViewModel: RestaurantsViewModel,
+    onAddButtonClicked: () -> Unit
+) {
     val context = LocalContext.current
     val restaurant = restaurantsViewModel.restaurantSelected
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick =  onAddButtonClicked ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(id = R.string.add_restaurant))
+            FloatingActionButton(onClick = onAddButtonClicked) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(id = R.string.add_restaurant)
+                )
             }
         },
     ) { paddingValues ->
@@ -65,12 +64,12 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
                         .fillMaxWidth()
                         .height(200.dp)
                 )
-        }
+            }
 
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = restaurant?.name?:stringResource(id = R.string.restaurant_name),
+                text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.titleLarge
             )
@@ -78,7 +77,7 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = restaurant?.city?:stringResource(id = R.string.restaurant_description),
+                text = restaurant?.city ?: stringResource(id = R.string.restaurant_description),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -121,11 +120,13 @@ fun DetailsRestaurantScreen(restaurantsViewModel: RestaurantsViewModel, onAddBut
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun productCard(
     product: DocumentSnapshot,
-    restaurantsViewModel: RestaurantsViewModel) {
+    restaurantsViewModel: RestaurantsViewModel
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,11 +159,13 @@ fun productCard(
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ratingCard(
     rating: DocumentSnapshot,
-    restaurantsViewModel: RestaurantsViewModel) {
+    restaurantsViewModel: RestaurantsViewModel
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

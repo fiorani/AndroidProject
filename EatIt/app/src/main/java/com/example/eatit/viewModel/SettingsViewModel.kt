@@ -8,12 +8,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor (
+class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
     val username = settingsRepository.preferenceFlow
 
-    fun saveUsername(username:String) {
+    fun saveUsername(username: String) {
         viewModelScope.launch {
             settingsRepository.saveToDataStore(username)
         }

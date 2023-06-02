@@ -11,7 +11,8 @@ import java.util.Random
  */
 object RestaurantUtil {
 
-    private const val RESTAURANT_URL_FMT = "https://storage.googleapis.com/firestorequickstarts.appspot.com/food_%d.png"
+    private const val RESTAURANT_URL_FMT =
+        "https://storage.googleapis.com/firestorequickstarts.appspot.com/food_%d.png"
     private const val MAX_IMAGE_NUM = 22
 
     private val NAME_FIRST_WORDS = arrayOf(
@@ -88,9 +89,9 @@ object RestaurantUtil {
 
     private fun getRandomName(random: Random): String {
         return (
-            getRandomString(NAME_FIRST_WORDS, random) + " " +
-                getRandomString(NAME_SECOND_WORDS, random)
-            )
+                getRandomString(NAME_FIRST_WORDS, random) + " " +
+                        getRandomString(NAME_SECOND_WORDS, random)
+                )
     }
 
     private fun getRandomString(array: Array<String>, random: Random): String {

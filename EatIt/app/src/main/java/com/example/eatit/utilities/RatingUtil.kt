@@ -1,7 +1,6 @@
 package com.example.eatit.util
 
 import com.example.eatit.model.Rating
-import java.util.ArrayList
 import java.util.Random
 import java.util.UUID
 import kotlin.math.floor

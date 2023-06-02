@@ -16,7 +16,9 @@ import javax.inject.Singleton
 object DataModule {
     @Singleton
     @Provides
-    fun provideSettingsRepository(@ApplicationContext context: Context) = SettingsRepository(context)
+    fun provideSettingsRepository(@ApplicationContext context: Context) =
+        SettingsRepository(context)
+
     @Singleton
     @Provides
     fun provideRestaurantsRepository(@ApplicationContext context: Context) =

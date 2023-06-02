@@ -18,14 +18,14 @@ import com.example.eatit.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RestaurantProfileScreen(modifier: Modifier = Modifier) {
-    Scaffold () { innerPadding ->
-        Column (modifier.padding(innerPadding)) {
+    Scaffold { innerPadding ->
+        Column(modifier.padding(innerPadding)) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
             ) {
-                Row() {
+                Row {
                     Icon(
                         Icons.Filled.AccountCircle,
                         contentDescription = stringResource(id = R.string.back),
@@ -71,7 +71,7 @@ fun RestaurantProfileScreen(modifier: Modifier = Modifier) {
                 onClick = { /* do something */ }
             ) {
                 Row(
-                    modifier= Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(

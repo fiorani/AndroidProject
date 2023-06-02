@@ -13,19 +13,21 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RestaurantHomeScreen() {
-    val orders = listOf<String>("A","A","A","A","A","A")
+    val orders = listOf<String>("A", "A", "A", "A", "A", "A")
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
 
-    Scaffold() {
-        Column() {
+    Scaffold {
+        Column {
             SearchBar(
                 query = query,
                 onQueryChange = { query = it },
                 onSearch = { active = false },
                 active = active,
                 onActiveChange = { active = it },
-                modifier = Modifier.fillMaxWidth().padding(5.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
             ) {
                 /*val filteredData = orders.filter { item ->
                     //item.orderId.contains(query, ignoreCase = true)
@@ -39,9 +41,14 @@ fun RestaurantHomeScreen() {
                 }*/
             }
 
-            LazyColumn(){
+            LazyColumn {
                 items(items = orders) { order ->
-                    OrderCard(customerName = "Marco", customerAddress= "Via O. Brobrio", total = 14.60f, orderDate = "19-10-2023")
+                    OrderCard(
+                        customerName = "Marco",
+                        customerAddress = "Via O. Brobrio",
+                        total = 14.60f,
+                        orderDate = "19-10-2023"
+                    )
                 }
             }
         }

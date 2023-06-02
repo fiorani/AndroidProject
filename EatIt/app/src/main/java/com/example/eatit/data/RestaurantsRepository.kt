@@ -15,7 +15,8 @@ class RestaurantsRepository(eatItApp: EatItApp) {
     }
 
     @WorkerThread
-    suspend fun insertNewProduct(restaurantId: String,product: Product) {
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("products").add(product)
+    suspend fun insertNewProduct(restaurantId: String, product: Product) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("products").add(product)
     }
 }

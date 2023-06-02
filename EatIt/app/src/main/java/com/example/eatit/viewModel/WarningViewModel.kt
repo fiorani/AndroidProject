@@ -3,7 +3,7 @@ package com.example.eatit.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class WarningViewModel: ViewModel() {
+class WarningViewModel : ViewModel() {
     private var _showPermissionSnackBar = mutableStateOf(false)
     val showPermissionSnackBar
         get() = _showPermissionSnackBar

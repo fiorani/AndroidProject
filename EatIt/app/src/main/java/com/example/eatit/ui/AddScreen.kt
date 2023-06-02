@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import androidx.compose.ui.graphics.Color
 import com.example.eatit.R
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
@@ -47,8 +47,7 @@ fun AddRestaurantScreen(
     var numRatings = 0
     var avgRating = 0.toDouble()
 
-    Scaffold(
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -155,10 +154,12 @@ fun AddRestaurantScreen(
 
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
-                AsyncImage(model = ImageRequest.Builder(context)
-                    .data(capturedImageUri)
-                    .crossfade(true)
-                    .build(), contentDescription = "image taken")
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(capturedImageUri)
+                        .crossfade(true)
+                        .build(), contentDescription = "image taken"
+                )
 
                 photo = saveImage(context.applicationContext.contentResolver, capturedImageUri)
             }
@@ -199,8 +200,7 @@ fun AddProductScreen(
     var price by rememberSaveable { mutableStateOf("") }
     var photoURI by rememberSaveable { mutableStateOf("") }
 
-    Scaffold(
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -294,7 +294,8 @@ fun AddProductScreen(
                             description = description,
                             price = price,
                             photo = photoURI
-                        ))
+                        )
+                    )
                     onNextButtonClicked()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Green),
@@ -304,10 +305,12 @@ fun AddProductScreen(
             }
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
-                AsyncImage(model = ImageRequest.Builder(context)
-                    .data(capturedImageUri)
-                    .crossfade(true)
-                    .build(), contentDescription = "image taken")
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(capturedImageUri)
+                        .crossfade(true)
+                        .build(), contentDescription = "image taken"
+                )
 
                 photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
             }

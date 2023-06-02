@@ -11,7 +11,8 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri): String {
     val bitmap = getBitmap(capturedImageUri, contentResolver)
@@ -46,6 +47,7 @@ private fun getBitmap(selectedPhotoUri: Uri, contentResolver: ContentResolver): 
             contentResolver,
             selectedPhotoUri
         )
+
         else -> {
             val source = ImageDecoder.createSource(contentResolver, selectedPhotoUri)
             ImageDecoder.decodeBitmap(source)

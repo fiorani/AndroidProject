@@ -40,8 +40,8 @@ sealed class AppScreen(val name: String) {
 
 
 @HiltAndroidApp
-class EatItApp : Application() {
-}
+class EatItApp : Application()
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarFunction(
@@ -54,8 +54,11 @@ fun TopAppBarFunction(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Row(){
-                Icon(Icons.Filled.LunchDining, contentDescription = stringResource(id = R.string.back))
+            Row {
+                Icon(
+                    Icons.Filled.LunchDining,
+                    contentDescription = stringResource(id = R.string.back)
+                )
                 Text(
                     text = currentScreen,
                     fontWeight = FontWeight.Medium,
@@ -153,7 +156,7 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            HomeScreen(
+            MapScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.AddRestaurant.name)
                 },
@@ -166,6 +169,7 @@ private fun NavigationGraph(
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
             //RestaurantMenuScreen()
+
         }
         composable(route = AppScreen.AddRestaurant.name) {
             AddRestaurantScreen(
@@ -173,19 +177,23 @@ private fun NavigationGraph(
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
                 restaurantsViewModel = restaurantsViewModel,
-            startLocationUpdates
+                startLocationUpdates
             )
         }
         composable(route = AppScreen.AddProduct.name) {
-            AddProductScreen(onNextButtonClicked = {
-                navController.popBackStack(AppScreen.Home.name, inclusive = false)
-            },
-                restaurantsViewModel = restaurantsViewModel)
+            AddProductScreen(
+                onNextButtonClicked = {
+                    navController.popBackStack(AppScreen.Home.name, inclusive = false)
+                },
+                restaurantsViewModel = restaurantsViewModel
+            )
         }
         composable(route = AppScreen.Details.name) {
-            DetailsRestaurantScreen(restaurantsViewModel = restaurantsViewModel,onAddButtonClicked = {
-                navController.navigate(AppScreen.AddProduct.name)
-            } )
+            DetailsRestaurantScreen(
+                restaurantsViewModel = restaurantsViewModel,
+                onAddButtonClicked = {
+                    navController.navigate(AppScreen.AddProduct.name)
+                })
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()

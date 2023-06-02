@@ -29,7 +29,13 @@ import com.example.eatit.data.LocationDetails
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.WarningViewModel
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Granularity
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,11 +49,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
-    private lateinit var connectivityManager : ConnectivityManager
+    private lateinit var connectivityManager: ConnectivityManager
 
-    val location =  mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
+    val location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
 
-    private var queue : RequestQueue? = null
+    private var queue: RequestQueue? = null
 
     val warningViewModel by viewModels<WarningViewModel>()
 
@@ -91,14 +97,14 @@ class MainActivity : ComponentActivity() {
         }
 
         networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network : Network) {
+            override fun onAvailable(network: Network) {
                 if (requestingLocationUpdates.value) {
                     sendRequest(location.value, connectivityManager)
                     warningViewModel.setConnectivitySnackBarVisibility(false)
                 }
             }
 
-            override fun onLost(network : Network) {
+            override fun onLost(network: Network) {
                 warningViewModel.setConnectivitySnackBarVisibility(true)
             }
         }
@@ -110,7 +116,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationApp(warningViewModel = warningViewModel, startLocationUpdates = ::startLocationUpdates)
+                    NavigationApp(
+                        warningViewModel = warningViewModel,
+                        startLocationUpdates = ::startLocationUpdates
+                    )
                 }
 
                 if (requestingLocationUpdates.value) {
@@ -124,7 +133,7 @@ class MainActivity : ComponentActivity() {
         val restaurantsViewModel by viewModels<RestaurantsViewModel>()
         queue = Volley.newRequestQueue(this)
         val url = "https://nominatim.openstreetmap.org/reverse?lat=" + location.latitude +
-                "&lon="+ location.longitude + "&format=jsonv2&limit=1"
+                "&lon=" + location.longitude + "&format=jsonv2&limit=1"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -169,11 +178,14 @@ class MainActivity : ComponentActivity() {
     private fun startLocationUpdates() {
         requestingLocationUpdates.value = true
 
-        val permission =   Manifest.permission.ACCESS_COARSE_LOCATION
+        val permission = Manifest.permission.ACCESS_COARSE_LOCATION
 
         when {
             //permission already granted
-            ContextCompat.checkSelfPermission (this, permission) == PackageManager.PERMISSION_GRANTED -> {
+            ContextCompat.checkSelfPermission(
+                this,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED -> {
                 locationRequest =
                     LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).apply {
                         setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
@@ -195,6 +207,7 @@ class MainActivity : ComponentActivity() {
             shouldShowRequestPermissionRationale(permission) -> {
                 warningViewModel.setPermissionSnackBarVisibility(true)
             }
+
             else -> {
                 //first time: ask for permissions
                 locationPermissionRequest.launch(
@@ -214,7 +227,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun isOnline(connectivityManager: ConnectivityManager): Boolean {
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true ||
             capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
         ) {

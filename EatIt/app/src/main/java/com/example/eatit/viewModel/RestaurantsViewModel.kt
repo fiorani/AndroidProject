@@ -12,13 +12,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RestaurantsViewModel @Inject constructor(
-    private val repository: RestaurantsRepository) : ViewModel() {
-    fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch{
+    private val repository: RestaurantsRepository
+) : ViewModel() {
+    fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
     }
-    fun addNewProduct(product: Product) = viewModelScope.launch{
+
+    fun addNewProduct(product: Product) = viewModelScope.launch {
         repository.insertNewProduct(_restaurantSelected?.id.toString(), product)
     }
+
     private var _restaurantSelected: Restaurant? = null
     val restaurantSelected
         get() = _restaurantSelected
@@ -39,8 +42,6 @@ class RestaurantsViewModel @Inject constructor(
     private fun resetGPSRestaurant() {
         _restaurantFromGPS.value = ""
     }
-
-
 
 
 }

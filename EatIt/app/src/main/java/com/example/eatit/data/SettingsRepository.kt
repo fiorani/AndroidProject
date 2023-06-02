@@ -34,7 +34,7 @@ class SettingsRepository(private val context: Context) {
             }
         }
         .map { preferences ->
-            preferences[USERNAME]?:""
+            preferences[USERNAME] ?: ""
         }
 
     suspend fun saveToDataStore(username: String) {

@@ -4,7 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.example.eatit.viewModel.WarningViewModel
@@ -39,7 +44,7 @@ internal fun GPSAlertDialogComposable(
         },
         dismissButton = {
             TextButton(
-                onClick = { warningViewModel.setGPSAlertDialogVisibility(false)  }
+                onClick = { warningViewModel.setGPSAlertDialogVisibility(false) }
             ) {
                 Text("Dismiss")
             }
@@ -67,6 +72,7 @@ internal fun PermissionSnackBarComposable(
                     applicationContext.startActivity(intent)
                 }
             }
+
             SnackbarResult.Dismissed -> {
                 warningViewModel.setPermissionSnackBarVisibility(false)
             }
@@ -95,6 +101,7 @@ fun ConnectivitySnackBarComposable(
                     applicationContext.startActivity(intent)
                 }
             }
+
             SnackbarResult.Dismissed -> {
                 warningViewModel.setConnectivitySnackBarVisibility(false)
             }
