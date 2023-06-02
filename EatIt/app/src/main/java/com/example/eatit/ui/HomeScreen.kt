@@ -32,11 +32,11 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val db = FirebaseFirestore.getInstance()
-    val restaurantsCollection = db.collection("restaurants")
+    val restaurantsCollection = FirebaseFirestore.getInstance().collection("restaurants")
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     val restaurants = remember { mutableStateListOf<DocumentSnapshot>() }
+    restaurants.clear()
     restaurantsCollection.get()
         .addOnSuccessListener { querySnapshot ->
             restaurants.addAll(querySnapshot.documents)
@@ -74,7 +74,7 @@ fun HomeScreen(
                 LazyColumn {
                     items(searchResults.size) { index ->
                         val restaurant = searchResults[index]
-                        ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+                        RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
                     }
                 }
             }
@@ -84,7 +84,7 @@ fun HomeScreen(
         ) {
             items(restaurants.size) { index ->
                 val restaurant = restaurants[index]
-                ristorantCard(restaurant, onItemClicked, restaurantsViewModel)
+                RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
             }
         }
     }
@@ -92,7 +92,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ristorantCard(
+fun RestaurantCard(
     restaurant: DocumentSnapshot,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel
