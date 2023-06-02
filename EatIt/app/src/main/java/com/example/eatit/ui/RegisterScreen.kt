@@ -224,7 +224,7 @@ fun RegisterScreen(
                         )
 
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
+                            Icons.Filled.LocationSearching,
                             contentDescription = "get gps",
                             modifier = Modifier
                                 .weight(1f)

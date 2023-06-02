@@ -138,9 +138,9 @@ class MainActivity : ComponentActivity() {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
-                /*restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
+                restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
                 connectivityManager.unregisterNetworkCallback(networkCallback)
-                requestingLocationUpdates.value = false*/
+                requestingLocationUpdates.value = false
             },
             { error ->
                 Log.d("MAINACTIVITY-SENDREQUEST", error.toString())
