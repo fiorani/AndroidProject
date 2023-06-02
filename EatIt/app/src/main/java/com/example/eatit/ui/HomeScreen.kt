@@ -64,9 +64,17 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
-                restaurantsCollection.whereEqualTo("name", query).get()
+                searchResults.clear()
+                restaurantsCollection.get()
                     .addOnSuccessListener { querySnapshot ->
-                        searchResults.addAll(querySnapshot.documents)
+                        for (document in querySnapshot)
+                        {
+                            if (document.data?.get("name").toString()
+                                    .contains(query, ignoreCase = true)
+                            ) {
+                                searchResults.add(document)
+                            }
+                        }
                     }
                     .addOnFailureListener { exception ->
                         println("Error getting restaurants: $exception")
