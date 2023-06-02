@@ -16,6 +16,7 @@ class RestaurantsViewModel @Inject constructor(
 ) : ViewModel() {
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
+        resetGPSRestaurant()
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
@@ -38,7 +39,6 @@ class RestaurantsViewModel @Inject constructor(
     fun setGPSRestaurant(restaurant: String) {
         _restaurantFromGPS.value = restaurant
     }
-
     private fun resetGPSRestaurant() {
         _restaurantFromGPS.value = ""
     }

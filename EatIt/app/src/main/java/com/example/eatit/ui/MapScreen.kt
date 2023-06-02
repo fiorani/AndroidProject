@@ -32,9 +32,7 @@ import com.google.maps.android.compose.rememberMarkerState
 
 @Composable
 fun MapScreen(
-    onAddButtonClicked: () -> Unit,
-    onItemClicked: () -> Unit,
-    restaurantsViewModel: RestaurantsViewModel,
+    startLocationUpdates: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val db = FirebaseFirestore.getInstance()
@@ -49,9 +47,9 @@ fun MapScreen(
         }
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
-            val singapore = LatLng(1.35, 103.87)
+            val camera = LatLng(1.35, 103.87)
             val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(singapore, 10f)
+                position = CameraPosition.fromLatLngZoom(camera, 10f)
             }
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),

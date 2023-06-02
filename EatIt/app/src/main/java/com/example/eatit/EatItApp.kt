@@ -156,7 +156,7 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            MapScreen(
+            HomeScreen(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.AddRestaurant.name)
                 },

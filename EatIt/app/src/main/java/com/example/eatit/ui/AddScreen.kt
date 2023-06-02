@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -40,7 +41,7 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var city by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
     var category by rememberSaveable { mutableStateOf("") }
     var photo by rememberSaveable { mutableStateOf("") }
     var price = 0
@@ -55,15 +56,6 @@ fun AddRestaurantScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -81,13 +73,21 @@ fun AddRestaurantScreen(
                 )
 
                 Icon(
-                    Icons.Filled.LocationSearching,
+                    painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
                     contentDescription = "get gps",
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable(onClick = startLocationUpdates)
+                    modifier = Modifier.weight(1f).clickable(onClick = startLocationUpdates)
                 )
             }
+            Spacer(modifier = Modifier.size(15.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource(id = R.string.restaurant_name)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+
+
 
             Spacer(modifier = Modifier.size(15.dp))
 
