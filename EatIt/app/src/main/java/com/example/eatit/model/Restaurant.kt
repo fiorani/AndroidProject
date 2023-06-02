@@ -1,5 +1,6 @@
 package com.example.eatit.model
 
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.IgnoreExtraProperties
 
 /**
@@ -14,6 +15,7 @@ data class Restaurant(
     var price: Int = 0,
     var numRatings: Int = 0,
     var avgRating: Double = 0.toDouble(),
+    var id: String? = null
 ) {
 
     companion object {

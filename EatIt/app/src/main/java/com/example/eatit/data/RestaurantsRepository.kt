@@ -5,8 +5,6 @@ import com.example.eatit.EatItApp
 import com.example.eatit.model.Restaurant
 import com.google.firebase.firestore.FirebaseFirestore
 
-import kotlinx.coroutines.tasks.*
-
 
 class RestaurantsRepository(eatItApp: EatItApp) {
 
