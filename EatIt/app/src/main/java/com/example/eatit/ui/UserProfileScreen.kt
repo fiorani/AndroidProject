@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -43,14 +44,17 @@ import com.google.firebase.ktx.Firebase
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewModel) {
-    var user: User? = null
+    var user = remember { mutableStateListOf<DocumentSnapshot>() }
+    user.clear()
     FirebaseFirestore.getInstance().collection("users").get()
         .addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot) {
+                println("Error getting restaurants: "+document.data.get("userId").toString()+" "+Firebase.auth.currentUser?.uid.toString())
                 if (document.data.get("userId").toString()
                         .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
                 ) {
-                    user = document.toObject(User::class.java)
+                    user.add(document)
+                    println("Error getting restaurants: "+ user?.toString() )
                 }
             }
         }
@@ -79,10 +83,11 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                     .padding(8.dp),
             ) {
                 Row {
-                    if (user?.photo.toString() != "") {
+                    if(user.size>0){
+                    if (user[0].data?.get("photo").toString() != "") {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(user?.photo)
+                                .data(Uri.parse(user[0].data?.get("photo").toString()))
                                 .crossfade(true)
                                 .build(),
                             contentDescription = "image of the restaurant",
@@ -92,16 +97,18 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                         )
                     }
                     Column {
-                        Text(
-                            text = user?.userName.toString(),
-                            modifier = Modifier.padding(8.dp),
-                            fontSize = 32.sp
-                        )
-                        Text(
-                            text = user?.userName.toString(),
-                            modifier = Modifier.padding(8.dp),
-                            fontSize = 16.sp
-                        )
+                            Text(
+                                text = user[0].data!!["userName"].toString(),
+                                modifier = Modifier.padding(8.dp),
+                                fontSize = 32.sp
+                            )
+                            Text(
+                                text = user[0].data!!["userName"].toString(),
+                                modifier = Modifier.padding(8.dp),
+                                fontSize = 16.sp
+                            )
+                        }
+
                     }
                 }
             }
