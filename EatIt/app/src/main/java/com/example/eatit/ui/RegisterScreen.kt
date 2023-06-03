@@ -239,6 +239,7 @@ fun RegisterScreen(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
                                       createAccount(txtName.toString(),txtPassword.toString())
+
                                         onAddButtonClicked()
                                       },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
