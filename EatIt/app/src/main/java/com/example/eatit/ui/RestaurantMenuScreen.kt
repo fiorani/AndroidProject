@@ -8,8 +8,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +29,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
     val orders = listOf<String>("A", "A", "A", "A", "A", "A")
     var cont = 0
     var cont2 = 0
+    val isSurfaceOpen = remember { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {} /*onAddButtonClicked*/) {
@@ -74,7 +80,9 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                     )
                                 )
                                 .padding(10.dp, 1.dp),
-                            onClick = { /* do something */ }
+                            onClick = {
+                                isSurfaceOpen.value = true
+                            }
                         ) {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -83,13 +91,50 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                     .padding(10.dp)
                             ) {
                                 Text("Sufflet")
-                                Text("€4")
+                                Row() {
+                                    Text("€4")
+                                    IconButton(
+                                        onClick = {}
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "Edit"
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
             Spacer(modifier = Modifier.size(80.dp))
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DishEdit(isSurfaceOpen : MutableState<Boolean>) {
+    Surface(
+        modifier = Modifier
+            .wrapContentWidth()
+            .wrapContentHeight(),
+        shape = MaterialTheme.shapes.large,
+        tonalElevation = AlertDialogDefaults.TonalElevation
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "This area typically contains the supportive text " +
+                        "which presents the details regarding the Dialog's purpose.",
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            TextButton(
+                onClick = {
+                    isSurfaceOpen.value = false
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Confirm")
+            }
         }
     }
 }
