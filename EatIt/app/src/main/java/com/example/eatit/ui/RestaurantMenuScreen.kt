@@ -114,8 +114,10 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
             if (isSurfaceOpen.value) {
                 Dialog(
                     onDismissRequest = { isSurfaceOpen.value = false },
-                ){
-                    DishEdit(isSurfaceOpen)
+                ) {
+                    DishEdit(isSurfaceOpen) {
+                        isSurfaceOpen.value = false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
+                    }
                 }
             }
         }
@@ -123,7 +125,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DishEdit(isSurfaceOpen : MutableState<Boolean>){
+fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit){
     Surface(
         modifier = Modifier
             .wrapContentWidth()
@@ -140,6 +142,7 @@ fun DishEdit(isSurfaceOpen : MutableState<Boolean>){
             TextButton(
                 onClick = {
                     isSurfaceOpen.value = false
+                    onConfirm() // Chiama la funzione onConfirm quando il pulsante viene premuto
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {
