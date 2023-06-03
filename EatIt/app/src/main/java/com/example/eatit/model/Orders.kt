@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
-data class Orders (
+data class Orders(
     var userId: String? = null,
     var userName: String? = null,
     var userProducts: List<Product>? = null,
@@ -13,7 +13,7 @@ data class Orders (
     @ServerTimestamp var timestamp: Date? = null,
 ) {
 
-    constructor(user: FirebaseUser,products: List<Product>, price: Double) : this() {
+    constructor(user: FirebaseUser, products: List<Product>, price: Double) : this() {
         this.userId = user.uid
         this.userName = user.displayName
         if (TextUtils.isEmpty(this.userName)) {

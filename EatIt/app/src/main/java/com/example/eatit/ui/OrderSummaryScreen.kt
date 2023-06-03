@@ -98,9 +98,15 @@ fun OrderSummaryScreen() {
                 )
             }
             SectionSummaryCard("Dessert", listOf("Asticee Bollyuto", "Funghi & Tartufy"))
-            SectionSummaryCard("Dolcini", listOf("Astice Bollito", "Funghi & Tartufy","Astice Bollito", "Funghi & Tartufy"))
+            SectionSummaryCard(
+                "Dolcini",
+                listOf("Astice Bollito", "Funghi & Tartufy", "Astice Bollito", "Funghi & Tartufy")
+            )
             SectionSummaryCard("Bevande", listOf("Astice Bollito", "Funghi & Tartufy"))
-            SectionSummaryCard("Antipasti", listOf("Astice Bollito", "Funghi & Tartufy", "Funghi & Tartufy"))
+            SectionSummaryCard(
+                "Antipasti",
+                listOf("Astice Bollito", "Funghi & Tartufy", "Funghi & Tartufy")
+            )
             Spacer(modifier = Modifier.size(20.dp))
         }
     }
@@ -108,8 +114,8 @@ fun OrderSummaryScreen() {
 
 @Composable
 fun SectionSummaryCard(
-sectionName: String,
-products: List<String>
+    sectionName: String,
+    products: List<String>
 ) {
     Text(
         modifier = Modifier.padding(20.dp, 10.dp),
@@ -118,8 +124,8 @@ products: List<String>
         fontWeight = FontWeight.Bold
     )
 
-    for(product in products) {
-        Row (
+    for (product in products) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp, 0.dp),
@@ -131,13 +137,13 @@ products: List<String>
                 colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(8.dp),
                 shape = CardDefaults.shape
-            ){
+            ) {
                 Row(
                     modifier = Modifier.width(285.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        modifier = Modifier.padding(17.dp,7.dp),
+                        modifier = Modifier.padding(17.dp, 7.dp),
                         text = product,
                         fontSize = 17.sp
                     )
@@ -149,7 +155,7 @@ products: List<String>
                 }
             }
             Text(
-                modifier = Modifier.padding(17.dp,0.dp),
+                modifier = Modifier.padding(17.dp, 0.dp),
                 text = "x 0",
                 fontSize = 17.sp
             )

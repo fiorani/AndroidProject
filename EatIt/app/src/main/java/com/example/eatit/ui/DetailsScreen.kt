@@ -145,12 +145,12 @@ fun productCard(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = product.data!!["name"].toString()+"("+product.data!!["description"].toString()+")",
+                text = product.data!!["name"].toString() + "(" + product.data!!["description"].toString() + ")",
                 modifier = Modifier.padding(8.dp),
                 fontSize = 20.sp
             )
             Text(
-                text = product.data!!["price"].toString()+"€",
+                text = product.data!!["price"].toString() + "€",
                 modifier = Modifier.padding(8.dp),
                 fontSize = 15.sp
             )
@@ -181,7 +181,7 @@ fun ratingCard(
                 modifier = Modifier.padding(4.dp),
                 fontSize = 20.sp
             )
-            Row() {
+            Row {
                 Text(
                     text = rating.data!!["userName"].toString(),
                     modifier = Modifier.padding(4.dp),

@@ -65,7 +65,7 @@ fun LoginScreen(
                             onClick = {
                                 singIn(txtName.text, txtPassword.text)
                                 onAddButtonClicked()
-                                 },
+                            },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Text(

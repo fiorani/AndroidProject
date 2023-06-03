@@ -85,7 +85,7 @@ fun TopAppBarFunction(
             }
         },
         actions = {
-            if (currentScreen != AppScreen.Settings.name) {
+            if (currentScreen == AppScreen.UserProfile.name) {
                 IconButton(onClick = onSettingsButtonClicked) {
                     Icon(
                         Icons.Filled.Settings,
@@ -93,7 +93,7 @@ fun TopAppBarFunction(
                     )
                 }
             }
-            if (currentScreen != AppScreen.UserProfile.name) {
+            if (currentScreen == AppScreen.Home.name) {
                 IconButton(onClick = onUserProfileButtonClicked) {
                     Icon(
                         Icons.Filled.AccountCircle,
@@ -122,13 +122,12 @@ fun NavigationApp(
     singIn: (String, String) -> Unit,
     createAccount: (String, String) -> Unit,
 ) {
-
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
     // Get the name of the current screen
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
-
     val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -142,7 +141,14 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding, startLocationUpdates, Modifier, singIn, createAccount)
+        NavigationGraph(
+            navController,
+            innerPadding,
+            startLocationUpdates,
+            Modifier,
+            singIn,
+            createAccount
+        )
         val context = LocalContext.current
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)
@@ -176,13 +182,13 @@ private fun NavigationGraph(
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            if(Firebase.auth.currentUser == null){
-                LoginScreen(modifier,singIn,onItemClicked = {
+            if (Firebase.auth.currentUser == null) {
+                LoginScreen(modifier, singIn, onItemClicked = {
                     navController.navigate(AppScreen.Register.name)
-                },createAccount, onAddButtonClicked = {
+                }, createAccount, onAddButtonClicked = {
                     navController.navigate(AppScreen.Home.name)
                 })
-            }else{
+            } else {
                 HomeScreen(
                     onAddButtonClicked = {
                         navController.navigate(AppScreen.AddRestaurant.name)
@@ -231,8 +237,10 @@ private fun NavigationGraph(
             SettingsScreen(settingsViewModel)
         }
         composable(route = AppScreen.Map.name) {
-            MapScreen(startLocationUpdates = startLocationUpdates,
-                restaurantsViewModel = restaurantsViewModel)
+            MapScreen(
+                startLocationUpdates = startLocationUpdates,
+                restaurantsViewModel = restaurantsViewModel
+            )
         }
         composable(route = AppScreen.UserProfile.name) {
             UserProfileScreen()
@@ -243,9 +251,9 @@ private fun NavigationGraph(
             }
         }
         composable(route = AppScreen.Login.name) {
-            LoginScreen(modifier,singIn,onItemClicked = {
+            LoginScreen(modifier, singIn, onItemClicked = {
                 navController.navigate(AppScreen.Register.name)
-            },createAccount, onAddButtonClicked = {
+            }, createAccount, onAddButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
             })
         }

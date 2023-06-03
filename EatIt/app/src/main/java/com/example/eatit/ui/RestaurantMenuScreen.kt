@@ -1,6 +1,5 @@
 package com.example.eatit.ui
 
-import android.app.Dialog
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -15,14 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.example.eatit.R
 import kotlinx.coroutines.launch
 
@@ -98,7 +95,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                     .padding(10.dp)
                             ) {
                                 Text("Sufflet")
-                                Row() {
+                                Row {
                                     Text("€4")
                                     IconButton(
                                         onClick = {}
@@ -121,16 +118,17 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                         isSurfaceOpen.value = false
                         cont = 0
                         cont2 = 0
-                                       },
+                    },
                 ) {
                     DishEdit(
                         isSurfaceOpen,
                         onConfirm = {
-                            isSurfaceOpen.value = false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
+                            isSurfaceOpen.value =
+                                false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
                             cont = 0
                             cont2 = 0
-                                    },
-                        snackbarHostState= snackbarHostState
+                        },
+                        snackbarHostState = snackbarHostState
                     )
                 }
             }
@@ -138,10 +136,14 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit, snackbarHostState: SnackbarHostState
-){
+fun DishEdit(
+    isSurfaceOpen: MutableState<Boolean>,
+    onConfirm: () -> Unit,
+    snackbarHostState: SnackbarHostState
+) {
     val scope = rememberCoroutineScope()
     var txtProduct by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -177,7 +179,7 @@ fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit, snac
 
                     }
                     txtPrice = it
-                                },
+                },
                 label = { Text("Price") }
             )
             Spacer(modifier = Modifier.height(24.dp))

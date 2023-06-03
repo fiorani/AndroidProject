@@ -39,6 +39,7 @@ class RestaurantsViewModel @Inject constructor(
     fun setGPSRestaurant(restaurant: String) {
         _restaurantFromGPS.value = restaurant
     }
+
     private fun resetGPSRestaurant() {
         _restaurantFromGPS.value = ""
     }

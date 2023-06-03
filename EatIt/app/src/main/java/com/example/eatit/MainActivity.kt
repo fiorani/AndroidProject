@@ -186,6 +186,7 @@ class MainActivity : ComponentActivity() {
             reload()
         }
     }
+
     private fun reload() {
     }
 
@@ -255,6 +256,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val TAG = "OSM_REQUEST"
     }
+
     private fun createAccount(email: String, password: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
@@ -277,6 +279,7 @@ class MainActivity : ComponentActivity() {
             }
         // [END create_user_with_email]
     }
+
     private fun signIn(email: String, password: String) {
         // [START sign_in_with_email]
         auth.signInWithEmailAndPassword(email, password)
@@ -299,6 +302,7 @@ class MainActivity : ComponentActivity() {
             }
         // [END sign_in_with_email]
     }
+
     private fun updateUI(user: FirebaseUser?) {
     }
 }

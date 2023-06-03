@@ -67,9 +67,8 @@ fun HomeScreen(
                 searchResults.clear()
                 restaurantsCollection.get()
                     .addOnSuccessListener { querySnapshot ->
-                        for (document in querySnapshot)
-                        {
-                            if (document.data?.get("name").toString()
+                        for (document in querySnapshot) {
+                            if (document.data.get("name").toString()
                                     .contains(query, ignoreCase = true)
                             ) {
                                 searchResults.add(document)
@@ -86,7 +85,7 @@ fun HomeScreen(
                     }
                 }
             }
-            LazyColumn() {
+            LazyColumn {
                 items(restaurants.size) { index ->
                     val restaurant = restaurants[index]
                     RestaurantCard(restaurant, onItemClicked, restaurantsViewModel)
@@ -118,7 +117,7 @@ fun RestaurantCard(
         shape = CardDefaults.shape,
 
         ) {
-        Row(modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth()) {
             if (restaurant.data?.get("photo").toString() != "") {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)

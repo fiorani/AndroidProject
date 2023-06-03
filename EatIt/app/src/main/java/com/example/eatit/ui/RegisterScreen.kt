@@ -1,12 +1,9 @@
 package com.example.eatit.ui
 
 import android.text.format.DateFormat
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,9 +13,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.R
 import com.example.eatit.ui.components.LocationField
-import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -211,7 +206,7 @@ fun RegisterScreen(
                     }
 
                     //Maps: Don't know if it's working correctly
-                    LocationField{}
+                    LocationField {}
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
@@ -238,10 +233,10 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                      createAccount(txtName.toString(),txtPassword.toString())
+                                createAccount(txtName.toString(), txtPassword.toString())
 
-                                        onAddButtonClicked()
-                                      },
+                                onAddButtonClicked()
+                            },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Text(

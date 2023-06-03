@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,9 +26,10 @@ fun UserOrderingMenuScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(10.dp)
-                .fillMaxSize().verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Column() {
+            Column {
                 SectionCard("Primi", listOf("Pollo", "Soya", "Mangime"))
                 SectionCard("Secondi", listOf("Pollo", "Soya", "Mangime"))
                 SectionCard("Terzi", listOf("Pollo", "Soya", "Mangime"))
@@ -100,27 +100,27 @@ fun SectionCard(
     }
 
     if (expandedState) {
-        for(product in products){
-            Row (
+        for (product in products) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(30.dp, 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(){
+                Row {
                     Icon(
                         imageVector = Icons.Default.Fastfood,
                         contentDescription = "Agriculture"
                     )
                     Text(
-                        modifier = Modifier.padding(10.dp,0.dp),
+                        modifier = Modifier.padding(10.dp, 0.dp),
                         text = product,
                         fontSize = 20.sp
                     )
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         onClick = {}
                     ) {
@@ -130,7 +130,7 @@ fun SectionCard(
                         )
                     }
                     Text(
-                        modifier = Modifier.padding(10.dp,0.dp),
+                        modifier = Modifier.padding(10.dp, 0.dp),
                         text = "0",
                         fontSize = 20.sp
                     )
