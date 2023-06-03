@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.eatit.viewModel.SettingsViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +40,16 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                 style = MaterialTheme.typography.bodyLarge
             )
 
+            Spacer(modifier = Modifier.size(35.dp))
+
+            Button(
+                onClick = {
+                    Firebase.auth.signOut()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Logout")
+            }
         }
     }
 }

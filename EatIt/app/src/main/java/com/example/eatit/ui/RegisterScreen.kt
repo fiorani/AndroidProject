@@ -13,7 +13,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.LocationField
+import com.example.eatit.viewModel.UsersViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import okhttp3.internal.wait
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,7 +27,9 @@ fun RegisterScreen(
     modifier: Modifier = Modifier,
     startLocationUpdates: () -> Unit,
     createAccount: (String, String) -> Unit,
-    onAddButtonClicked: () -> Unit
+    singIn: (String, String) -> Unit,
+    onNextButtonClicked: () -> Unit,
+    usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -233,9 +240,19 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                createAccount(txtName.toString(), txtPassword.toString())
-
-                                onAddButtonClicked()
+                               createAccount("1lello101112S292@mail.com", "123456")
+                                singIn("1lello101112S292@mail.com", "123456")
+                                if (Firebase.auth.currentUser != null) {
+                                    usersViewModel.addNewUser(
+                                        User(
+                                            Firebase.auth.currentUser?.uid,
+                                            txtName.toString(),
+                                            txtEmail.toString(),
+                                            "",
+                                            0,
+                                        ))
+                                    onNextButtonClicked()
+                                }
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {

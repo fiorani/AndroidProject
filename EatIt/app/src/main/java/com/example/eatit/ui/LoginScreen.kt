@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.sp
 fun LoginScreen(
     modifier: Modifier = Modifier,
     singIn: (String, String) -> Unit,
-    onItemClicked: () -> Unit,
+    onRegisterClicked: () -> Unit,
     createAccount: (String, String) -> Unit,
-    onAddButtonClicked: () -> Unit
+    onNextButtonClicked: () -> Unit
 ) {
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
@@ -64,7 +64,7 @@ fun LoginScreen(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
                                 singIn(txtName.text, txtPassword.text)
-                                onAddButtonClicked()
+                                onNextButtonClicked()
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
@@ -96,7 +96,7 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(55.dp, 5.dp),
                         onClick = {
-                            onItemClicked()
+                            onRegisterClicked( )
                         },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {

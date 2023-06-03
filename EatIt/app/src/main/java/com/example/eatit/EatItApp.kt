@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -176,6 +177,7 @@ private fun NavigationGraph(
     createAccount: (String, String) -> Unit
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
+    val usersViewModel = hiltViewModel<UsersViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -183,9 +185,9 @@ private fun NavigationGraph(
     ) {
         composable(route = AppScreen.Home.name) {
             if (Firebase.auth.currentUser == null) {
-                LoginScreen(modifier, singIn, onItemClicked = {
+                LoginScreen(modifier, singIn, onRegisterClicked = {
                     navController.navigate(AppScreen.Register.name)
-                }, createAccount, onAddButtonClicked = {
+                }, createAccount, onNextButtonClicked = {
                     navController.navigate(AppScreen.Home.name)
                 })
             } else {
@@ -200,10 +202,7 @@ private fun NavigationGraph(
                 )
             }
             //TODO: Refactor
-            //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
-            //LoginScreen()
             //RestaurantMenuScreen()
-            //MapScreen(startLocationUpdates = startLocationUpdates)
             //UserOrderingMenuScreen()
             //OrderSummaryScreen()
 
@@ -243,17 +242,17 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.UserProfile.name) {
-            UserProfileScreen()
+            UserProfileScreen(usersViewModel = usersViewModel)
         }
         composable(route = AppScreen.Register.name) {
-            RegisterScreen(modifier, startLocationUpdates, createAccount) {
+            RegisterScreen(modifier, startLocationUpdates, createAccount, singIn,onNextButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
-            }
+            }, usersViewModel = usersViewModel)
         }
         composable(route = AppScreen.Login.name) {
-            LoginScreen(modifier, singIn, onItemClicked = {
+            LoginScreen(modifier, singIn, onRegisterClicked = {
                 navController.navigate(AppScreen.Register.name)
-            }, createAccount, onAddButtonClicked = {
+            }, createAccount, onNextButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
             })
         }

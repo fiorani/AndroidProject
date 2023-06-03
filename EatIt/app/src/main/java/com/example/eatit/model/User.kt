@@ -5,19 +5,21 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class User(
+    var userId: String? = null,
     var userName: String? = null,
-    var city: String? = null,
+    var userEmail: String? = null,
     var photo: String? = null,
     var age: Int = 0,
 ) {
 
-    constructor(city: String, photo: String, age: Int) : this() {
+    constructor(mail: String, photo: String, age: Int) : this() {
         val user = Firebase.auth.currentUser
+        this.userId = user?.uid
         this.userName = user?.displayName
         if (TextUtils.isEmpty(this.userName)) {
             this.userName = user?.email
         }
-        this.city = city
+        this.userEmail = mail
         this.photo = photo
         this.age = age
     }
