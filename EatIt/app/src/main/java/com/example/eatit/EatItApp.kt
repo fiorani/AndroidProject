@@ -25,7 +25,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
-import com.example.eatit.viewModel.MainActivityViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.WarningViewModel
@@ -171,14 +170,13 @@ private fun NavigationGraph(
     createAccount: (String, String) -> Unit
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
-    val mainActivityViewModel = hiltViewModel<MainActivityViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            if(!mainActivityViewModel.isSigningIn && Firebase.auth.currentUser == null){
+            if(Firebase.auth.currentUser == null){
                 LoginScreen(modifier,singIn,onItemClicked = {
                     navController.navigate(AppScreen.Register.name)
                 },createAccount, onAddButtonClicked = {
@@ -198,7 +196,7 @@ private fun NavigationGraph(
             //TODO: Refactor
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
-            RestaurantMenuScreen()
+            //RestaurantMenuScreen()
             //MapScreen(startLocationUpdates = startLocationUpdates)
             //UserOrderingMenuScreen()
             //OrderSummaryScreen()
@@ -243,6 +241,13 @@ private fun NavigationGraph(
             RegisterScreen(modifier, startLocationUpdates, createAccount) {
                 navController.navigate(AppScreen.Home.name)
             }
+        }
+        composable(route = AppScreen.Login.name) {
+            LoginScreen(modifier,singIn,onItemClicked = {
+                navController.navigate(AppScreen.Register.name)
+            },createAccount, onAddButtonClicked = {
+                navController.navigate(AppScreen.Home.name)
+            })
         }
     }
 }
