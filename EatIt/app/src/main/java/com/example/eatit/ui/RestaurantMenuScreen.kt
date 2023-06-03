@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
+import com.example.eatit.ui.components.DropDownSelect
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,7 +96,9 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                     .padding(10.dp)
                             ) {
                                 Text("Sufflet")
-                                Row {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
                                     Text("€4")
                                     IconButton(
                                         onClick = {}
@@ -127,8 +130,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                 false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
                             cont = 0
                             cont2 = 0
-                        },
-                        snackbarHostState = snackbarHostState
+                        }
                     )
                 }
             }
@@ -141,16 +143,10 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
 @Composable
 fun DishEdit(
     isSurfaceOpen: MutableState<Boolean>,
-    onConfirm: () -> Unit,
-    snackbarHostState: SnackbarHostState
+    onConfirm: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    var txtProduct by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(""))
-    }
-    var txtPrice by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(""))
-    }
+    val dishTypes = listOf("Antipasti", "Primi", "Secondi", "Dolci", "Bevande")
+    
     Surface(
         modifier = Modifier
             .wrapContentWidth()
@@ -162,27 +158,40 @@ fun DishEdit(
             Text(
                 text = "Modifica pietanza:",
             )
+
+            Box() {
+                dishTypes.forEach(){ type ->
+                    AssistChip(
+                        onClick = { /* Do something! */ },
+                        label = { Text(type) }
+                    )
+                }
+            }
+
+            var txtProduct by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                mutableStateOf(TextFieldValue(""))
+            }
             OutlinedTextField(
                 value = txtProduct,
                 onValueChange = { txtProduct = it },
-                label = { Text("Name") }
+                label = { Text("Nome pietanza") }
             )
+
+            var txtPrice by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                mutableStateOf(TextFieldValue(""))
+            }
             OutlinedTextField(
                 value = txtPrice,
                 onValueChange = {
-                    if (it.text.toDoubleOrNull() == null) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Errore: inserire un numero")
-                        }
-                    } else {
-                        val tmp = it.text.substring(0, it.text.indexOf(",") + 2)
-
-                    }
-                    txtPrice = it
-                },
-                label = { Text("Price") }
+                    if (it.text.toDoubleOrNull() != null) {
+                        txtPrice = it
+                    } //val tmp = it.text.substring(0, it.text.indexOf(",") + 2) 
+                    },
+                label = { Text("Prezzo") }
             )
+            
             Spacer(modifier = Modifier.height(24.dp))
+            
             TextButton(
                 onClick = {
                     isSurfaceOpen.value = false
