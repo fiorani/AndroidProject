@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
+import com.example.eatit.ui.components.LocationField
 import com.example.eatit.viewModel.RestaurantsViewModel
 import java.util.*
 
@@ -210,28 +211,7 @@ fun RegisterScreen(
                     }
 
                     //Maps: Don't know if it's working correctly
-                    Row {
-                        var title by rememberSaveable { mutableStateOf("") }
-                        OutlinedTextField(
-                            value = title,
-                            onValueChange = { newText ->
-                                title = newText
-                            },
-                            label = {
-                                Text("Location")
-                            },
-                            modifier = Modifier.weight(4f)
-                        )
-
-                        Icon(
-                            Icons.Filled.LocationSearching,
-                            contentDescription = "get gps",
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(20.dp)
-                                .clickable(onClick = startLocationUpdates)
-                        )
-                    }
+                    LocationField{}
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
