@@ -30,7 +30,7 @@ fun HomeScreen(
     onAddButtonClicked: () -> Unit,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val restaurantsCollection = FirebaseFirestore.getInstance().collection("restaurants")
     var active by remember { mutableStateOf(false) }

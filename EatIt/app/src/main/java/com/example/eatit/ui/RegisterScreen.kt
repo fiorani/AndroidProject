@@ -18,7 +18,6 @@ import com.example.eatit.ui.components.LocationField
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import okhttp3.internal.wait
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -240,7 +239,7 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                               createAccount("1lello101112S292@mail.com", "123456")
+                                createAccount("1lello101112S292@mail.com", "123456")
                                 singIn("1lello101112S292@mail.com", "123456")
                                 if (Firebase.auth.currentUser != null) {
                                     usersViewModel.addNewUser(
@@ -250,7 +249,8 @@ fun RegisterScreen(
                                             txtEmail.toString(),
                                             "",
                                             0,
-                                        ))
+                                        )
+                                    )
                                     onNextButtonClicked()
                                 }
                             },

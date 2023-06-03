@@ -13,6 +13,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +25,9 @@ fun LoginScreen(
     createAccount: (String, String) -> Unit,
     onNextButtonClicked: () -> Unit
 ) {
+    if (Firebase.auth.currentUser != null) {
+        onNextButtonClicked()
+    }
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             Card(
@@ -96,7 +101,7 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(55.dp, 5.dp),
                         onClick = {
-                            onRegisterClicked( )
+                            onRegisterClicked()
                         },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {

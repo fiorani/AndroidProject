@@ -1,6 +1,5 @@
 package com.example.eatit.ui
 
-import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -10,11 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,13 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -49,7 +43,7 @@ import com.google.firebase.ktx.Firebase
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewModel) {
-    var user : User? = null
+    var user: User? = null
     FirebaseFirestore.getInstance().collection("users").get()
         .addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot) {
@@ -65,15 +59,16 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
         }
     val orders = remember { mutableStateListOf<DocumentSnapshot>() }
     orders.clear()
-    FirebaseFirestore.getInstance().collection("oders").get().addOnSuccessListener { querySnapshot ->
-        for (document in querySnapshot) {
-            if (document.data.get("userId").toString()
-                    .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
-            ) {
-                orders.add(document)
+    FirebaseFirestore.getInstance().collection("oders").get()
+        .addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot) {
+                if (document.data.get("userId").toString()
+                        .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
+                ) {
+                    orders.add(document)
+                }
             }
-        }
-    }.addOnFailureListener { exception ->
+        }.addOnFailureListener { exception ->
         println("Error getting restaurants: $exception")
     }
     Scaffold { innerPadding ->

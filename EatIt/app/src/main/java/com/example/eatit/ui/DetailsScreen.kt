@@ -36,10 +36,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 

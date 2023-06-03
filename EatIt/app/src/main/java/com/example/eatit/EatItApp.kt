@@ -29,8 +29,6 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 
 sealed class AppScreen(val name: String) {
@@ -102,7 +100,7 @@ fun TopAppBarFunction(
                     )
                 }
             }
-            if (currentScreen != AppScreen.Map.name) {
+            if (currentScreen == AppScreen.Home.name) {
                 IconButton(onClick = onMapButtonClicked) {
                     Icon(
                         Icons.Filled.Map,
@@ -180,27 +178,19 @@ private fun NavigationGraph(
     val usersViewModel = hiltViewModel<UsersViewModel>()
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Home.name,
+        startDestination = AppScreen.Login.name,
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            if (Firebase.auth.currentUser == null) {
-                LoginScreen(modifier, singIn, onRegisterClicked = {
-                    navController.navigate(AppScreen.Register.name)
-                }, createAccount, onNextButtonClicked = {
-                    navController.navigate(AppScreen.Home.name)
-                })
-            } else {
-                HomeScreen(
-                    onAddButtonClicked = {
-                        navController.navigate(AppScreen.AddRestaurant.name)
-                    },
-                    onItemClicked = {
-                        navController.navigate(AppScreen.Details.name)
-                    },
-                    restaurantsViewModel = restaurantsViewModel
-                )
-            }
+            HomeScreen(
+                onAddButtonClicked = {
+                    navController.navigate(AppScreen.AddRestaurant.name)
+                },
+                onItemClicked = {
+                    navController.navigate(AppScreen.Details.name)
+                },
+                restaurantsViewModel = restaurantsViewModel
+            )
             //TODO: Refactor
             //RestaurantMenuScreen()
             //UserOrderingMenuScreen()
@@ -245,9 +235,16 @@ private fun NavigationGraph(
             UserProfileScreen(usersViewModel = usersViewModel)
         }
         composable(route = AppScreen.Register.name) {
-            RegisterScreen(modifier, startLocationUpdates, createAccount, singIn,onNextButtonClicked = {
-                navController.navigate(AppScreen.Home.name)
-            }, usersViewModel = usersViewModel)
+            RegisterScreen(
+                modifier,
+                startLocationUpdates,
+                createAccount,
+                singIn,
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Home.name)
+                },
+                usersViewModel = usersViewModel
+            )
         }
         composable(route = AppScreen.Login.name) {
             LoginScreen(modifier, singIn, onRegisterClicked = {
