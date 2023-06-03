@@ -94,7 +94,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                                     .padding(10.dp)
                             ) {
                                 Text("Sufflet")
-                                Row(verticalAlignment = Alignment.CenterVertically,) {
+                                Row() {
                                     Text("€4")
                                     IconButton(
                                         onClick = {}
