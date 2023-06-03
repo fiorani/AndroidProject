@@ -11,19 +11,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.eatit.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +33,10 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
     var cont = 0
     var cont2 = 0
     val isSurfaceOpen = remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = {} /*onAddButtonClicked*/) {
                 Icon(
@@ -112,20 +116,39 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
             }
             Spacer(modifier = Modifier.size(80.dp))
             if (isSurfaceOpen.value) {
-                Dialog(
-                    onDismissRequest = { isSurfaceOpen.value = false },
+                AlertDialog(
+                    onDismissRequest = {
+                        isSurfaceOpen.value = false
+                        cont = 0
+                        cont2 = 0
+                                       },
                 ) {
-                    DishEdit(isSurfaceOpen) {
-                        isSurfaceOpen.value = false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
-                    }
+                    DishEdit(
+                        isSurfaceOpen,
+                        onConfirm = {
+                            isSurfaceOpen.value = false // Aggiorna isSurfaceOpen quando viene premuto "Confirm"
+                            cont = 0
+                            cont2 = 0
+                                    },
+                        snackbarHostState= snackbarHostState
+                    )
                 }
             }
+
         }
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit){
+fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit, snackbarHostState: SnackbarHostState
+){
+    val scope = rememberCoroutineScope()
+    var txtProduct by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
+    }
+    var txtPrice by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
+    }
     Surface(
         modifier = Modifier
             .wrapContentWidth()
@@ -135,8 +158,27 @@ fun DishEdit(isSurfaceOpen : MutableState<Boolean>, onConfirm : () -> Unit){
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "This area typically contains the supportive text " +
-                        "which presents the details regarding the Dialog's purpose.",
+                text = "Modifica pietanza:",
+            )
+            OutlinedTextField(
+                value = txtProduct,
+                onValueChange = { txtProduct = it },
+                label = { Text("Name") }
+            )
+            OutlinedTextField(
+                value = txtPrice,
+                onValueChange = {
+                    if (it.text.toDoubleOrNull() == null) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Errore: inserire un numero")
+                        }
+                    } else {
+                        val tmp = it.text.substring(0, it.text.indexOf(",") + 2)
+
+                    }
+                    txtPrice = it
+                                },
+                label = { Text("Price") }
             )
             Spacer(modifier = Modifier.height(24.dp))
             TextButton(
