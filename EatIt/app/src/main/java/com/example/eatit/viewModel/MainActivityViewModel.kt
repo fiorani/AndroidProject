@@ -8,7 +8,6 @@ import com.example.eatit.utilities.Filters
  */
 
 class MainActivityViewModel : ViewModel() {
-
     var isSigningIn: Boolean = false
     var filters: Filters = Filters.default
 }

@@ -16,7 +16,13 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    singIn: (String, String) -> Unit,
+    onItemClicked: () -> Unit,
+    createAccount: (String, String) -> Unit,
+    onAddButtonClicked: () -> Unit
+) {
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             Card(
@@ -56,7 +62,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     ) {
                         Button(
                             modifier = Modifier.padding(10.dp),
-                            onClick = { /* Do something! */ },
+                            onClick = {
+                                singIn(txtName.text, txtPassword.text)
+                                onAddButtonClicked()
+                                 },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             Text(
@@ -86,7 +95,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(55.dp, 5.dp),
-                        onClick = { /* Do something! */ },
+                        onClick = {
+                            onItemClicked()
+                        },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {
                         Text(

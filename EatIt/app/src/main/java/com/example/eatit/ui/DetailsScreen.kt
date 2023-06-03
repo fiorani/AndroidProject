@@ -114,7 +114,6 @@ fun DetailsRestaurantScreen(
             Spacer(modifier = Modifier.size(15.dp))
 
             LazyColumn {
-                Log.d("TAG", "entrato:")
                 items(products.size) { index ->
                     val product = products[index]
                     productCard(product)

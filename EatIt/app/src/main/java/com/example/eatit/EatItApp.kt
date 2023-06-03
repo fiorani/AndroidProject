@@ -1,7 +1,6 @@
 package com.example.eatit
 
 import android.app.Application
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -26,9 +25,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
+import com.example.eatit.viewModel.MainActivityViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.WarningViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 
 sealed class AppScreen(val name: String) {
@@ -39,6 +41,8 @@ sealed class AppScreen(val name: String) {
     object Settings : AppScreen("Settings Screen")
     object UserProfile : AppScreen("User Profile Screen")
     object Map : AppScreen("Map Screen")
+    object Login : AppScreen("Login Screen")
+    object Register : AppScreen("Register Screen")
 }
 
 
@@ -115,7 +119,9 @@ fun TopAppBarFunction(
 fun NavigationApp(
     warningViewModel: WarningViewModel,
     startLocationUpdates: () -> Unit,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    singIn: (String, String) -> Unit,
+    createAccount: (String, String) -> Unit,
 ) {
 
     // Get current back stack entry
@@ -137,7 +143,7 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding, startLocationUpdates)
+        NavigationGraph(navController, innerPadding, startLocationUpdates, Modifier, singIn, createAccount)
         val context = LocalContext.current
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)
@@ -160,24 +166,35 @@ private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
     startLocationUpdates: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    singIn: (String, String) -> Unit,
+    createAccount: (String, String) -> Unit
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
+    val mainActivityViewModel = hiltViewModel<MainActivityViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            HomeScreen(
-                onAddButtonClicked = {
-                    navController.navigate(AppScreen.AddRestaurant.name)
-                },
-                onItemClicked = {
-                    navController.navigate(AppScreen.Details.name)
-                },
-                restaurantsViewModel = restaurantsViewModel
-            )
+            if(!mainActivityViewModel.isSigningIn && Firebase.auth.currentUser == null){
+                LoginScreen(modifier,singIn,onItemClicked = {
+                    navController.navigate(AppScreen.Register.name)
+                },createAccount, onAddButtonClicked = {
+                    navController.navigate(AppScreen.Home.name)
+                })
+            }else{
+                HomeScreen(
+                    onAddButtonClicked = {
+                        navController.navigate(AppScreen.AddRestaurant.name)
+                    },
+                    onItemClicked = {
+                        navController.navigate(AppScreen.Details.name)
+                    },
+                    restaurantsViewModel = restaurantsViewModel
+                )
+            }
             //TODO: Refactor
             //RegisterScreen(restaurantsViewModel = restaurantsViewModel, startLocationUpdates = startLocationUpdates)
             //LoginScreen()
@@ -221,6 +238,11 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.UserProfile.name) {
             UserProfileScreen()
+        }
+        composable(route = AppScreen.Register.name) {
+            RegisterScreen(modifier, startLocationUpdates, createAccount) {
+                navController.navigate(AppScreen.Home.name)
+            }
         }
     }
 }
