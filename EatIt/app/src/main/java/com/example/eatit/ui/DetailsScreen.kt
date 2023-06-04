@@ -24,16 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
+import com.example.eatit.model.Orders
 import com.example.eatit.ui.components.EatItImage
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 
 @Composable
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
-    onAddButtonClicked: () -> Unit
+    onAddButtonClicked: () -> Unit,
+            cartViewModel: CartViewModel
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
     val productCollection = restaurantsViewModel.getProducts(restaurant?.id.toString())
@@ -53,6 +56,20 @@ fun DetailsRestaurantScreen(
     }.addOnFailureListener { exception ->
         println("Error getting restaurants: $exception")
     }
+    cartViewModel.selectOrder(Orders(
+    userId = "1",
+    restaurantId = restaurant?.id.toString(),
+        listProductId = ArrayList(
+            listOf()
+        ),
+        listQuantity = ArrayList(
+            listOf()
+        ),
+        listPrice = ArrayList(
+            listOf()
+        ),
+        totalPrice = 0.0,
+    ))
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {
@@ -95,7 +112,7 @@ fun DetailsRestaurantScreen(
             LazyColumn {
                 items(products.size) { index ->
                     val product = products[index]
-                    ProductCard(product)
+                    ProductCard(product,cartViewModel)
                 }
                 items(ratings.size) { index ->
                     val rating = ratings[index]

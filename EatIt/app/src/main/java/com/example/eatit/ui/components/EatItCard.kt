@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.Restaurant
 import com.example.eatit.ui.theme.EatItTheme
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.gowtham.ratingbar.RatingBar
@@ -90,7 +91,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: DocumentSnapshot) {
+fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
     EatItCard(onItemClicked = {
     }) {
         Row(
@@ -115,10 +116,15 @@ fun ProductCard(product: DocumentSnapshot) {
                 modifier = Modifier.padding(8.dp),
                 fontSize = 20.sp
             )
+            val (count, updateCount) = remember { mutableStateOf(0) }
             QuantitySelector(
-                count = 0,
-                decreaseItemCount = { /*TODO*/ },
-                increaseItemCount = { /*TODO*/ })
+                count = count,
+                decreaseItemCount = { if (count > 0) updateCount(count - 1)
+                                    cartViewModel.reduceCount(product)},
+                increaseItemCount = { updateCount(count + 1)
+                                    cartViewModel.increaseCount(product)
+                                    Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
+                })
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.eatit.di
 
 import android.content.Context
 import com.example.eatit.EatItApp
+import com.example.eatit.data.CartRepository
 import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.data.SettingsRepository
 import com.example.eatit.data.UsersRepository
@@ -29,4 +30,10 @@ object DataModule {
     @Provides
     fun provideUsersRepository(@ApplicationContext context: Context) =
         UsersRepository((context.applicationContext as EatItApp))
+    @Singleton
+    @Provides
+    fun provideCartRepository(@ApplicationContext context: Context) =
+        CartRepository((context.applicationContext as EatItApp))
+
+
 }

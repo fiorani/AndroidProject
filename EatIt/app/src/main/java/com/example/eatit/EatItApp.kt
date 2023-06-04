@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -213,6 +214,7 @@ private fun NavigationGraph(
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
+    val cartViewModel = hiltViewModel<CartViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Login.name,
@@ -255,7 +257,9 @@ private fun NavigationGraph(
                 restaurantsViewModel = restaurantsViewModel,
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.AddProduct.name)
-                })
+                },
+                cartViewModel = cartViewModel
+            )
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
