@@ -120,7 +120,8 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
             QuantitySelector(
                 count = count,
                 decreaseItemCount = { if (count > 0) updateCount(count - 1)
-                                    cartViewModel.reduceCount(product)},
+                                    cartViewModel.reduceCount(product)
+                                    cartViewModel.addNewOrder(cartViewModel.oderSelected!!)},
                 increaseItemCount = { updateCount(count + 1)
                                     cartViewModel.increaseCount(product)
                                     Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")

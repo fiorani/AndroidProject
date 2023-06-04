@@ -65,7 +65,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
         }
     val orders = remember { mutableStateListOf<DocumentSnapshot>() }
     orders.clear()
-    FirebaseFirestore.getInstance().collection("oders").get()
+    FirebaseFirestore.getInstance().collection("orders").get()
         .addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot) {
                 if (document.data.get("userId").toString()

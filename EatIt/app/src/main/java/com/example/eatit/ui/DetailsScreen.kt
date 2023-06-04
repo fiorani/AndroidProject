@@ -30,7 +30,9 @@ import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun DetailsRestaurantScreen(
@@ -57,7 +59,7 @@ fun DetailsRestaurantScreen(
         println("Error getting restaurants: $exception")
     }
     cartViewModel.selectOrder(Orders(
-    userId = "1",
+    userId = Firebase.auth.currentUser?.uid.toString(),
     restaurantId = restaurant?.id.toString(),
         listProductId = ArrayList(
             listOf()
