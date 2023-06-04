@@ -36,22 +36,23 @@ fun EatItImageCircle(photo: String) {
 @Composable
 fun EatItImage(photo: String) {
     if (photo != "") {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(photo))
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "image of the restaurant",
-                modifier = Modifier
-                    .fillMaxWidth().height(200.dp)
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(
-                            color = Color.Black.copy(alpha = 0.5f)
-                        )
-                    },
-                contentScale = ContentScale.FillWidth,
-            )
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(Uri.parse(photo))
+                .crossfade(true)
+                .build(),
+            contentDescription = "image of the restaurant",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .drawWithContent {
+                    drawContent()
+                    drawRect(
+                        color = Color.Black.copy(alpha = 0.5f)
+                    )
+                },
+            contentScale = ContentScale.FillWidth,
+        )
 
     }
 }

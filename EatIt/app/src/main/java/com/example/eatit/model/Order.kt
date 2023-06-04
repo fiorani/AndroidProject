@@ -1,15 +1,12 @@
 package com.example.eatit.model
 
-import androidx.compose.runtime.Immutable
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Date
 
-data class Orders(
+data class Order(
     var userId: String? = null,
     var restaurantId: String? = null,
     var listProductId: ArrayList<String>? = null,
@@ -17,8 +14,14 @@ data class Orders(
     var listPrice: ArrayList<String>? = null,
     var totalPrice: Double = 0.toDouble(),
     @ServerTimestamp var timestamp: Date? = null,
-){
-    constructor(productId: ArrayList<String>,quantity: ArrayList<String>,prices: ArrayList<String>, price: Double, restaurantId: String?) : this() {
+) {
+    constructor(
+        productId: ArrayList<String>,
+        quantity: ArrayList<String>,
+        prices: ArrayList<String>,
+        price: Double,
+        restaurantId: String?
+    ) : this() {
         val user = Firebase.auth.currentUser
         this.userId = user?.uid
         this.restaurantId = restaurantId
@@ -27,11 +30,13 @@ data class Orders(
         this.totalPrice = price
         this.listPrice = prices
     }
-    fun reduceCount(product: DocumentSnapshot, order: Orders): Orders {
+
+    fun reduceCount(product: DocumentSnapshot, order: Order): Order {
         val orderLines = order
         val productIndex = orderLines.listProductId?.indexOf(product.id)
         if (productIndex != null && productIndex != -1) {
-            val currentQuantity = orderLines.listQuantity?.get(productIndex!!)?.toIntOrNull()?: return orderLines
+            val currentQuantity =
+                orderLines.listQuantity?.get(productIndex!!)?.toIntOrNull() ?: return orderLines
             val newQuantity = currentQuantity?.minus(1)
             if (newQuantity == 0) {
                 orderLines.listProductId?.removeAt(productIndex!!)
@@ -40,7 +45,10 @@ data class Orders(
                 return updatePrice(orderLines)
             }
             if (newQuantity!! > 0) {
-                orderLines.listQuantity?.set(productIndex!!, newQuantity.toString())  // Update the quantity in the list
+                orderLines.listQuantity?.set(
+                    productIndex!!,
+                    newQuantity.toString()
+                )  // Update the quantity in the list
                 // Save the updated orderLines to the repository or perform any other necessary actions
             }
         }
@@ -48,15 +56,19 @@ data class Orders(
         return updatePrice(orderLines)
     }
 
-    fun increaseCount(product: DocumentSnapshot, order: Orders): Orders {
+    fun increaseCount(product: DocumentSnapshot, order: Order): Order {
         val orderLines = order
         val productIndex = orderLines.listProductId?.indexOf(product.id)
 
         if (productIndex != null && productIndex != -1) {
             // Il prodotto esiste già nell'ordine, incrementa la quantità
-            val currentQuantity = orderLines.listQuantity?.get(productIndex)?.toIntOrNull()?: return orderLines
+            val currentQuantity =
+                orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
             val newQuantity = currentQuantity?.plus(1)
-            orderLines.listQuantity?.set(productIndex, newQuantity.toString())  // Aggiorna la quantità nella lista
+            orderLines.listQuantity?.set(
+                productIndex,
+                newQuantity.toString()
+            )  // Aggiorna la quantità nella lista
         } else {
             // Il prodotto non esiste nell'ordine, aggiungilo
             orderLines.listProductId?.add(product.id)
@@ -68,10 +80,10 @@ data class Orders(
         return updatePrice(orderLines)
     }
 
-    private fun updatePrice(order: Orders): Orders {
+    private fun updatePrice(order: Order): Order {
         val orderLines = order
         var totalPrice = 0.0
-        for (i in orderLines.listQuantity!!.indices){
+        for (i in orderLines.listQuantity!!.indices) {
             totalPrice += orderLines.listQuantity!![i].toDouble() * orderLines.listPrice!![i].toDouble()
         }
         orderLines.totalPrice = totalPrice

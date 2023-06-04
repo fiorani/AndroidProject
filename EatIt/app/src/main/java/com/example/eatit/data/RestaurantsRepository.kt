@@ -22,9 +22,18 @@ class RestaurantsRepository(eatItApp: EatItApp) {
 
     fun getRestaurants() = FirebaseFirestore.getInstance().collection("restaurants").get()
 
-    fun getProducts(restaurantId: String) = FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("products").get()
+    fun getProducts(restaurantId: String) =
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("products").get()
 
-    fun getRatings(restaurantId: String) = FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("ratings").get()
+    fun getRatings(restaurantId: String) =
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("ratings").get()
 
-    fun getRestaurant(restaurantId: String) = FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).get()
+    fun getRestaurant(restaurantId: String) =
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).get()
+
+    fun getProduct(restaurantId: String, productId: String) =
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("products").document(productId).get()
 }

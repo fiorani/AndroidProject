@@ -36,6 +36,9 @@ class RestaurantsViewModel @Inject constructor(
 
     fun getRestaurant(restaurantId: String) = repository.getRestaurant(restaurantId)
 
+    fun getProduct(restaurantId: String, productId: String) =
+        repository.getProduct(restaurantId, productId)
+
     val restaurantSelected
         get() = _restaurantSelected
 

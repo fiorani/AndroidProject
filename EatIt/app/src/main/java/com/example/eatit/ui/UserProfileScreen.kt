@@ -1,6 +1,6 @@
 package com.example.eatit.ui
 
-import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -30,71 +30,44 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.eatit.R
+import com.example.eatit.model.Restaurant
 import com.example.eatit.ui.components.EatItImage
+import com.example.eatit.viewModel.CartViewModel
+import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewModel) {
-    var user = remember { mutableStateListOf<DocumentSnapshot>() }
+fun UserProfileScreen(
+    modifier: Modifier = Modifier,
+    usersViewModel: UsersViewModel,
+    restaurantsViewModel: RestaurantsViewModel,
+    cartViewModel: CartViewModel
+) {
+    var user: SnapshotStateList<DocumentSnapshot> by remember { mutableStateOf(mutableStateListOf()) }
     user.clear()
-    FirebaseFirestore.getInstance().collection("users").get()
-        .addOnSuccessListener { querySnapshot ->
-            for (document in querySnapshot) {
-                println(
-                    "Error getting restaurants: " + document.data.get("userId")
-                        .toString() + " " + Firebase.auth.currentUser?.uid.toString()
-                )
-                if (document.data.get("userId").toString()
-                        .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
-                ) {
-                    user.add(document)
-                    println("Error getting restaurants: " + user.toString())
-                }
-            }
-        }
-        .addOnFailureListener { exception ->
-            println("Error getting restaurants: $exception")
-        }
-    val orders = remember { mutableStateListOf<DocumentSnapshot>() }
+    user = usersViewModel.getUser()
+    var orders: SnapshotStateList<DocumentSnapshot> by remember { mutableStateOf(mutableStateListOf()) }
     orders.clear()
-    FirebaseFirestore.getInstance().collection("orders").get()
-        .addOnSuccessListener { querySnapshot ->
-            for (document in querySnapshot) {
-                if (document.data.get("userId").toString()
-                        .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
-                ) {
-                    orders.add(document)
-                }
-            }
-        }.addOnFailureListener { exception ->
-            println("Error getting restaurants: $exception")
-        }
+    orders = cartViewModel.getOrders() as SnapshotStateList<DocumentSnapshot>
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
-            if(user.size > 0){
+            if (user.size > 0) {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     EatItImage(user[0].data?.get("photo").toString())
                     Column(
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start,
                         modifier = Modifier
-                            .height(200.dp)) {
+                            .height(200.dp)
+                    ) {
                         Text(
                             text = user[0].data!!["userName"].toString(),
                             color = MaterialTheme.colorScheme.background,
@@ -121,7 +94,12 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(orders.size) { item ->
-                    orderCard(orders[item])
+                    var listProducts= remember {
+                        mutableStateListOf<DocumentSnapshot>()
+                    }
+                    listProducts.clear()
+                    listProducts = cartViewModel.getProducts(orders[item])
+                    orderCard(orders[item], restaurantsViewModel, cartViewModel,listProducts)
                 }
             }
 
@@ -131,11 +109,28 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun orderCard(orders: DocumentSnapshot) {
+fun orderCard(
+    orders: DocumentSnapshot,
+    restaurantsViewModel: RestaurantsViewModel,
+    cartViewModel: CartViewModel,
+    listProducts: SnapshotStateList<DocumentSnapshot>
+) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
+    var restaurant: Restaurant? = null
+    restaurantsViewModel.getRestaurant(orders.data?.get("restaurantId").toString())
+        .addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                restaurant = documentSnapshot.toObject(Restaurant::class.java)
+            }
+        }
+        .addOnFailureListener { exception ->
+            // Gestisci l'eventuale errore nell'ottenimento del documento
+        }
+
+    Log.d("listProducts", listProducts.size.toString())
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,20 +149,30 @@ fun orderCard(orders: DocumentSnapshot) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = orders.data?.get("userId").toString(),
+                text = restaurant?.name.toString(),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 32.sp
             )
             Text(
-                text = orders.data?.get("restaurantId").toString(),
+                text = orders.data?.get("totalPrice").toString(),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 16.sp
             )
             if (expandedState) {
-                Text(
-                    text = orders.data?.get("totalPrice").toString(),
-                    overflow = TextOverflow.Ellipsis
-                )
+                Column(Modifier.fillMaxWidth()) {
+                    listProducts.forEachIndexed { index, product ->
+                        Text(
+                            text = product.data?.get("name").toString(),
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = (orders.data?.get("listQuantity") as List<String>)[index],
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 16.sp
+                        )
+                    }
+                }
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically

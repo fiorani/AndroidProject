@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
-import com.example.eatit.model.Orders
+import com.example.eatit.model.Order
 import com.example.eatit.ui.components.EatItImage
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
@@ -38,7 +38,7 @@ import com.google.firebase.ktx.Firebase
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
     onAddButtonClicked: () -> Unit,
-            cartViewModel: CartViewModel
+    cartViewModel: CartViewModel
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
     val productCollection = restaurantsViewModel.getProducts(restaurant?.id.toString())
@@ -50,7 +50,7 @@ fun DetailsRestaurantScreen(
         println("Error getting restaurants: $exception")
     }
 
-    val ratingsCollection =restaurantsViewModel.getRatings(restaurant?.id.toString())
+    val ratingsCollection = restaurantsViewModel.getRatings(restaurant?.id.toString())
     val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
     ratings.clear()
     ratingsCollection.addOnSuccessListener { querySnapshot ->
@@ -58,20 +58,22 @@ fun DetailsRestaurantScreen(
     }.addOnFailureListener { exception ->
         println("Error getting restaurants: $exception")
     }
-    cartViewModel.selectOrder(Orders(
-    userId = Firebase.auth.currentUser?.uid.toString(),
-    restaurantId = restaurant?.id.toString(),
-        listProductId = ArrayList(
-            listOf()
-        ),
-        listQuantity = ArrayList(
-            listOf()
-        ),
-        listPrice = ArrayList(
-            listOf()
-        ),
-        totalPrice = 0.0,
-    ))
+    cartViewModel.selectOrder(
+        Order(
+            userId = Firebase.auth.currentUser?.uid.toString(),
+            restaurantId = restaurant?.id.toString(),
+            listProductId = ArrayList(
+                listOf()
+            ),
+            listQuantity = ArrayList(
+                listOf()
+            ),
+            listPrice = ArrayList(
+                listOf()
+            ),
+            totalPrice = 0.0,
+        )
+    )
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {
@@ -93,16 +95,18 @@ fun DetailsRestaurantScreen(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
-                        .height(200.dp)) {
+                        .height(200.dp)
+                ) {
                     Text(
                         text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
-                    )
+                        )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        text = restaurant?.city ?: stringResource(id = R.string.restaurant_description),
+                        text = restaurant?.city
+                            ?: stringResource(id = R.string.restaurant_description),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -114,7 +118,7 @@ fun DetailsRestaurantScreen(
             LazyColumn {
                 items(products.size) { index ->
                     val product = products[index]
-                    ProductCard(product,cartViewModel)
+                    ProductCard(product, cartViewModel)
                 }
                 items(ratings.size) { index ->
                     val rating = ratings[index]

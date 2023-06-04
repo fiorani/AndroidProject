@@ -1,5 +1,6 @@
 package com.example.eatit.viewModel
 
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
@@ -13,5 +14,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
     }
+
+    @Composable
+    fun getUser() = repository.getUser()
 
 }

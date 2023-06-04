@@ -119,12 +119,15 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
             val (count, updateCount) = remember { mutableStateOf(0) }
             QuantitySelector(
                 count = count,
-                decreaseItemCount = { if (count > 0) updateCount(count - 1)
-                                    cartViewModel.reduceCount(product)
-                                    cartViewModel.addNewOrder(cartViewModel.oderSelected!!)},
-                increaseItemCount = { updateCount(count + 1)
-                                    cartViewModel.increaseCount(product)
-                                    Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
+                decreaseItemCount = {
+                    if (count > 0) updateCount(count - 1)
+                    cartViewModel.reduceCount(product)
+                    cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
+                },
+                increaseItemCount = {
+                    updateCount(count + 1)
+                    cartViewModel.increaseCount(product)
+                    Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
                 })
         }
     }
@@ -169,6 +172,7 @@ fun RatingCard(rating: DocumentSnapshot) {
         }
     }
 }
+
 @Composable
 fun OrderCard(
     customerName: String,

@@ -90,6 +90,7 @@ fun TopAppBarFunction(
         }
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppBarFunction(
@@ -100,7 +101,7 @@ fun BottomAppBarFunction(
     onMapButtonClicked: () -> Unit,
     onHomeButtonClicked: () -> Unit,
     onCartButtonClicked: () -> Unit,
-){
+) {
 
     BottomAppBar(modifier = modifier,
         actions = {
@@ -143,6 +144,7 @@ fun BottomAppBarFunction(
         }
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
@@ -167,7 +169,7 @@ fun NavigationApp(
                 navigateUp = { navController.navigateUp() }
             )
         },
-        bottomBar={
+        bottomBar = {
             BottomAppBarFunction(
                 currentScreen = currentScreen,
                 onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
@@ -272,7 +274,11 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.UserProfile.name) {
-            UserProfileScreen(usersViewModel = usersViewModel)
+            UserProfileScreen(
+                usersViewModel = usersViewModel,
+                restaurantsViewModel = restaurantsViewModel,
+                cartViewModel = cartViewModel
+            )
         }
         composable(route = AppScreen.Register.name) {
             RegisterScreen(
@@ -294,7 +300,7 @@ private fun NavigationGraph(
             })
         }
         composable(route = AppScreen.Cart.name) {
-           CartScreen()
+            CartScreen()
         }
     }
 }

@@ -30,6 +30,7 @@ object DataModule {
     @Provides
     fun provideUsersRepository(@ApplicationContext context: Context) =
         UsersRepository((context.applicationContext as EatItApp))
+
     @Singleton
     @Provides
     fun provideCartRepository(@ApplicationContext context: Context) =
