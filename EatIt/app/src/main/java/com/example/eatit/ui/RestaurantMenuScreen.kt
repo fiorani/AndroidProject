@@ -21,8 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
-import com.example.eatit.ui.components.DropDownSelect
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,8 +157,8 @@ fun DishEdit(
                 text = "Modifica pietanza:",
             )
 
-            Box() {
-                dishTypes.forEach(){ type ->
+            Box {
+                dishTypes.forEach { type ->
                     AssistChip(
                         onClick = { /* Do something! */ },
                         label = { Text(type) }

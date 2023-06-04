@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.eatit.model.User
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -54,7 +53,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                         .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
                 ) {
                     user.add(document)
-                    println("Error getting restaurants: "+ user?.toString() )
+                    println("Error getting restaurants: "+ user.toString())
                 }
             }
         }

@@ -1,27 +1,170 @@
-package com.example.eatit.ui
+package com.example.eatit.ui.components
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
+import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.eatit.model.Restaurant
+import com.example.eatit.ui.theme.EatItTheme
+import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.firestore.DocumentSnapshot
+import com.gowtham.ratingbar.RatingBar
+import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+private fun EatItCard(onItemClicked: () -> Unit, function: @Composable () -> Unit) {
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(8.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = CardDefaults.shape,
+        onClick = onItemClicked,
+        content = @Composable {
+            function()
+        }
+    )
+}
+
+@Composable
+fun RestaurantCard(restaurant: DocumentSnapshot, onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
+    EatItCard(onItemClicked = {
+        val restaurantt = restaurant.toObject(Restaurant::class.java)
+        restaurantt?.id = restaurant.id
+        restaurantsViewModel.selectRestaurant(restaurantt!!)
+        onItemClicked()
+    }) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            if (restaurant.data?.get("photo").toString() != "") {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(Uri.parse(restaurant.data?.get("photo").toString()))
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "image of the restaurant",
+                    modifier = Modifier
+                        .size(size = 100.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = restaurant.data!!["name"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 28.sp
+                )
+                Text(
+                    text = restaurant.data!!["city"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 16.sp
+                )
+                var rating: Float by remember { mutableStateOf(3.2f) }
+                RatingBar(
+                    value = restaurant.data!!["avgRating"].toString().toFloat(),
+                    style = RatingBarStyle.Fill(),
+                    onValueChange = {
+                        rating = it
+                    },
+                    onRatingChanged = {
+                        Log.d("TAG", "onRatingChanged: $it")
+                    },
+                    modifier = Modifier.padding(4.dp),
+                    size = 20.dp
+                )
+
+            }
+        }
+
+    }
+}
+@Composable
+fun ProductCard(product: DocumentSnapshot) {
+    EatItCard(onItemClicked = {
+    }) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = product.data!!["name"].toString() + "(" + product.data!!["description"].toString() + ")",
+                modifier = Modifier.padding(8.dp),
+                fontSize = 20.sp
+            )
+            Text(
+                text = product.data!!["price"].toString() + "€",
+                modifier = Modifier.padding(8.dp),
+                fontSize = 15.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun RatingCard(rating: DocumentSnapshot) {
+    EatItCard(onItemClicked = {
+    }){
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = rating.data!!["text"].toString(),
+                modifier = Modifier.padding(4.dp),
+                fontSize = 20.sp
+            )
+            Row {
+                Text(
+                    text = rating.data!!["userName"].toString(),
+                    modifier = Modifier.padding(4.dp),
+                    fontSize = 15.sp
+                )
+                var valrating: Float by remember { mutableStateOf(3.2f) }
+                RatingBar(
+                    value = rating.data!!["rating"].toString().toFloat(),
+                    style = RatingBarStyle.Fill(),
+                    onValueChange = {
+                        valrating = it
+                    },
+                    onRatingChanged = {
+                        Log.d("TAG", "onRatingChanged: $it")
+                    },
+                    modifier = Modifier.padding(4.dp),
+                    size = 20.dp
+                )
+            }
+
+
+        }
+    }
+}
+
+@Composable
 fun OrderCard(
-    modifier: Modifier = Modifier,
     customerName: String,
     customerAddress: String,
     total: Float,
@@ -32,17 +175,7 @@ fun OrderCard(
         targetValue = if (expandedState) 180f else 0f
     )
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            )
-            .padding(10.dp),
-    ) {
+    EatItCard(onItemClicked = {}) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -179,5 +312,18 @@ fun OrderCard(
                 )
             }
         }
+    }
+}
+
+@Preview("default")
+@Composable
+fun Preview() {
+    EatItTheme {
+        OrderCard(
+            customerName = "Mario Rossi",
+            customerAddress = "Via Roma 1",
+            total = 10f,
+            orderDate = "12/12/2021"
+        )
     }
 }
