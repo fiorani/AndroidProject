@@ -11,4 +11,5 @@ class CartRepository(eatItApp: EatItApp) {
     suspend fun insertNewOrder(order: Orders) {
         FirebaseFirestore.getInstance().collection("orders").add(order)
     }
+    fun getOrders() = FirebaseFirestore.getInstance().collection("orders").get()
 }
