@@ -1,11 +1,9 @@
 package com.example.eatit.ui.components
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,22 +36,23 @@ fun EatItImageCircle(photo: String) {
 @Composable
 fun EatItImage(photo: String) {
     if (photo != "") {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(photo))
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "image of the restaurant",
-                modifier = Modifier
-                    .fillMaxWidth().height(200.dp)
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(
-                            color = Color.Black.copy(alpha = 0.5f)
-                        )
-                    },
-                contentScale = ContentScale.FillWidth,
-            )
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(Uri.parse(photo))
+                .crossfade(true)
+                .build(),
+            contentDescription = "image of the restaurant",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .drawWithContent {
+                    drawContent()
+                    drawRect(
+                        color = Color.Black.copy(alpha = 0.5f)
+                    )
+                },
+            contentScale = ContentScale.FillWidth,
+        )
 
     }
 }

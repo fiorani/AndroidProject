@@ -19,6 +19,7 @@ private val Karla = FontFamily(
     Font(R.font.karla_regular, FontWeight.Normal),
     Font(R.font.karla_bold, FontWeight.Bold)
 )
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     titleLarge = TextStyle(
@@ -29,17 +30,17 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
     titleMedium = TextStyle(
-    fontFamily = Montserrat,
-    fontWeight = FontWeight.Normal,
-    fontSize = 24.sp,
-    lineHeight = 24.sp,
-    letterSpacing = 0.5.sp
+        fontFamily = Montserrat,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
-    fontFamily = Karla,
-    fontWeight = FontWeight.Normal,
-    fontSize = 16.sp,
-    lineHeight = 16.sp,
-    letterSpacing = 0.5.sp
+        fontFamily = Karla,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     )
 )

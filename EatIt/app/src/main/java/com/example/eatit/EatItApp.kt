@@ -1,15 +1,19 @@
 package com.example.eatit
 
 import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,10 +58,7 @@ fun TopAppBarFunction(
     currentScreen: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
-    onSettingsButtonClicked: () -> Unit,
-    onUserProfileButtonClicked: () -> Unit,
-    onMapButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -76,7 +77,7 @@ fun TopAppBarFunction(
         modifier = modifier,
         navigationIcon = {
             //se si può navigare indietro (non home screen) allora appare la freccetta
-            if (canNavigateBack) {
+            if (canNavigateBack && currentScreen != AppScreen.Home.name) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -84,31 +85,57 @@ fun TopAppBarFunction(
                     )
                 }
             }
-        },
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomAppBarFunction(
+    currentScreen: String,
+    modifier: Modifier = Modifier,
+    onSettingsButtonClicked: () -> Unit,
+    onUserProfileButtonClicked: () -> Unit,
+    onMapButtonClicked: () -> Unit,
+) {
+
+    BottomAppBar(modifier = modifier,
         actions = {
-            if (currentScreen == AppScreen.UserProfile.name) {
-                IconButton(onClick = onSettingsButtonClicked) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                IconButton(onClick = {}) {
                     Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = stringResource(id = R.string.settings)
+                        Icons.Filled.Home,
+                        contentDescription = stringResource(id = R.string.settings),
                     )
                 }
-            }
-            if (currentScreen == AppScreen.Home.name) {
                 IconButton(onClick = onUserProfileButtonClicked) {
                     Icon(
                         Icons.Filled.AccountCircle,
                         contentDescription = stringResource(id = R.string.settings)
                     )
                 }
-            }
-            if (currentScreen == AppScreen.Home.name) {
+                IconButton(onClick = {}) {
+                    Icon(
+                        Icons.Filled.ShoppingCart,
+                        contentDescription = stringResource(id = R.string.settings),
+                    )
+                }
                 IconButton(onClick = onMapButtonClicked) {
                     Icon(
                         Icons.Filled.Map,
                         contentDescription = stringResource(id = R.string.settings),
                     )
                 }
+                IconButton(onClick = onSettingsButtonClicked) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
+
             }
         }
     )
@@ -135,7 +162,12 @@ fun NavigationApp(
             TopAppBarFunction(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
+                navigateUp = { navController.navigateUp() }
+            )
+        },
+        bottomBar = {
+            BottomAppBarFunction(
+                currentScreen = currentScreen,
                 onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
                 onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
                 onMapButtonClicked = { navController.navigate(AppScreen.Map.name) }

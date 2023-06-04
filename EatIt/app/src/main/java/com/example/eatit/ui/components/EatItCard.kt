@@ -1,28 +1,21 @@
 package com.example.eatit.ui.components
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.eatit.model.Restaurant
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -58,7 +51,7 @@ fun RestaurantCard(
         restaurantsViewModel.selectRestaurant(restaurantt!!)
         onItemClicked()
     }) {
-        Row() {
+        Row {
             Surface(modifier = Modifier.size(100.dp)) {
                 EatItImageCircle(restaurant.data!!["photo"].toString())
             }
@@ -104,7 +97,7 @@ fun ProductCard(product: DocumentSnapshot) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column() {
+            Column {
                 Text(
                     text = product.data!!["name"].toString(),
                     modifier = Modifier.padding(8.dp),
@@ -169,6 +162,7 @@ fun RatingCard(rating: DocumentSnapshot) {
         }
     }
 }
+
 @Composable
 fun OrderCard(
     customerName: String,

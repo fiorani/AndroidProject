@@ -13,7 +13,6 @@ import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +22,7 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val restaurantsCollection = FirebaseFirestore.getInstance().collection("restaurants").get()
+    val restaurantsCollection = restaurantsViewModel.getRestaurants()
     val restaurants = remember { mutableStateListOf<DocumentSnapshot>() }
     restaurants.clear()
     restaurantsCollection.addOnSuccessListener { querySnapshot ->
