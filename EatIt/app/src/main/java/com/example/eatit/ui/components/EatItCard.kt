@@ -47,26 +47,20 @@ private fun EatItCard(onItemClicked: () -> Unit, function: @Composable () -> Uni
 }
 
 @Composable
-fun RestaurantCard(restaurant: DocumentSnapshot, onItemClicked: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
+fun RestaurantCard(
+    restaurant: DocumentSnapshot,
+    onItemClicked: () -> Unit,
+    restaurantsViewModel: RestaurantsViewModel
+) {
     EatItCard(onItemClicked = {
         val restaurantt = restaurant.toObject(Restaurant::class.java)
         restaurantt?.id = restaurant.id
         restaurantsViewModel.selectRestaurant(restaurantt!!)
         onItemClicked()
     }) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            if (restaurant.data?.get("photo").toString() != "") {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(restaurant.data?.get("photo").toString()))
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "image of the restaurant",
-                    modifier = Modifier
-                        .size(size = 100.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
+        Row() {
+            Surface(modifier = Modifier.size(100.dp)) {
+                EatItimage(restaurant.data!!["photo"].toString())
             }
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -101,6 +95,7 @@ fun RestaurantCard(restaurant: DocumentSnapshot, onItemClicked: () -> Unit, rest
 
     }
 }
+
 @Composable
 fun ProductCard(product: DocumentSnapshot) {
     EatItCard(onItemClicked = {
@@ -126,7 +121,7 @@ fun ProductCard(product: DocumentSnapshot) {
 @Composable
 fun RatingCard(rating: DocumentSnapshot) {
     EatItCard(onItemClicked = {
-    }){
+    }) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
@@ -162,7 +157,6 @@ fun RatingCard(rating: DocumentSnapshot) {
         }
     }
 }
-
 @Composable
 fun OrderCard(
     customerName: String,

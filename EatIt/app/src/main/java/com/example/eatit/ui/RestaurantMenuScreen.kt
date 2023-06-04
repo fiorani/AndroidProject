@@ -144,7 +144,7 @@ fun DishEdit(
     onConfirm: () -> Unit
 ) {
     val dishTypes = listOf("Antipasti", "Primi", "Secondi", "Dolci", "Bevande")
-    
+
     Surface(
         modifier = Modifier
             .wrapContentWidth()
@@ -184,12 +184,12 @@ fun DishEdit(
                     if (it.text.toDoubleOrNull() != null) {
                         txtPrice = it
                     } //val tmp = it.text.substring(0, it.text.indexOf(",") + 2) 
-                    },
+                },
                 label = { Text("Prezzo") }
             )
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             TextButton(
                 onClick = {
                     isSurfaceOpen.value = false

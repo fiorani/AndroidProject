@@ -19,9 +19,11 @@ import com.google.firebase.firestore.QuerySnapshot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EatItSearchBar(restaurants: Task<QuerySnapshot>,
-                               onItemClicked: () -> Unit,
-                               restaurantsViewModel: RestaurantsViewModel) {
+fun EatItSearchBar(
+    restaurants: Task<QuerySnapshot>,
+    onItemClicked: () -> Unit,
+    restaurantsViewModel: RestaurantsViewModel
+) {
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     SearchBar(
@@ -33,7 +35,7 @@ fun EatItSearchBar(restaurants: Task<QuerySnapshot>,
         active = active,
         onActiveChange = { active = it },
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
         searchResults.clear()
         restaurants.addOnSuccessListener { querySnapshot ->

@@ -48,12 +48,15 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
     FirebaseFirestore.getInstance().collection("users").get()
         .addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot) {
-                println("Error getting restaurants: "+document.data.get("userId").toString()+" "+Firebase.auth.currentUser?.uid.toString())
+                println(
+                    "Error getting restaurants: " + document.data.get("userId")
+                        .toString() + " " + Firebase.auth.currentUser?.uid.toString()
+                )
                 if (document.data.get("userId").toString()
                         .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
                 ) {
                     user.add(document)
-                    println("Error getting restaurants: "+ user.toString())
+                    println("Error getting restaurants: " + user.toString())
                 }
             }
         }
@@ -72,8 +75,8 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                 }
             }
         }.addOnFailureListener { exception ->
-        println("Error getting restaurants: $exception")
-    }
+            println("Error getting restaurants: $exception")
+        }
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             Card(
@@ -82,20 +85,20 @@ fun UserProfileScreen(modifier: Modifier = Modifier, usersViewModel: UsersViewMo
                     .padding(8.dp),
             ) {
                 Row {
-                    if(user.size>0){
-                    if (user[0].data?.get("photo").toString() != "") {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(Uri.parse(user[0].data?.get("photo").toString()))
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "image of the restaurant",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        )
-                    }
-                    Column {
+                    if (user.size > 0) {
+                        if (user[0].data?.get("photo").toString() != "") {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(Uri.parse(user[0].data?.get("photo").toString()))
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "image of the restaurant",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                            )
+                        }
+                        Column {
                             Text(
                                 text = user[0].data!!["userName"].toString(),
                                 modifier = Modifier.padding(8.dp),

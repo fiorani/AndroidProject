@@ -14,6 +14,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
+import com.example.eatit.ui.components.EatItimage
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -73,20 +75,11 @@ fun DetailsRestaurantScreen(
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(paddingValues).fillMaxWidth()
+            modifier = Modifier
+                .padding(paddingValues)
         ) {
-            if (restaurant?.photo != "") {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(Uri.parse(restaurant?.photo))
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "image of the restaurant",
-                    modifier = Modifier
-                        .size(200.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
+            Surface(modifier = Modifier.size(200.dp)) {
+                EatItimage(restaurant?.photo ?: "")
             }
 
             Spacer(modifier = Modifier.size(15.dp))

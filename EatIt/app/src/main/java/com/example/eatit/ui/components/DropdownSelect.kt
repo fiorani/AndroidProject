@@ -15,19 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 
 @Composable
-fun DropDownSelect(){
+fun DropDownSelect() {
     val dishTypes = listOf("Antipasti", "Primi", "Secondi", "Dolci", "Bevande")
     val isDropped = remember { mutableStateOf(false) }
     val selected = remember { mutableStateOf("Antipasti") }
 
-    Button(onClick = { isDropped.value = true}) {
+    Button(onClick = { isDropped.value = true }) {
         Text(text = selected.value)
         Icon(
             imageVector = Icons.Default.ArrowDropDown,
             contentDescription = "ArrowDropDown"
         )
     }
-    if(isDropped.value) {
+    if (isDropped.value) {
         Surface(modifier = Modifier.zIndex(3f)) {
             Column {
                 dishTypes.forEach { type ->
@@ -36,7 +36,7 @@ fun DropDownSelect(){
                             selected.value = type
                             isDropped.value = false
                         }
-                    ){
+                    ) {
                         Text(text = type)
                     }
                 }

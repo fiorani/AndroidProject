@@ -27,8 +27,8 @@ fun HomeScreen(
     val restaurants = remember { mutableStateListOf<DocumentSnapshot>() }
     restaurants.clear()
     restaurantsCollection.addOnSuccessListener { querySnapshot ->
-            restaurants.addAll(querySnapshot.documents)
-        }
+        restaurants.addAll(querySnapshot.documents)
+    }
         .addOnFailureListener { exception ->
             println("Error getting restaurants: $exception")
         }
@@ -43,9 +43,11 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         Column(modifier.padding(innerPadding)) {
-            EatItSearchBar(restaurantsCollection ,onItemClicked,
-                restaurantsViewModel)
-            LazyColumn {
+            EatItSearchBar(
+                restaurantsCollection, onItemClicked,
+                restaurantsViewModel
+            )
+            LazyColumn(Modifier.fillMaxWidth()) {
                 items(restaurants.size) { index ->
                     val restaurant = restaurants[index]
                     RestaurantCard(
