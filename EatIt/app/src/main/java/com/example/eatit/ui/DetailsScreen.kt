@@ -1,9 +1,13 @@
 package com.example.eatit.ui
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,9 +33,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.eatit.R
-import com.example.eatit.ui.components.EatItimage
+import com.example.eatit.ui.components.EatItImage
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
+import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -78,25 +83,28 @@ fun DetailsRestaurantScreen(
             modifier = Modifier
                 .padding(paddingValues)
         ) {
-            Surface(modifier = Modifier.size(200.dp)) {
-                EatItimage(restaurant?.photo ?: "")
+            Box(modifier = Modifier.fillMaxWidth()) {
+                EatItImage(restaurant?.photo ?: "")
+                Column(
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .height(200.dp)) {
+                    Text(
+                        text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
+                        color = MaterialTheme.colorScheme.background,
+                        style = MaterialTheme.typography.titleLarge,
+
+                    )
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Text(
+                        text = restaurant?.city ?: stringResource(id = R.string.restaurant_description),
+                        color = MaterialTheme.colorScheme.background,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.size(15.dp))
+                }
             }
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            Text(
-                text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            Text(
-                text = restaurant?.city ?: stringResource(id = R.string.restaurant_description),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium
-            )
             Spacer(modifier = Modifier.size(15.dp))
 
             LazyColumn {

@@ -60,7 +60,7 @@ fun RestaurantCard(
     }) {
         Row() {
             Surface(modifier = Modifier.size(100.dp)) {
-                EatItimage(restaurant.data!!["photo"].toString())
+                EatItImageCircle(restaurant.data!!["photo"].toString())
             }
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -104,16 +104,28 @@ fun ProductCard(product: DocumentSnapshot) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = product.data!!["name"].toString() + "(" + product.data!!["description"].toString() + ")",
-                modifier = Modifier.padding(8.dp),
-                fontSize = 20.sp
-            )
+            Column() {
+                Text(
+                    text = product.data!!["name"].toString(),
+                    modifier = Modifier.padding(8.dp),
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = product.data!!["description"].toString(),
+                    modifier = Modifier.padding(8.dp),
+                    fontSize = 15.sp
+                )
+            }
+
             Text(
                 text = product.data!!["price"].toString() + "€",
                 modifier = Modifier.padding(8.dp),
-                fontSize = 15.sp
+                fontSize = 20.sp
             )
+            QuantitySelector(
+                count = 0,
+                decreaseItemCount = { /*TODO*/ },
+                increaseItemCount = { /*TODO*/ })
         }
     }
 }

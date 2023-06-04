@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -63,7 +64,8 @@ fun TopAppBarFunction(
             Row {
                 Icon(
                     Icons.Filled.LunchDining,
-                    contentDescription = stringResource(id = R.string.back)
+                    contentDescription = stringResource(id = R.string.back),
+                    modifier = Modifier.align(CenterVertically)
                 )
                 Text(
                     text = currentScreen,
