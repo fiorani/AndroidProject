@@ -162,7 +162,6 @@ fun RatingCard(rating: DocumentSnapshot) {
         }
     }
 }
-
 @Composable
 fun OrderCard(
     customerName: String,

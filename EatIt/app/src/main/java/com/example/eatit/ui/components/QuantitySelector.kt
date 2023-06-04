@@ -30,8 +30,7 @@ fun QuantitySelector(
         IconButton(
             modifier = Modifier
                 .align(Alignment.CenterVertically),
-            onClick = decreaseItemCount
-        ) {
+            onClick = decreaseItemCount) {
             Icon(
                 imageVector = Icons.Default.Remove,
                 contentDescription = "Drop-Down Arrow"
@@ -48,8 +47,7 @@ fun QuantitySelector(
         IconButton(
             modifier = Modifier
                 .align(Alignment.CenterVertically),
-            onClick = increaseItemCount
-        ) {
+            onClick = increaseItemCount) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Drop-Down Arrow"

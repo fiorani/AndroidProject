@@ -46,6 +46,7 @@ sealed class AppScreen(val name: String) {
     object Map : AppScreen("Map Screen")
     object Login : AppScreen("Login Screen")
     object Register : AppScreen("Register Screen")
+    object Cart : AppScreen("Cart Screen")
 }
 
 
@@ -88,7 +89,6 @@ fun TopAppBarFunction(
         }
     )
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppBarFunction(
@@ -97,7 +97,9 @@ fun BottomAppBarFunction(
     onSettingsButtonClicked: () -> Unit,
     onUserProfileButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
-) {
+    onHomeButtonClicked: () -> Unit,
+    onCartButtonClicked: () -> Unit,
+){
 
     BottomAppBar(modifier = modifier,
         actions = {
@@ -105,7 +107,7 @@ fun BottomAppBarFunction(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = onHomeButtonClicked) {
                     Icon(
                         Icons.Filled.Home,
                         contentDescription = stringResource(id = R.string.settings),
@@ -117,7 +119,7 @@ fun BottomAppBarFunction(
                         contentDescription = stringResource(id = R.string.settings)
                     )
                 }
-                IconButton(onClick = {}) {
+                IconButton(onClick = onCartButtonClicked) {
                     Icon(
                         Icons.Filled.ShoppingCart,
                         contentDescription = stringResource(id = R.string.settings),
@@ -140,7 +142,6 @@ fun BottomAppBarFunction(
         }
     )
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
@@ -165,12 +166,14 @@ fun NavigationApp(
                 navigateUp = { navController.navigateUp() }
             )
         },
-        bottomBar = {
+        bottomBar={
             BottomAppBarFunction(
                 currentScreen = currentScreen,
                 onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
                 onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
-                onMapButtonClicked = { navController.navigate(AppScreen.Map.name) }
+                onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
+                onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
+                onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
             )
         }
     ) { innerPadding ->
@@ -227,7 +230,6 @@ private fun NavigationGraph(
             )
             //TODO: Refactor
             //RestaurantMenuScreen()
-            //UserOrderingMenuScreen()
             //OrderSummaryScreen()
 
         }
@@ -286,6 +288,9 @@ private fun NavigationGraph(
             }, createAccount, onNextButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
             })
+        }
+        composable(route = AppScreen.Cart.name) {
+           CartScreen()
         }
     }
 }

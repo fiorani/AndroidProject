@@ -45,7 +45,7 @@ fun DetailsRestaurantScreen(
         println("Error getting restaurants: $exception")
     }
 
-    val ratingsCollection = restaurantsViewModel.getRatings(restaurant?.id.toString())
+    val ratingsCollection =restaurantsViewModel.getRatings(restaurant?.id.toString())
     val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
     ratings.clear()
     ratingsCollection.addOnSuccessListener { querySnapshot ->
@@ -74,18 +74,16 @@ fun DetailsRestaurantScreen(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
-                        .height(200.dp)
-                ) {
+                        .height(200.dp)) {
                     Text(
                         text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
-                        )
+                    )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        text = restaurant?.city
-                            ?: stringResource(id = R.string.restaurant_description),
+                        text = restaurant?.city ?: stringResource(id = R.string.restaurant_description),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )
