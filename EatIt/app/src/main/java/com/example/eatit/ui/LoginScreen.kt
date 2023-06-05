@@ -71,7 +71,7 @@ fun LoginScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                signIn(txtName.text, txtPassword.toString(),onNextButtonClicked)
+                                signIn(txtName.text, txtPassword.text,onNextButtonClicked)
 
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
