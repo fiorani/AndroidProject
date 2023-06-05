@@ -12,6 +12,7 @@ import com.example.eatit.R
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.firestore.DocumentSnapshot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,7 +22,10 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val restaurants = remember { restaurantsViewModel.getRestaurants() }
+    var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
+    LaunchedEffect(Unit) {
+        restaurants  = restaurantsViewModel.getRestaurants()
+    }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {

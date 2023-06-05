@@ -29,7 +29,7 @@ class RestaurantsViewModel @Inject constructor(
         repository.insertNewProduct(_restaurantSelected?.id.toString(), product)
     }
 
-    fun getRestaurants(): List<DocumentSnapshot> {
+    suspend fun getRestaurants(): List<DocumentSnapshot> {
         return repository.getRestaurants()
     }
 

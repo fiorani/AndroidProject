@@ -6,6 +6,9 @@ import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class RestaurantsRepository(eatItApp: EatItApp) {
@@ -21,16 +24,16 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             .collection("products").add(product)
     }
 
-    fun getRestaurants(): List<DocumentSnapshot> {
-        val products = mutableListOf<DocumentSnapshot>()
-        FirebaseFirestore.getInstance().collection("restaurants").get()
-            .addOnSuccessListener { querySnapshot ->
-                products.addAll(querySnapshot.documents)
-            }.addOnFailureListener { exception ->
-                println("Error getting restaurants: $exception")
-            }
-        return products
+    suspend fun getRestaurants(): List<DocumentSnapshot> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants").get().await()
+            querySnapshot.documents
+        } catch (exception: Exception) {
+            println("Error getting restaurants: $exception")
+            emptyList()
+        }
     }
+
 
     fun getProducts(restaurantId: String): List<DocumentSnapshot> {
         val products = mutableListOf<DocumentSnapshot>()
