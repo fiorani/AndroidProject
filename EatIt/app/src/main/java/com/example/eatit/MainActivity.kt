@@ -27,6 +27,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.eatit.data.LocationDetails
+import com.example.eatit.model.User
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -237,7 +238,7 @@ class MainActivity : ComponentActivity() {
     private fun createAccount(
         email: String,
         password: String,
-        user: com.example.eatit.model.User,
+        user: User,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()

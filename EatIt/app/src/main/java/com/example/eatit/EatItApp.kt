@@ -233,7 +233,10 @@ private fun NavigationGraph(
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
-                restaurantsViewModel = restaurantsViewModel
+                restaurantsViewModel = restaurantsViewModel,
+                onLoginClicked = {
+                    navController.navigate(AppScreen.Login.name)
+                }
             )
         }
         composable(route = AppScreen.AddRestaurant.name) {
@@ -283,24 +286,21 @@ private fun NavigationGraph(
         composable(route = AppScreen.Register.name) {
             RegisterScreen(
                 modifier,
-                startLocationUpdates,
                 createAccount,
-                signIn,
                 onNextButtonClicked = {
                     navController.navigate(AppScreen.Home.name)
                 },
                 onLoginButtonClicked = {
                     navController.navigate(AppScreen.Login.name)
-                },
-                usersViewModel = usersViewModel
+                }
             )
         }
         composable(route = AppScreen.Login.name) {
             LoginScreen(modifier, signIn, onRegisterClicked = {
                 navController.navigate(AppScreen.Register.name)
-            }, createAccount) {
+            },onNextButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
-            }
+            })
         }
         composable(route = AppScreen.Cart.name) {
             CartScreen()

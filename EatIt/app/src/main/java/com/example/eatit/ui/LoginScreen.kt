@@ -20,18 +20,14 @@ import com.google.firebase.ktx.Firebase
 import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction4
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     onRegisterClicked: () -> Unit,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit
 ) {
-    if (Firebase.auth.currentUser != null) {
-        onNextButtonClicked()
-    }
     Scaffold { innerPadding ->
         BackgroundImage(0.2f)
         Column(modifier.padding(innerPadding)) {

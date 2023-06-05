@@ -27,12 +27,9 @@ import kotlin.reflect.KFunction4
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    startLocationUpdates: () -> Unit,
     createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
-    signIn: KFunction3<String, String, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
-    usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.2f)

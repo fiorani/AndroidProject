@@ -14,16 +14,21 @@ import com.example.eatit.R
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.ktx.Firebase
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onAddButtonClicked: () -> Unit,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
+    onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (Firebase.auth.currentUser == null) {
+        onLoginClicked()
+    }
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
     LaunchedEffect(Unit) {
         restaurants = restaurantsViewModel.getRestaurants()
