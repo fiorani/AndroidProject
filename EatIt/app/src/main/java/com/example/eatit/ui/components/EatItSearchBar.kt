@@ -12,15 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EatItSearchBar(
-    restaurants: Task<QuerySnapshot>,
+    restaurants: List<DocumentSnapshot>,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel
 ) {
@@ -38,16 +36,10 @@ fun EatItSearchBar(
     ) {
         var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
         searchResults.clear()
-        restaurants.addOnSuccessListener { querySnapshot ->
-            for (document in querySnapshot) {
-                if (document.data.get("name").toString()
-                        .contains(query, ignoreCase = true)
-                ) {
-                    searchResults.add(document)
-                }
+        restaurants.forEach { document ->
+            if (document.getString("name")?.contains(query, ignoreCase = true) == true) {
+                searchResults.add(document)
             }
-        }.addOnFailureListener { exception ->
-            println("Error getting restaurants: $exception")
         }
         LazyColumn {
             items(searchResults.size) { index ->

@@ -1,7 +1,5 @@
 package com.example.eatit.viewModel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.CartRepository
@@ -32,13 +30,11 @@ class CartViewModel @Inject constructor(
     fun increaseCount(product: DocumentSnapshot) =
         _orderLines?.increaseCount(product, _orderLines!!)
 
-    @Composable
     fun getOrders(): List<DocumentSnapshot> {
         return repository.getOrders()
     }
 
-    @Composable
-    fun getProducts(order: DocumentSnapshot): SnapshotStateList<DocumentSnapshot> {
+    fun getProducts(order: DocumentSnapshot): List<DocumentSnapshot> {
         return repository.getProducts(order)
     }
 

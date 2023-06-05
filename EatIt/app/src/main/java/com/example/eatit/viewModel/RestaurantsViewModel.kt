@@ -7,6 +7,7 @@ import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.Filters
+import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +29,17 @@ class RestaurantsViewModel @Inject constructor(
         repository.insertNewProduct(_restaurantSelected?.id.toString(), product)
     }
 
-    fun getRestaurants() = repository.getRestaurants()
+    fun getRestaurants(): List<DocumentSnapshot> {
+        return repository.getRestaurants()
+    }
 
-    fun getProducts(restaurantId: String) = repository.getProducts(restaurantId)
+    fun getProducts(restaurantId: String): List<DocumentSnapshot> {
+        return repository.getProducts(restaurantId)
+    }
 
-    fun getRatings(restaurantId: String) = repository.getRatings(restaurantId)
+    fun getRatings(restaurantId: String): List<DocumentSnapshot> {
+        return repository.getRatings(restaurantId)
+    }
 
     fun getRestaurant(restaurantId: String) = repository.getRestaurant(restaurantId)
 

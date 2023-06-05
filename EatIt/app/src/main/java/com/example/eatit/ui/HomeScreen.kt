@@ -12,7 +12,6 @@ import com.example.eatit.R
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.firebase.firestore.DocumentSnapshot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,15 +21,7 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val restaurantsCollection = restaurantsViewModel.getRestaurants()
-    val restaurants = remember { mutableStateListOf<DocumentSnapshot>() }
-    restaurants.clear()
-    restaurantsCollection.addOnSuccessListener { querySnapshot ->
-        restaurants.addAll(querySnapshot.documents)
-    }
-        .addOnFailureListener { exception ->
-            println("Error getting restaurants: $exception")
-        }
+    val restaurants = remember { restaurantsViewModel.getRestaurants() }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddButtonClicked) {
@@ -43,14 +34,13 @@ fun HomeScreen(
     ) { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             EatItSearchBar(
-                restaurantsCollection, onItemClicked,
+                restaurants, onItemClicked,
                 restaurantsViewModel
             )
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(restaurants.size) { index ->
-                    val restaurant = restaurants[index]
                     RestaurantCard(
-                        restaurant,
+                        restaurants[index],
                         onItemClicked,
                         restaurantsViewModel
                     )

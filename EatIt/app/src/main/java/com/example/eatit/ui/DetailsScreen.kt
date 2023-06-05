@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +30,6 @@ import com.example.eatit.ui.components.RatingCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 
 @Composable
@@ -41,23 +39,8 @@ fun DetailsRestaurantScreen(
     cartViewModel: CartViewModel
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
-    val productCollection = restaurantsViewModel.getProducts(restaurant?.id.toString())
-    val products = remember { mutableStateListOf<DocumentSnapshot>() }
-    products.clear()
-    productCollection.addOnSuccessListener { querySnapshot ->
-        products.addAll(querySnapshot.documents)
-    }.addOnFailureListener { exception ->
-        println("Error getting restaurants: $exception")
-    }
-
-    val ratingsCollection = restaurantsViewModel.getRatings(restaurant?.id.toString())
-    val ratings = remember { mutableStateListOf<DocumentSnapshot>() }
-    ratings.clear()
-    ratingsCollection.addOnSuccessListener { querySnapshot ->
-        ratings.addAll(querySnapshot.documents)
-    }.addOnFailureListener { exception ->
-        println("Error getting restaurants: $exception")
-    }
+    val products = remember { restaurantsViewModel.getProducts(restaurant?.id.toString()) }
+    val ratings = remember { restaurantsViewModel.getRatings(restaurant?.id.toString()) }
     cartViewModel.selectOrder(
         Order(
             userId = Firebase.auth.currentUser?.uid.toString(),
@@ -117,12 +100,10 @@ fun DetailsRestaurantScreen(
 
             LazyColumn {
                 items(products.size) { index ->
-                    val product = products[index]
-                    ProductCard(product, cartViewModel)
+                    ProductCard(products[index], cartViewModel)
                 }
                 items(ratings.size) { index ->
-                    val rating = ratings[index]
-                    RatingCard(rating)
+                    RatingCard(ratings[index])
                 }
             }
         }

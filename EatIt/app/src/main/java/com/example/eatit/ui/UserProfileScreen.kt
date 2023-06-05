@@ -26,11 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -51,12 +49,8 @@ fun UserProfileScreen(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel
 ) {
-    var user: SnapshotStateList<DocumentSnapshot> by remember { mutableStateOf(mutableStateListOf()) }
-    user.clear()
-    user = usersViewModel.getUser()
-    var orders: SnapshotStateList<DocumentSnapshot> by remember { mutableStateOf(mutableStateListOf()) }
-    orders.clear()
-    orders = cartViewModel.getOrders() as SnapshotStateList<DocumentSnapshot>
+    val user = remember { usersViewModel.getUser() }
+    val orders = remember { cartViewModel.getOrders() }
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             if (user.size > 0) {
@@ -94,12 +88,12 @@ fun UserProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(orders.size) { item ->
-                    var listProducts= remember {
-                        mutableStateListOf<DocumentSnapshot>()
-                    }
-                    listProducts.clear()
-                    listProducts = cartViewModel.getProducts(orders[item])
-                    orderCard(orders[item], restaurantsViewModel, cartViewModel,listProducts)
+                    OrderCard(
+                        orders[item],
+                        restaurantsViewModel,
+                        cartViewModel,
+                        cartViewModel.getProducts(orders[item])
+                    )
                 }
             }
 
@@ -109,11 +103,11 @@ fun UserProfileScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun orderCard(
+fun OrderCard(
     orders: DocumentSnapshot,
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel,
-    listProducts: SnapshotStateList<DocumentSnapshot>
+    listProducts: List<DocumentSnapshot>
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(

@@ -1,10 +1,10 @@
 package com.example.eatit.viewModel
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
 import com.example.eatit.model.User
+import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +15,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         repository.insertNewUser(user)
     }
 
-    @Composable
-    fun getUser() = repository.getUser()
+    fun getUser(): List<DocumentSnapshot> {
+        return repository.getUser()
+    }
 
 }

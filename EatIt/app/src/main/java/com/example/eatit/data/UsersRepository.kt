@@ -1,10 +1,6 @@
 package com.example.eatit.data
 
 import androidx.annotation.WorkerThread
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.eatit.EatItApp
 import com.example.eatit.model.User
 import com.google.firebase.auth.ktx.auth
@@ -18,9 +14,8 @@ class UsersRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("users").add(user)
     }
 
-    @Composable
-    fun getUser(): SnapshotStateList<DocumentSnapshot> {
-        var user = remember { mutableStateListOf<DocumentSnapshot>() }
+    fun getUser(): List<DocumentSnapshot> {
+        val user = mutableListOf<DocumentSnapshot>()
         FirebaseFirestore.getInstance().collection("users").get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
