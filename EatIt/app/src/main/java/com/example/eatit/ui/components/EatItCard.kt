@@ -50,7 +50,7 @@ fun RestaurantCard(
         onItemClicked()
     }) {
         Column {
-            EatItImageCircle(restaurant.data!!["photo"].toString())
+            EatItImageCard(restaurant.data!!["photo"].toString())
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.padding(10.dp)

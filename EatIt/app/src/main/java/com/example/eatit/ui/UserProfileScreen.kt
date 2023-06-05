@@ -27,7 +27,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
-import com.example.eatit.ui.components.EatItImage
+import com.example.eatit.ui.components.EatItImageProfile
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -48,7 +48,7 @@ fun UserProfileScreen(
         Column(modifier.padding(innerPadding)) {
             if (user.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    EatItImage(user[0].data?.get("photo").toString())
+                    EatItImageProfile(user[0].data?.get("photo").toString())
                     Column(
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start,

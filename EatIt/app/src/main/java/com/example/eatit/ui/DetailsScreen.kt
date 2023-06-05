@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
 import com.example.eatit.model.Order
-import com.example.eatit.ui.components.EatItImage
+import com.example.eatit.ui.components.EatItImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
 import com.example.eatit.viewModel.CartViewModel
@@ -73,7 +73,7 @@ fun DetailsRestaurantScreen(
                 .padding(paddingValues)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                EatItImage(restaurant?.data?.get("photo").toString())
+                EatItImageProfile(restaurant?.data?.get("photo").toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
