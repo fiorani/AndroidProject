@@ -2,6 +2,7 @@ package com.example.eatit.ui.components
 
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
@@ -197,7 +199,7 @@ fun OrderCard(
 
     EatItCard(onItemClicked = {}) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -207,7 +209,7 @@ fun OrderCard(
                 lineHeight = 0.sp,
                 fontSize = 20.sp
             )
-            Column(modifier = Modifier.padding(10.dp)) {
+            Column(modifier = Modifier.padding(0.dp,10.dp).width(500.dp)) {
                 Text(
                     text = customerName,
                     fontSize = 20.sp
