@@ -139,23 +139,19 @@ fun OrderCard(
                     modifier = Modifier.padding(8.dp),
                     fontSize = 32.sp
                 )
+
+                Text(
+                    text = "total price="+orders.data?.get("totalPrice").toString(),
+                    modifier = Modifier.padding(8.dp),
+                    fontSize = 16.sp
+                )
             }
 
-            Text(
-                text = orders.data?.get("totalPrice").toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 16.sp
-            )
             if (expandedState) {
                 Column(Modifier.fillMaxWidth()) {
                     listProducts.forEachIndexed { index, product ->
                         Text(
-                            text = product.data?.get("name").toString(),
-                            modifier = Modifier.padding(8.dp),
-                            fontSize = 16.sp
-                        )
-                        Text(
-                            text = (orders.data?.get("listQuantity") as List<String>)[index],
+                            text = product.data?.get("name").toString()+" price="+product.data?.get("price").toString()+"*"+(orders.data?.get("listQuantity") as List<String>)[index],
                             modifier = Modifier.padding(8.dp),
                             fontSize = 16.sp
                         )
