@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.eatit.model.User
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -36,6 +37,7 @@ import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.reflect.KFunction4
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("EatIt")
@@ -152,7 +154,7 @@ fun NavigationApp(
     startLocationUpdates: () -> Unit,
     navController: NavHostController = rememberNavController(),
     singIn: (String, String) -> Unit,
-    createAccount: (String, String) -> Unit,
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -212,7 +214,7 @@ private fun NavigationGraph(
     startLocationUpdates: () -> Unit,
     modifier: Modifier = Modifier,
     singIn: (String, String) -> Unit,
-    createAccount: (String, String) -> Unit
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
@@ -265,7 +267,9 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            SettingsScreen(settingsViewModel)
+            SettingsScreen(settingsViewModel,onNextButtonClicked = {
+                navController.navigate(AppScreen.Login.name)
+            })
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(
@@ -295,9 +299,9 @@ private fun NavigationGraph(
         composable(route = AppScreen.Login.name) {
             LoginScreen(modifier, singIn, onRegisterClicked = {
                 navController.navigate(AppScreen.Register.name)
-            }, createAccount, onNextButtonClicked = {
+            }, createAccount) {
                 navController.navigate(AppScreen.Home.name)
-            })
+            }
         }
         composable(route = AppScreen.Cart.name) {
             CartScreen()

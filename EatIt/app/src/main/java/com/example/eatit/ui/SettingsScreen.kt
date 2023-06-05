@@ -12,7 +12,7 @@ import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel) {
+fun SettingsScreen(settingsViewModel: SettingsViewModel, onNextButtonClicked: () -> Unit) {
     Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -45,6 +45,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
             Button(
                 onClick = {
                     Firebase.auth.signOut()
+                    onNextButtonClicked()
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

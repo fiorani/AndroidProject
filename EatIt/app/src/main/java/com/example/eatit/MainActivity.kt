@@ -40,6 +40,7 @@ import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -257,15 +258,16 @@ class MainActivity : ComponentActivity() {
         private const val TAG = "OSM_REQUEST"
     }
 
-    private fun createAccount(email: String, password: String) {
+    private fun createAccount(email: String, password: String,user: com.example.eatit.model.User,onNextButtonClicked: () -> Unit) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    val user = auth.currentUser
-                    updateUI(user)
+                    FirebaseFirestore.getInstance().collection("users").add(user)
+                    signIn(email, password)
+                    onNextButtonClicked()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -274,7 +276,6 @@ class MainActivity : ComponentActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    updateUI(null)
                 }
             }
         // [END create_user_with_email]
@@ -287,8 +288,6 @@ class MainActivity : ComponentActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -297,7 +296,6 @@ class MainActivity : ComponentActivity() {
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    updateUI(null)
                 }
             }
         // [END sign_in_with_email]

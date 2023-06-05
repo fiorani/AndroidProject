@@ -13,8 +13,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.reflect.KFunction4
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +24,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     singIn: (String, String) -> Unit,
     onRegisterClicked: () -> Unit,
-    createAccount: (String, String) -> Unit,
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit
 ) {
     if (Firebase.auth.currentUser != null) {
