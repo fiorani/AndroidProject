@@ -241,7 +241,7 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                createAccount("lolo2@mail.com", "123456",   User(
+                                createAccount(txtEmail.toString(), txtPassword.toString(),   User(
                                     Firebase.auth.currentUser?.uid,
                                     txtName.toString(),
                                     txtEmail.toString(),
