@@ -113,17 +113,7 @@ fun OrderCard(
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
-    var restaurant: Restaurant? = null
-    restaurantsViewModel.getRestaurant(orders.data?.get("restaurantId").toString())
-        .addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists()) {
-                restaurant = documentSnapshot.toObject(Restaurant::class.java)
-            }
-        }
-        .addOnFailureListener { exception ->
-            // Gestisci l'eventuale errore nell'ottenimento del documento
-        }
-
+    val restaurant= restaurantsViewModel.getRestaurant(orders.data?.get("restaurantId").toString())
     Log.d("listProducts", listProducts.size.toString())
     Card(
         modifier = Modifier
@@ -142,11 +132,14 @@ fun OrderCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = restaurant?.name.toString(),
-                modifier = Modifier.padding(8.dp),
-                fontSize = 32.sp
-            )
+            if (restaurant.size>0) {
+                Text(
+                    text = restaurant[0].data?.get("name").toString(),
+                    modifier = Modifier.padding(8.dp),
+                    fontSize = 32.sp
+                )
+            }
+
             Text(
                 text = orders.data?.get("totalPrice").toString(),
                 modifier = Modifier.padding(8.dp),

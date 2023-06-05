@@ -54,8 +54,16 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         return products
     }
 
-    fun getRestaurant(restaurantId: String) =
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).get()
+    fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> {
+        val products = mutableListOf<DocumentSnapshot>()
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .get().addOnSuccessListener { querySnapshot ->
+                products.add(querySnapshot)
+            }.addOnFailureListener { exception ->
+                println("Error getting restaurants: $exception")
+            }
+        return products
+    }
 
     fun getProduct(restaurantId: String, productId: String) =
         FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
