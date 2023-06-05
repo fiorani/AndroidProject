@@ -36,17 +36,17 @@ data class Order(
         val productIndex = orderLines.listProductId?.indexOf(product.id)
         if (productIndex != null && productIndex != -1) {
             val currentQuantity =
-                orderLines.listQuantity?.get(productIndex!!)?.toIntOrNull() ?: return orderLines
-            val newQuantity = currentQuantity?.minus(1)
+                orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
+            val newQuantity = currentQuantity.minus(1)
             if (newQuantity == 0) {
-                orderLines.listProductId?.removeAt(productIndex!!)
-                orderLines.listQuantity?.removeAt(productIndex!!)
-                orderLines.listPrice?.removeAt(productIndex!!)
+                orderLines.listProductId?.removeAt(productIndex)
+                orderLines.listQuantity?.removeAt(productIndex)
+                orderLines.listPrice?.removeAt(productIndex)
                 return updatePrice(orderLines)
             }
             if (newQuantity!! > 0) {
                 orderLines.listQuantity?.set(
-                    productIndex!!,
+                    productIndex,
                     newQuantity.toString()
                 )  // Update the quantity in the list
                 // Save the updated orderLines to the repository or perform any other necessary actions
@@ -64,7 +64,7 @@ data class Order(
             // Il prodotto esiste già nell'ordine, incrementa la quantità
             val currentQuantity =
                 orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
-            val newQuantity = currentQuantity?.plus(1)
+            val newQuantity = currentQuantity.plus(1)
             orderLines.listQuantity?.set(
                 productIndex,
                 newQuantity.toString()

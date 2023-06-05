@@ -1,10 +1,8 @@
 package com.example.eatit.ui.components
 
 import android.net.Uri
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,12 +25,15 @@ fun EatItImageCircle(photo: String) {
                 .build(),
             contentDescription = "image of the restaurant",
             modifier = Modifier
-                .fillMaxWidth().height(160.dp)
-                .clip(shape = RoundedCornerShape(
-                    topStart = 16.dp,
-                    topEnd = 16.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp)
+                .fillMaxWidth()
+                .height(160.dp)
+                .clip(
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                        bottomStart = 0.dp,
+                        bottomEnd = 0.dp
+                    )
                 ),
             alpha = 0.8f,
             contentScale = ContentScale.Crop,

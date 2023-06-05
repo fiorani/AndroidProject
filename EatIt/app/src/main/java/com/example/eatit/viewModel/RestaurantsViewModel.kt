@@ -17,7 +17,7 @@ class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
     var filters: Filters = Filters.default
-    private var _restaurantSelected: Restaurant? = null
+    private var _restaurantSelected: DocumentSnapshot? = null
     private var _restaurantFromGPS = mutableStateOf("")
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
@@ -48,7 +48,7 @@ class RestaurantsViewModel @Inject constructor(
     val restaurantSelected
         get() = _restaurantSelected
 
-    fun selectRestaurant(restaurant: Restaurant) {
+    fun selectRestaurant(restaurant: DocumentSnapshot) {
         _restaurantSelected = restaurant
     }
 

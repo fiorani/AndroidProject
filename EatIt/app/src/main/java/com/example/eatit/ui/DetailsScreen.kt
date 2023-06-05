@@ -73,7 +73,7 @@ fun DetailsRestaurantScreen(
                 .padding(paddingValues)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                EatItImage(restaurant?.photo ?: "")
+                EatItImage(restaurant?.data?.get("photo").toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
@@ -81,15 +81,14 @@ fun DetailsRestaurantScreen(
                         .height(200.dp)
                 ) {
                     Text(
-                        text = restaurant?.name ?: stringResource(id = R.string.restaurant_name),
+                        text = restaurant?.data?.get("name").toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
                         )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        text = restaurant?.city
-                            ?: stringResource(id = R.string.restaurant_description),
+                        text = restaurant?.data?.get("city").toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )

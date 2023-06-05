@@ -4,7 +4,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -25,17 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItImage
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.firestore.DocumentSnapshot
-import androidx.compose.ui.platform.LocalContext
-import com.example.eatit.ui.components.BackgroundImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,10 +81,12 @@ fun UserProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(orders.size) { item ->
-                    val products = remember {cartViewModel.getProducts(orders[item]) }
+                    val products = remember { cartViewModel.getProducts(orders[item]) }
                     var restaurant by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
                     LaunchedEffect(Unit) {
-                        restaurant  = restaurantsViewModel.getRestaurant(orders[item].data?.get("restaurantId").toString())
+                        restaurant = restaurantsViewModel.getRestaurant(
+                            orders[item].data?.get("restaurantId").toString()
+                        )
                     }
                     OrderCard(
                         orders[item],
@@ -112,7 +110,7 @@ fun OrderCard(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel,
     listProducts: List<DocumentSnapshot>,
-    restaurant:  List<DocumentSnapshot>
+    restaurant: List<DocumentSnapshot>
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -135,7 +133,7 @@ fun OrderCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (restaurant.size>0) {
+            if (restaurant.size > 0) {
                 Text(
                     text = restaurant[0].data?.get("name").toString(),
                     modifier = Modifier.padding(8.dp),

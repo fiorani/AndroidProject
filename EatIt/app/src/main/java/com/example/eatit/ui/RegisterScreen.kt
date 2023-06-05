@@ -26,13 +26,13 @@ import kotlin.reflect.KFunction4
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-        modifier: Modifier = Modifier,
-        startLocationUpdates: () -> Unit,
-        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
-        signIn: KFunction3<String, String, () -> Unit, Unit>,
-        onNextButtonClicked: () -> Unit,
-        onLoginButtonClicked: () -> Unit,
-        usersViewModel: UsersViewModel
+    modifier: Modifier = Modifier,
+    startLocationUpdates: () -> Unit,
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    signIn: KFunction3<String, String, () -> Unit, Unit>,
+    onNextButtonClicked: () -> Unit,
+    onLoginButtonClicked: () -> Unit,
+    usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.2f)
@@ -238,13 +238,15 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                createAccount(txtEmail.text, txtPassword.toString(),   User(
-                                    Firebase.auth.currentUser?.uid,
-                                    txtName.toString(),
-                                    txtEmail.toString(),
-                                    "",
-                                    0,
-                                ), onNextButtonClicked)
+                                createAccount(
+                                    txtEmail.text, txtPassword.text, User(
+                                        Firebase.auth.currentUser?.uid,
+                                        txtName.text,
+                                        txtEmail.text,
+                                        "",
+                                        0,
+                                    ), onNextButtonClicked
+                                )
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
@@ -275,7 +277,7 @@ fun RegisterScreen(
                             .fillMaxWidth()
                             .padding(60.dp, 5.dp),
                         onClick = {
-                             onLoginButtonClicked()
+                            onLoginButtonClicked()
                         },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {

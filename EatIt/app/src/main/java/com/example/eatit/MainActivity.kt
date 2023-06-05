@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Granularity
@@ -38,9 +39,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,28 +49,20 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private lateinit var auth: FirebaseAuth
-
-    private var requestingLocationUpdates = mutableStateOf(false)
-
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
-
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private lateinit var connectivityManager: ConnectivityManager
-
-    val location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
-
+    private var requestingLocationUpdates = mutableStateOf(false)
     private var queue: RequestQueue? = null
-
+    val location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
     val warningViewModel by viewModels<WarningViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
         connectivityManager =
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -81,12 +72,10 @@ class MainActivity : ComponentActivity() {
                 warningViewModel.setPermissionSnackBarVisibility(true)
             }
         }
-
         locationRequest =
             LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).apply {
                 setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
             }.build()
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
@@ -102,7 +91,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 if (requestingLocationUpdates.value) {
@@ -130,7 +118,6 @@ class MainActivity : ComponentActivity() {
                         createAccount = ::createAccount,
                     )
                 }
-
                 if (requestingLocationUpdates.value) {
                     connectivityManager.registerDefaultNetworkCallback(networkCallback)
                 }
@@ -143,7 +130,6 @@ class MainActivity : ComponentActivity() {
         queue = Volley.newRequestQueue(this)
         val url = "https://nominatim.openstreetmap.org/reverse?lat=" + location.latitude +
                 "&lon=" + location.longitude + "&format=jsonv2&limit=1"
-
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -182,21 +168,11 @@ class MainActivity : ComponentActivity() {
         if (requestingLocationUpdates.value)
             (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
                 .registerDefaultNetworkCallback(networkCallback)
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            reload()
-        }
     }
-
-    private fun reload() {
-    }
-
 
     private fun startLocationUpdates() {
         requestingLocationUpdates.value = true
-
         val permission = Manifest.permission.ACCESS_COARSE_LOCATION
-
         when {
             //permission already granted
             ContextCompat.checkSelfPermission(
@@ -258,17 +234,20 @@ class MainActivity : ComponentActivity() {
         private const val TAG = "OSM_REQUEST"
     }
 
-    private fun createAccount(email: String, password: String,user: com.example.eatit.model.User,onNextButtonClicked: () -> Unit) {
-        // [START create_user_with_email]
+    private fun createAccount(
+        email: String,
+        password: String,
+        user: com.example.eatit.model.User,
+        onNextButtonClicked: () -> Unit
+    ) {
+        val usersViewModel by viewModels<UsersViewModel>()
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    FirebaseFirestore.getInstance().collection("users").add(user)
-                    signIn(email, password,onNextButtonClicked)
+                    usersViewModel.addNewUser(user)
+                    signIn(email, password, onNextButtonClicked)
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
@@ -277,15 +256,12 @@ class MainActivity : ComponentActivity() {
                     ).show()
                 }
             }
-        // [END create_user_with_email]
     }
 
-    private fun signIn(email: String, password: String,onNextButtonClicked: () -> Unit ) {
-        // [START sign_in_with_email]
+    private fun signIn(email: String, password: String, onNextButtonClicked: () -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     onNextButtonClicked()
                 } else {
@@ -298,10 +274,6 @@ class MainActivity : ComponentActivity() {
                     ).show()
                 }
             }
-        // [END sign_in_with_email]
-    }
-
-    private fun updateUI(user: FirebaseUser?) {
     }
 }
 

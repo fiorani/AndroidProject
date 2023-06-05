@@ -10,12 +10,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun BackgroundImage(alpha :Float){
+fun BackgroundImage(alpha: Float) {
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {
         val imageModifier = Modifier.fillMaxSize()
-        val backgroundImage = painterResource(id = LocalContext.current.resources.getIdentifier("background_image", "drawable", LocalContext.current.packageName))
+        val backgroundImage = painterResource(
+            id = LocalContext.current.resources.getIdentifier(
+                "background_image",
+                "drawable",
+                LocalContext.current.packageName
+            )
+        )
 
         Image(
             painter = backgroundImage,

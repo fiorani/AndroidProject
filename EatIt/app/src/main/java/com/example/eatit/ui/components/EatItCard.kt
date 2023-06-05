@@ -2,27 +2,20 @@ package com.example.eatit.ui.components
 
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import com.example.eatit.model.Restaurant
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -53,9 +46,7 @@ fun RestaurantCard(
     restaurantsViewModel: RestaurantsViewModel
 ) {
     EatItCard(onItemClicked = {
-        val restaurantt = restaurant.toObject(Restaurant::class.java)
-        restaurantt?.id = restaurant.id
-        restaurantsViewModel.selectRestaurant(restaurantt!!)
+        restaurantsViewModel.selectRestaurant(restaurant)
         onItemClicked()
     }) {
         Column {
@@ -63,14 +54,16 @@ fun RestaurantCard(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.padding(10.dp)
-            ){
+            ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = restaurant.data!!["name"].toString(),
-                        modifier = Modifier.padding(4.dp).width(200.dp),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .width(200.dp),
                         fontSize = 25.sp,
                         fontWeight = Bold
                     )
@@ -80,7 +73,7 @@ fun RestaurantCard(
                         fontSize = 20.sp
                     )
                 }
-                Column() {
+                Column {
                     var rating: Float by remember { mutableStateOf(3.2f) }
                     RatingBar(
                         value = restaurant.data!!["avgRating"].toString().toFloat(),
@@ -199,7 +192,9 @@ fun OrderCard(
 
     EatItCard(onItemClicked = {}) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -209,7 +204,9 @@ fun OrderCard(
                 lineHeight = 0.sp,
                 fontSize = 20.sp
             )
-            Column(modifier = Modifier.padding(0.dp,10.dp).width(500.dp)) {
+            Column(modifier = Modifier
+                .padding(0.dp, 10.dp)
+                .width(500.dp)) {
                 Text(
                     text = customerName,
                     fontSize = 20.sp

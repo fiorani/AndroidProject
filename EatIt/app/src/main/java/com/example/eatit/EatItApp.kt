@@ -81,8 +81,12 @@ fun TopAppBarFunction(
         },
         modifier = modifier,
         navigationIcon = {
-            //se si può navigare indietro (non home screen) allora appare la freccetta
-            if (canNavigateBack && currentScreen != AppScreen.Home.name) {
+            if (canNavigateBack && currentScreen != AppScreen.Home.name
+                && currentScreen != AppScreen.UserProfile.name
+                && currentScreen != AppScreen.Cart.name
+                && currentScreen != AppScreen.Map.name
+                && currentScreen != AppScreen.Settings.name
+            ) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -94,10 +98,8 @@ fun TopAppBarFunction(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppBarFunction(
-    currentScreen: String,
     modifier: Modifier = Modifier,
     onSettingsButtonClicked: () -> Unit,
     onUserProfileButtonClicked: () -> Unit,
@@ -148,21 +150,18 @@ fun BottomAppBarFunction(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
-        warningViewModel: WarningViewModel,
-        startLocationUpdates: () -> Unit,
-        navController: NavHostController = rememberNavController(),
-        signIn: KFunction3<String, String, () -> Unit, Unit>,
-        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    warningViewModel: WarningViewModel,
+    startLocationUpdates: () -> Unit,
+    navController: NavHostController = rememberNavController(),
+    signIn: KFunction3<String, String, () -> Unit, Unit>,
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
-    // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
     val snackbarHostState = remember { SnackbarHostState() }
-
+    val context = LocalContext.current
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -175,12 +174,11 @@ fun NavigationApp(
         bottomBar = {
             if (currentScreen != AppScreen.Register.name && currentScreen != AppScreen.Login.name) {
                 BottomAppBarFunction(
-                        currentScreen = currentScreen,
-                        onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
-                        onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
-                        onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
-                        onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
-                        onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
+                    onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
+                    onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
+                    onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
+                    onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
+                    onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
                 )
             }
         }
@@ -193,7 +191,6 @@ fun NavigationApp(
             signIn,
             createAccount
         )
-        val context = LocalContext.current
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)
         }
@@ -212,19 +209,20 @@ fun NavigationApp(
 
 @Composable
 private fun NavigationGraph(
-        navController: NavHostController,
-        innerPadding: PaddingValues,
-        startLocationUpdates: () -> Unit,
-        modifier: Modifier = Modifier,
-        signIn: KFunction3<String, String, () -> Unit, Unit>,
-        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    startLocationUpdates: () -> Unit,
+    modifier: Modifier = Modifier,
+    signIn: KFunction3<String, String, () -> Unit, Unit>,
+    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
+    val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val cartViewModel = hiltViewModel<CartViewModel>()
     NavHost(
         navController = navController,
-        startDestination = AppScreen.UserProfile.name, //||||||||||||||||||||||||||||||||||!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        startDestination = AppScreen.Home.name,
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
@@ -237,10 +235,6 @@ private fun NavigationGraph(
                 },
                 restaurantsViewModel = restaurantsViewModel
             )
-            //TODO: Refactor
-            //RestaurantMenuScreen()
-            //OrderSummaryScreen()
-
         }
         composable(route = AppScreen.AddRestaurant.name) {
             AddRestaurantScreen(
@@ -269,8 +263,7 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.Settings.name) {
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
-            SettingsScreen(settingsViewModel,onNextButtonClicked = {
+            SettingsScreen(settingsViewModel, onNextButtonClicked = {
                 navController.navigate(AppScreen.Login.name)
             })
         }

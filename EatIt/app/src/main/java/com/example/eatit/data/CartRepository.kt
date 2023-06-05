@@ -14,7 +14,6 @@ class CartRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("orders").add(order)
     }
 
-
     fun getOrders(): List<DocumentSnapshot> {
         val orders = mutableListOf<DocumentSnapshot>()
         FirebaseFirestore.getInstance().collection("orders").get()

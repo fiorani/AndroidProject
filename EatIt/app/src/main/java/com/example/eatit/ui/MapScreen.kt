@@ -34,7 +34,7 @@ fun MapScreen(
     val context = LocalContext.current
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
     LaunchedEffect(Unit) {
-        restaurants  = restaurantsViewModel.getRestaurants()
+        restaurants = restaurantsViewModel.getRestaurants()
     }
     var myPosition by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
     Log.d("currentLocation", myPosition)
