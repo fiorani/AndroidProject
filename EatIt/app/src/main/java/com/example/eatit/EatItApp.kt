@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -101,6 +103,7 @@ fun TopAppBarFunction(
 @Composable
 fun BottomAppBarFunction(
     modifier: Modifier = Modifier,
+    currentScreen: String,
     onSettingsButtonClicked: () -> Unit,
     onUserProfileButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
@@ -119,11 +122,27 @@ fun BottomAppBarFunction(
                         Icons.Filled.Home,
                         contentDescription = stringResource(id = R.string.settings),
                     )
+
+                }
+                if (currentScreen == AppScreen.Home.name) {
+                    Text(
+                        text = "Home",
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.align(CenterVertically)
+                    )
                 }
                 IconButton(onClick = onUserProfileButtonClicked) {
                     Icon(
                         Icons.Filled.AccountCircle,
                         contentDescription = stringResource(id = R.string.settings)
+                    )
+
+                }
+                if (currentScreen == AppScreen.UserProfile.name) {
+                    Text(
+                        text = "Profile",
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.align(CenterVertically)
                     )
                 }
                 IconButton(onClick = onCartButtonClicked) {
@@ -132,16 +151,37 @@ fun BottomAppBarFunction(
                         contentDescription = stringResource(id = R.string.settings),
                     )
                 }
+                if (currentScreen == AppScreen.Cart.name) {
+                    Text(
+                        text = "Cart",
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.align(CenterVertically)
+                    )
+                }
                 IconButton(onClick = onMapButtonClicked) {
                     Icon(
                         Icons.Filled.Map,
                         contentDescription = stringResource(id = R.string.settings),
                     )
                 }
+                if (currentScreen == AppScreen.Map.name) {
+                    Text(
+                        text = "Map",
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.align(CenterVertically)
+                    )
+                }
                 IconButton(onClick = onSettingsButtonClicked) {
                     Icon(
                         Icons.Filled.Settings,
                         contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
+                if (currentScreen == AppScreen.Settings.name) {
+                    Text(
+                        text = "Settings",
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.align(CenterVertically)
                     )
                 }
 
@@ -175,6 +215,7 @@ fun NavigationApp(
             if (currentScreen != AppScreen.Register.name && currentScreen != AppScreen.Login.name) {
                 BottomAppBarFunction(
                     onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
+                    currentScreen = currentScreen,
                     onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
                     onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
                     onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
@@ -298,7 +339,7 @@ private fun NavigationGraph(
         composable(route = AppScreen.Login.name) {
             LoginScreen(modifier, signIn, onRegisterClicked = {
                 navController.navigate(AppScreen.Register.name)
-            },onNextButtonClicked = {
+            }, onNextButtonClicked = {
                 navController.navigate(AppScreen.Home.name)
             })
         }
