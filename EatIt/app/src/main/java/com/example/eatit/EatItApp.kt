@@ -224,7 +224,7 @@ private fun NavigationGraph(
     val cartViewModel = hiltViewModel<CartViewModel>()
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Login.name,
+        startDestination = AppScreen.UserProfile.name, //||||||||||||||||||||||||||||||||||!!!!!!!!!!!!!!!!!!!!!!!!!!!
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {

@@ -14,11 +14,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
+import com.example.eatit.ui.components.BackgroundImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RestaurantProfileScreen(modifier: Modifier = Modifier) {
     Scaffold { innerPadding ->
+        BackgroundImage(alpha = 0.05f)
         Column(modifier.padding(innerPadding)) {
             Card(
                 modifier = Modifier

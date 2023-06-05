@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.User
+import com.example.eatit.ui.components.BackgroundImage
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlin.reflect.KFunction3
@@ -32,6 +33,7 @@ fun LoginScreen(
         onNextButtonClicked()
     }
     Scaffold { innerPadding ->
+        BackgroundImage(0.2f)
         Column(modifier.padding(innerPadding)) {
             Card(
                 modifier = Modifier

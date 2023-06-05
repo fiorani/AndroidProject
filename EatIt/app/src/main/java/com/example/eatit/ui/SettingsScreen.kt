@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.viewModel.SettingsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -14,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun SettingsScreen(settingsViewModel: SettingsViewModel, onNextButtonClicked: () -> Unit) {
     Scaffold { paddingValues ->
+        BackgroundImage(alpha = 0.1f)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier

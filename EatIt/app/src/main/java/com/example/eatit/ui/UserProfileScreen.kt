@@ -4,15 +4,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -32,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.EatItImage
@@ -39,6 +34,8 @@ import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.firestore.DocumentSnapshot
+import androidx.compose.ui.platform.LocalContext
+import com.example.eatit.ui.components.BackgroundImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +48,9 @@ fun UserProfileScreen(
     val user = remember { usersViewModel.getUser() }
     val orders = remember { cartViewModel.getOrders() }
     Scaffold { innerPadding ->
+        BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-            if (user.size > 0) {
+            if (user.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     EatItImage(user[0].data?.get("photo").toString())
                     Column(

@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.User
+import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.LocationField
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -34,6 +35,7 @@ fun RegisterScreen(
         usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
+        BackgroundImage(alpha = 0.2f)
         Column(
             modifier
                 .padding(innerPadding)
