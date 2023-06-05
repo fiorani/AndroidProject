@@ -65,7 +65,4 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         return products
     }
 
-    fun getProduct(restaurantId: String, productId: String) =
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
-            .collection("products").document(productId).get()
 }

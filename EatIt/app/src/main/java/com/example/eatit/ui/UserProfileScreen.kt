@@ -113,8 +113,7 @@ fun OrderCard(
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
-    val restaurant= restaurantsViewModel.getRestaurant(orders.data?.get("restaurantId").toString())
-    Log.d("listProducts", listProducts.size.toString())
+    val restaurant = remember {restaurantsViewModel.getRestaurant(orders.data?.get("restaurantId").toString())}
     Card(
         modifier = Modifier
             .fillMaxWidth()
