@@ -3,6 +3,7 @@ package com.example.eatit.ui.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -13,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun QuantitySelector(
@@ -23,13 +26,10 @@ fun QuantitySelector(
 ) {
     Row(modifier = modifier) {
         Text(
-            text = "Quantity",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
+            text = "Qty",
+            modifier = Modifier.align(Alignment.CenterVertically),
         )
         IconButton(
-            modifier = Modifier
-                .align(Alignment.CenterVertically),
             onClick = decreaseItemCount
         ) {
             Icon(
@@ -37,17 +37,11 @@ fun QuantitySelector(
                 contentDescription = "Drop-Down Arrow"
             )
         }
-        Crossfade(
-            targetState = count,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            Text(
-                text = "$it"
-            )
-        }
+        Text(
+            text = count.toString(),
+            modifier = Modifier.align(Alignment.CenterVertically),
+        )
         IconButton(
-            modifier = Modifier
-                .align(Alignment.CenterVertically),
             onClick = increaseItemCount
         ) {
             Icon(

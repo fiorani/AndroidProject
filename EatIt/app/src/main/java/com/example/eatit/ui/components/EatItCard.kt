@@ -101,25 +101,17 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
     }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(
-                    text = product.data!!["name"].toString(),
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = product.data!!["description"].toString(),
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 15.sp
-                )
-            }
-
+            Text(
+                text = product.data!!["name"].toString(),
+                modifier = Modifier
+                    .padding(4.dp)
+                    .weight(1f)
+            )
             Text(
                 text = product.data!!["price"].toString() + "€",
-                modifier = Modifier.padding(8.dp),
-                fontSize = 20.sp
+                modifier = Modifier.padding(4.dp),
             )
             val (count, updateCount) = remember { mutableStateOf(0) }
             QuantitySelector(
@@ -134,6 +126,12 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
                     cartViewModel.increaseCount(product)
                     Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
                 })
+        }
+        Row() {
+            Text(
+                text = product.data!!["description"].toString(),
+                modifier = Modifier.padding(4.dp),
+            )
         }
     }
 }
