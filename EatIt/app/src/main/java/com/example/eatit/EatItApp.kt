@@ -37,19 +37,20 @@ import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction4
 
-sealed class AppScreen(val name: String) {
-    object Home : AppScreen("EatIt")
-    object AddRestaurant : AppScreen("Add Restaurant")
-    object AddProduct : AppScreen("Add Product")
-    object Details : AppScreen("Details Screen")
-    object Settings : AppScreen("Settings Screen")
-    object UserProfile : AppScreen("User Profile Screen")
-    object Map : AppScreen("Map Screen")
-    object Login : AppScreen("Login Screen")
-    object Register : AppScreen("Register Screen")
-    object Cart : AppScreen("Cart Screen")
+sealed class AppScreen(var name: String) {
+    object Home : AppScreen("Home")
+    object AddRestaurant : AppScreen("AddRestaurant")
+    object AddProduct : AppScreen("AddProduct")
+    object Details : AppScreen("Details")
+    object Settings : AppScreen("Settings")
+    object UserProfile : AppScreen("UserProfile")
+    object Map : AppScreen("Map")
+    object Login : AppScreen("Login")
+    object Register : AppScreen("Register")
+    object Cart : AppScreen("Cart")
 }
 
 
@@ -73,7 +74,7 @@ fun TopAppBarFunction(
                     modifier = Modifier.align(CenterVertically)
                 )
                 Text(
-                    text = currentScreen,
+                    text = "EatIt",
                     fontWeight = FontWeight.Medium,
                 )
             }
@@ -150,11 +151,11 @@ fun BottomAppBarFunction(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
-    warningViewModel: WarningViewModel,
-    startLocationUpdates: () -> Unit,
-    navController: NavHostController = rememberNavController(),
-    singIn: (String, String) -> Unit,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+        warningViewModel: WarningViewModel,
+        startLocationUpdates: () -> Unit,
+        navController: NavHostController = rememberNavController(),
+        signIn: KFunction3<String, String, () -> Unit, Unit>,
+        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -172,14 +173,16 @@ fun NavigationApp(
             )
         },
         bottomBar = {
-            BottomAppBarFunction(
-                currentScreen = currentScreen,
-                onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
-                onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
-                onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
-                onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
-                onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
-            )
+            if (currentScreen != AppScreen.Register.name && currentScreen != AppScreen.Login.name) {
+                BottomAppBarFunction(
+                        currentScreen = currentScreen,
+                        onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
+                        onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
+                        onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
+                        onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
+                        onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
+                )
+            }
         }
     ) { innerPadding ->
         NavigationGraph(
@@ -187,7 +190,7 @@ fun NavigationApp(
             innerPadding,
             startLocationUpdates,
             Modifier,
-            singIn,
+            signIn,
             createAccount
         )
         val context = LocalContext.current
@@ -209,12 +212,12 @@ fun NavigationApp(
 
 @Composable
 private fun NavigationGraph(
-    navController: NavHostController,
-    innerPadding: PaddingValues,
-    startLocationUpdates: () -> Unit,
-    modifier: Modifier = Modifier,
-    singIn: (String, String) -> Unit,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+        navController: NavHostController,
+        innerPadding: PaddingValues,
+        startLocationUpdates: () -> Unit,
+        modifier: Modifier = Modifier,
+        signIn: KFunction3<String, String, () -> Unit, Unit>,
+        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
@@ -289,15 +292,18 @@ private fun NavigationGraph(
                 modifier,
                 startLocationUpdates,
                 createAccount,
-                singIn,
+                signIn,
                 onNextButtonClicked = {
                     navController.navigate(AppScreen.Home.name)
+                },
+                onLoginButtonClicked = {
+                    navController.navigate(AppScreen.Login.name)
                 },
                 usersViewModel = usersViewModel
             )
         }
         composable(route = AppScreen.Login.name) {
-            LoginScreen(modifier, singIn, onRegisterClicked = {
+            LoginScreen(modifier, signIn, onRegisterClicked = {
                 navController.navigate(AppScreen.Register.name)
             }, createAccount) {
                 navController.navigate(AppScreen.Home.name)

@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
                     NavigationApp(
                         warningViewModel = warningViewModel,
                         startLocationUpdates = ::startLocationUpdates,
-                        singIn = ::signIn,
+                        signIn = ::signIn,
                         createAccount = ::createAccount,
                     )
                 }
@@ -266,8 +266,7 @@ class MainActivity : ComponentActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     FirebaseFirestore.getInstance().collection("users").add(user)
-                    signIn(email, password)
-                    onNextButtonClicked()
+                    signIn(email, password,onNextButtonClicked)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -281,13 +280,14 @@ class MainActivity : ComponentActivity() {
         // [END create_user_with_email]
     }
 
-    private fun signIn(email: String, password: String) {
+    private fun signIn(email: String, password: String,onNextButtonClicked: () -> Unit ) {
         // [START sign_in_with_email]
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
+                    onNextButtonClicked()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)

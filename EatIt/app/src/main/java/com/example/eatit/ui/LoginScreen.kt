@@ -16,16 +16,17 @@ import androidx.compose.ui.unit.sp
 import com.example.eatit.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction4
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
-    singIn: (String, String) -> Unit,
-    onRegisterClicked: () -> Unit,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
-    onNextButtonClicked: () -> Unit
+        modifier: Modifier = Modifier,
+        signIn: KFunction3<String, String, () -> Unit, Unit>,
+        onRegisterClicked: () -> Unit,
+        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+        onNextButtonClicked: () -> Unit
 ) {
     if (Firebase.auth.currentUser != null) {
         onNextButtonClicked()
@@ -70,8 +71,8 @@ fun LoginScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                singIn(txtName.text, txtPassword.text)
-                                onNextButtonClicked()
+                                signIn(txtName.text, txtPassword.toString(),onNextButtonClicked)
+
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {

@@ -15,22 +15,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.LocationField
-import com.example.eatit.ui.components.OrderCard
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.*
+import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction4
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
-    startLocationUpdates: () -> Unit,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
-    singIn: (String, String) -> Unit,
-    onNextButtonClicked: () -> Unit,
-    usersViewModel: UsersViewModel
+        modifier: Modifier = Modifier,
+        startLocationUpdates: () -> Unit,
+        createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+        signIn: KFunction3<String, String, () -> Unit, Unit>,
+        onNextButtonClicked: () -> Unit,
+        onLoginButtonClicked: () -> Unit,
+        usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -38,12 +39,6 @@ fun RegisterScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            OrderCard(
-                customerName = "Marco",
-                customerAddress = "Via O. Brobrio",
-                total = 14.60f,
-                orderDate = "19-10-2023"
-            )
             val isUserRegister = remember { mutableStateOf(true) }
             var strTitle = "User registration"
             Text(
@@ -241,13 +236,13 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
-                                createAccount(txtEmail.toString(), txtPassword.toString(),   User(
+                                createAccount(txtEmail.text, txtPassword.toString(),   User(
                                     Firebase.auth.currentUser?.uid,
                                     txtName.toString(),
                                     txtEmail.toString(),
                                     "",
                                     0,
-                                ), { onNextButtonClicked() })
+                                ), onNextButtonClicked)
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
@@ -277,7 +272,9 @@ fun RegisterScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(60.dp, 5.dp),
-                        onClick = { /* Do something! */ },
+                        onClick = {
+                             onLoginButtonClicked()
+                        },
                         contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                     ) {
                         Text(
