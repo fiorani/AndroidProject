@@ -57,15 +57,15 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         return products
     }
 
-    fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> {
-        val products = mutableListOf<DocumentSnapshot>()
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
-            .get().addOnSuccessListener { querySnapshot ->
-                products.add(querySnapshot)
-            }.addOnFailureListener { exception ->
-                println("Error getting restaurants: $exception")
-            }
-        return products
+    suspend fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> = withContext(Dispatchers.IO) {
+        try {
+            val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).get().await()
+            mutableListOf(querySnapshot)
+        } catch (exception: Exception) {
+            println("Error getting restaurant: $exception")
+            mutableListOf()
+        }
     }
+
 
 }

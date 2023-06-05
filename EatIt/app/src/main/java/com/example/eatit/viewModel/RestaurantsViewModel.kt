@@ -41,7 +41,7 @@ class RestaurantsViewModel @Inject constructor(
         return repository.getRatings(restaurantId)
     }
 
-    fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> {
+    suspend fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> {
         return repository.getRestaurant(restaurantId)
     }
 
