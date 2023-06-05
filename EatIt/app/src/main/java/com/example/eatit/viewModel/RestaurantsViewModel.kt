@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
-import com.example.eatit.utilities.Filters
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +15,6 @@ import javax.inject.Inject
 class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
-    var filters: Filters = Filters.default
     private var _restaurantSelected: DocumentSnapshot? = null
     private var _restaurantFromGPS = mutableStateOf("")
 

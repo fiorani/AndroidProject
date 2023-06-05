@@ -22,8 +22,7 @@ data class Order(
         price: Double,
         restaurantId: String?
     ) : this() {
-        val user = Firebase.auth.currentUser
-        this.userId = user?.uid
+        this.userId = Firebase.auth.uid
         this.restaurantId = restaurantId
         this.listProductId = productId
         this.listQuantity = quantity

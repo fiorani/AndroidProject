@@ -6,9 +6,6 @@ import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.ktx.Firebase
 import java.util.Date
 
-/**
- * Model POJO for a rating.
- */
 data class Rating(
     var userId: String? = null,
     var userName: String? = null,
@@ -18,13 +15,11 @@ data class Rating(
 ) {
 
     constructor(rating: Double, text: String) : this() {
-        val user = Firebase.auth.currentUser
-        this.userId = user?.uid
-        this.userName = user?.displayName
+        this.userId = Firebase.auth.uid
+        this.userName =  Firebase.auth.currentUser?.displayName
         if (TextUtils.isEmpty(this.userName)) {
-            this.userName = user?.email
+            this.userName = Firebase.auth.currentUser?.email
         }
-
         this.rating = rating
         this.text = text
     }
