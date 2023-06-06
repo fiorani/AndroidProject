@@ -13,6 +13,9 @@ import javax.inject.Inject
 @HiltViewModel
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
     private var _userPosition = mutableStateOf("")
+    private var _user: User? = null
+    val user
+        get() = _user
     val userPosition
         get() = _userPosition
 
@@ -31,5 +34,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     fun setPosition(position: String) {
         _userPosition.value = position
         repository.setPosition(position)
+    }
+    fun setUser(user: User) {
+        _user = user
     }
 }

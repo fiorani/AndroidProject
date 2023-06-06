@@ -47,11 +47,8 @@ fun UserProfileScreen(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel
 ) {
-    var user: User by remember { mutableStateOf(User()) }
+    val user: User = usersViewModel.user!!
     val orders = remember { cartViewModel.getOrders() }
-    LaunchedEffect(Unit) {
-        user = usersViewModel.getUser()
-    }
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {

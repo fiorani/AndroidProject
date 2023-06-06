@@ -42,10 +42,10 @@ fun HomeScreen(
         onLoginClicked()
     }
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
-    var user: User by remember { mutableStateOf(User()) }
+    var user by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
-        usersViewModel.setPosition(usersViewModel.getPosition())
-        user = usersViewModel.getUser()
+        usersViewModel.setUser(usersViewModel.getUser())
+        user = usersViewModel.user!!
         restaurants = if(user.isRestaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         }else{
