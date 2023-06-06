@@ -27,7 +27,7 @@ class RestaurantsRepository(eatItApp: EatItApp) {
     suspend fun getRestaurants(): List<Restaurant> = withContext(Dispatchers.IO) {
         try {
             FirebaseFirestore.getInstance().collection("restaurants").get().await()
-            .documents.mapNotNull { documentSnapshot ->
+                .documents.mapNotNull { documentSnapshot ->
                     val restaurant = documentSnapshot.toObject(Restaurant::class.java)
                     restaurant?.id = documentSnapshot.id
                     restaurant
@@ -37,21 +37,25 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         }
     }
 
-    suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> = withContext(Dispatchers.IO) {
-        try {
-            FirebaseFirestore.getInstance().collection("restaurants").whereEqualTo("userId", userId).get().await()
-                .documents.mapNotNull {  documentSnapshot ->
-                    val restaurant = documentSnapshot.toObject(Restaurant::class.java)
-                    restaurant?.id = documentSnapshot.id
-                    restaurant }
-        } catch (e: Exception) {
-            throw e
+    suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> =
+        withContext(Dispatchers.IO) {
+            try {
+                FirebaseFirestore.getInstance().collection("restaurants")
+                    .whereEqualTo("userId", userId).get().await()
+                    .documents.mapNotNull { documentSnapshot ->
+                        val restaurant = documentSnapshot.toObject(Restaurant::class.java)
+                        restaurant?.id = documentSnapshot.id
+                        restaurant
+                    }
+            } catch (e: Exception) {
+                throw e
+            }
         }
-    }
 
 
     suspend fun getProducts(restaurantId: String): List<Product> = withContext(Dispatchers.IO) {
-        try{ FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+        try {
+            FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
                 .collection("products").get().await()
                 .documents.mapNotNull { it.toObject(Product::class.java) }
         } catch (e: Exception) {
@@ -60,23 +64,24 @@ class RestaurantsRepository(eatItApp: EatItApp) {
     }
 
     suspend fun getRatings(restaurantId: String): List<Rating> = withContext(Dispatchers.IO) {
-    try{
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
-            .collection("ratings").get().await()
-            .documents.mapNotNull { it.toObject(Rating::class.java) }
-    } catch (e: Exception) {
-        throw e
-    }
+        try {
+            FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+                .collection("ratings").get().await()
+                .documents.mapNotNull { it.toObject(Rating::class.java) }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
 
-    suspend fun getRestaurant(restaurantId: String): Restaurant=
+    suspend fun getRestaurant(restaurantId: String): Restaurant =
         withContext(Dispatchers.IO) {
             try {
-                    var restaurant=FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+                var restaurant =
+                    FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
                         .get().await().toObject(Restaurant::class.java)!!
-                    restaurant.id=restaurantId
-                    restaurant
+                restaurant.id = restaurantId
+                restaurant
             } catch (e: Exception) {
                 throw e
             }

@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.unit.dp
 import com.example.eatit.model.Restaurant
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.firebase.firestore.DocumentSnapshot
 
 
 @OptIn(ExperimentalMaterial3Api::class)

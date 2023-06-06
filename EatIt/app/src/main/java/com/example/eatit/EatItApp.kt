@@ -39,8 +39,6 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction8
@@ -319,7 +317,7 @@ private fun NavigationGraph(
         composable(route = AppScreen.Settings.name) {
             SettingsScreen(settingsViewModel, onNextButtonClicked = {
                 navController.navigate(AppScreen.Login.name)
-            },usersViewModel = usersViewModel,startLocationUpdates = startLocationUpdates)
+            }, usersViewModel = usersViewModel, startLocationUpdates = startLocationUpdates)
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(

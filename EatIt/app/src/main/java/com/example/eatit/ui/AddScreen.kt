@@ -66,8 +66,7 @@ fun AddRestaurantScreen(
             ) {
                 OutlinedTextField(
                     value = city,
-                    onValueChange = {
-                            newText ->
+                    onValueChange = { newText ->
                         city = newText
                     },
                     label = { Text("Username") },

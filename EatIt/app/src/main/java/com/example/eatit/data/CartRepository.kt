@@ -4,10 +4,7 @@ import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -32,11 +29,12 @@ class CartRepository(eatItApp: EatItApp) {
     }
 
     suspend fun getProducts(order: Order): List<Product> = withContext(Dispatchers.IO) {
-        try{
+        try {
             val products = mutableListOf<Product>()
-            val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants").document(order.restaurantId.toString())
-            .collection("products").get().await()
-            .documents
+            val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants")
+                .document(order.restaurantId.toString())
+                .collection("products").get().await()
+                .documents
             for (documentSnapshot in querySnapshot) {
                 if (order.listProductId?.contains(documentSnapshot.id) == true) {
                     val product = documentSnapshot.toObject(Product::class.java)

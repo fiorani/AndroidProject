@@ -23,7 +23,6 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.firebase.Timestamp
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -102,7 +101,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel,user: User) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel, user: User) {
     EatItCard(onItemClicked = {
     }) {
         Row(
@@ -115,7 +114,7 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel,user: User) {
                     .padding(4.dp)
                     .weight(1f)
             )
-            if(!user.isRestaurateur){
+            if (!user.isRestaurateur) {
                 Text(
                     text = product.price.toString() + "€",
                     modifier = Modifier.padding(4.dp),
@@ -230,7 +229,7 @@ fun OrderCard(
                     fontSize = 20.sp
                 )
                 Text(
-                    text = "€" + String.format("%.${2}f",orders.totalPrice),
+                    text = "€" + String.format("%.${2}f", orders.totalPrice),
                     modifier = Modifier.padding(8.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp
@@ -253,7 +252,9 @@ fun OrderCard(
                                 fontSize = 16.sp
                             )
                             Text(
-                                text =  "€" + orders.listPrice?.get(index) + " x" +orders.listQuantity?.get(index),
+                                text = "€" + orders.listPrice?.get(index) + " x" + orders.listQuantity?.get(
+                                    index
+                                ),
                                 modifier = Modifier.padding(8.dp),
                                 fontSize = 16.sp
                             )

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.CartRepository
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
-import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

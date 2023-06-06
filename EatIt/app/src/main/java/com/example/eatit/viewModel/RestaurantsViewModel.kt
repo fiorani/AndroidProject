@@ -21,12 +21,13 @@ class RestaurantsViewModel @Inject constructor(
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
-         repository.insertNewProduct(_restaurantSelected?.id, product)
+        repository.insertNewProduct(_restaurantSelected?.id, product)
     }
 
     suspend fun getRestaurants(): List<Restaurant> {
         return repository.getRestaurants()
     }
+
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> {
         return repository.getRestaurantsByUserId(userId)
     }

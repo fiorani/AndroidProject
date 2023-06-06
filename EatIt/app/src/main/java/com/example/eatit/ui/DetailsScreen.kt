@@ -1,6 +1,5 @@
 package com.example.eatit.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import com.example.eatit.R
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
-import com.example.eatit.model.User
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
@@ -53,8 +51,8 @@ fun DetailsRestaurantScreen(
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
     val user = usersViewModel.user!!
     LaunchedEffect(Unit) {
-        products=restaurantsViewModel.getProducts(restaurant?.id.toString())
-        ratings=restaurantsViewModel.getRatings(restaurant?.id.toString())
+        products = restaurantsViewModel.getProducts(restaurant?.id.toString())
+        ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
     cartViewModel.selectOrder(
         Order(
@@ -75,7 +73,7 @@ fun DetailsRestaurantScreen(
     Scaffold(
 
         floatingActionButton = {
-            if(user.isRestaurateur) {
+            if (user.isRestaurateur) {
                 FloatingActionButton(onClick = onAddButtonClicked) {
                     Icon(
                         Icons.Filled.Add,

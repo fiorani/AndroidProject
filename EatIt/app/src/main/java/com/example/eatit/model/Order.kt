@@ -1,7 +1,6 @@
 package com.example.eatit.model
 
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.ktx.Firebase
 import java.util.Date

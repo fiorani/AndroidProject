@@ -43,29 +43,29 @@ fun UserProfileScreen(
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    ImageProfile(user.photo.toString())
-                    Column(
-                        verticalArrangement = Arrangement.Bottom,
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier
-                            .height(200.dp)
-                    ) {
-                        Text(
-                            text = user.userName.toString(),
-                            color = MaterialTheme.colorScheme.background,
-                            style = MaterialTheme.typography.titleLarge,
+            Box(modifier = Modifier.fillMaxWidth()) {
+                ImageProfile(user.photo.toString())
+                Column(
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .height(200.dp)
+                ) {
+                    Text(
+                        text = user.userName.toString(),
+                        color = MaterialTheme.colorScheme.background,
+                        style = MaterialTheme.typography.titleLarge,
 
-                            )
-                        Spacer(modifier = Modifier.size(15.dp))
-                        Text(
-                            text = user.address.toString(),
-                            color = MaterialTheme.colorScheme.background,
-                            style = MaterialTheme.typography.titleMedium
                         )
-                        Spacer(modifier = Modifier.size(15.dp))
-                    }
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Text(
+                        text = user.address.toString(),
+                        color = MaterialTheme.colorScheme.background,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.size(15.dp))
                 }
+            }
 
 
             Text(
@@ -81,7 +81,7 @@ fun UserProfileScreen(
                     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
                     var restaurant by remember { mutableStateOf(Restaurant()) }
                     LaunchedEffect(Unit) {
-                        products=cartViewModel.getProducts(orders[item])
+                        products = cartViewModel.getProducts(orders[item])
                         restaurant = restaurantsViewModel.getRestaurant(
                             orders[item].restaurantId.toString()
                         )

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
 import com.example.eatit.model.User
-import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         repository.insertNewUser(user)
     }
 
-    suspend fun getUser(): User  {
+    suspend fun getUser(): User {
         return repository.getUser()
     }
 
@@ -35,6 +34,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         _userPosition.value = position
         repository.setPosition(position)
     }
+
     fun setUser(user: User) {
         _user = user
     }

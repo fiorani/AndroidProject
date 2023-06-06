@@ -47,15 +47,15 @@ fun HomeScreen(
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user!!
         usersViewModel.setPosition(user.userPosition.toString())
-        restaurants = if(user.isRestaurateur) {
+        restaurants = if (user.isRestaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
-        }else{
+        } else {
             restaurantsViewModel.getRestaurants()
         }
     }
     Scaffold(
         floatingActionButton = {
-            if(user.isRestaurateur){
+            if (user.isRestaurateur) {
                 FloatingActionButton(
                     shape = RoundedCornerShape(16.dp),
                     onClick = onAddButtonClicked

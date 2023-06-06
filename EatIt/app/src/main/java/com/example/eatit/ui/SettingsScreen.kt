@@ -41,40 +41,39 @@ fun SettingsScreen(
                 user = usersViewModel.getUser()
             }
             OutlinedTextField(
-                    value = user.userName.toString(),
-                    onValueChange = {
-                        name = it
+                value = user.userName.toString(),
+                onValueChange = {
+                    name = it
+                },
+                label = { Text("Username") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.size(15.dp))
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = { newText ->
+                        city = newText
                     },
                     label = { Text("Username") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.weight(4f)
                 )
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Localized",
+                    Modifier
+                        .weight(1f)
+                        .clickable(onClick = {
+                            startLocationUpdates()
+                        })
+                )
+            }
 
-                Spacer(modifier = Modifier.size(15.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedTextField(
-                        value = city,
-                        onValueChange = {
-                                newText ->
-                            city = newText
-                        },
-                        label = { Text("Username") },
-                        modifier = Modifier.weight(4f)
-                    )
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = "Localized",
-                        Modifier
-                            .weight(1f)
-                            .clickable(onClick = {
-                                startLocationUpdates()
-                            })
-                    )
-                }
-
-                Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(15.dp))
 
 
             Button(
