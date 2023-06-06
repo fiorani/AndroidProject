@@ -6,7 +6,6 @@ import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
-import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class RestaurantsViewModel @Inject constructor(
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
-        _restaurantSelected?.id?.let { repository.insertNewProduct(it, product) }
+         repository.insertNewProduct(_restaurantSelected?.id, product)
     }
 
     suspend fun getRestaurants(): List<Restaurant> {
