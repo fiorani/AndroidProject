@@ -1,10 +1,6 @@
 package com.example.eatit.util
 
-import android.content.Context
-import com.example.eatit.R
 import com.example.eatit.model.Restaurant
-import java.util.Locale
-import java.util.Random
 
 /**
  * Utilities for Restaurants.

@@ -39,8 +39,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -240,7 +238,11 @@ class MainActivity : ComponentActivity() {
     private fun createAccount(
         email: String,
         password: String,
-        user: User,
+        name: String,
+        photo: String,
+        age: Int,
+        address: String,
+        isRestaurateur: Boolean,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
@@ -249,13 +251,23 @@ class MainActivity : ComponentActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "createUserWithEmail:success")
-                        usersViewModel.addNewUser(user)
+                        usersViewModel.addNewUser(
+                            User(
+                                auth.currentUser!!.uid,
+                                name,
+                                email,
+                                photo,
+                                age,
+                                address,
+                                isRestaurateur
+                            )
+                        )
                         signIn(email, password, onNextButtonClicked)
                     } else {
                         task.exception?.let { errorToast("createUserWithEmail:failure", it) }
                     }
                 }
-        } catch (e : IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             errorToast("signInWithEmail:failure", e)
         }
     }
@@ -271,12 +283,12 @@ class MainActivity : ComponentActivity() {
                         task.exception?.let { errorToast("signInWithEmail:failure", it) }
                     }
                 }
-        } catch(e: IllegalArgumentException ) {
+        } catch (e: IllegalArgumentException) {
             errorToast("signInWithEmail:failure", e)
         }
     }
 
-    private fun errorToast(errorMsg: String, e : Exception){
+    private fun errorToast(errorMsg: String, e: Exception) {
         // If sign in fails, display a message to the user.
         Log.w(TAG, errorMsg, e)
         Toast.makeText(

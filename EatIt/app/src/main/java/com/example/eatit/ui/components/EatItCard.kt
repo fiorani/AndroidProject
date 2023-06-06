@@ -202,9 +202,11 @@ fun OrderCard(
                 lineHeight = 0.sp,
                 fontSize = 20.sp
             )
-            Column(modifier = Modifier
-                .padding(0.dp, 10.dp)
-                .width(500.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(0.dp, 10.dp)
+                    .width(500.dp)
+            ) {
                 Text(
                     text = customerName,
                     fontSize = 20.sp

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,14 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eatit.model.User
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -40,7 +37,7 @@ import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.reflect.KFunction3
-import kotlin.reflect.KFunction4
+import kotlin.reflect.KFunction8
 
 sealed class AppScreen(var name: String) {
     object Home : AppScreen("Home")
@@ -196,7 +193,7 @@ fun NavigationApp(
     startLocationUpdates: () -> Unit,
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
@@ -255,7 +252,7 @@ private fun NavigationGraph(
     startLocationUpdates: () -> Unit,
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()

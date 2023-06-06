@@ -16,7 +16,7 @@ data class Rating(
 
     constructor(rating: Double, text: String) : this() {
         this.userId = Firebase.auth.uid
-        this.userName =  Firebase.auth.currentUser?.displayName
+        this.userName = Firebase.auth.currentUser?.displayName
         if (TextUtils.isEmpty(this.userName)) {
             this.userName = Firebase.auth.currentUser?.email
         }

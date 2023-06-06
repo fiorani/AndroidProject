@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -143,7 +142,9 @@ fun OrderCard(
                 ) {
                     Text(
                         text = "Total price:",
-                        modifier = Modifier.padding(8.dp).weight(1f),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .weight(1f),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -165,11 +166,14 @@ fun OrderCard(
                         ) {
                             Text(
                                 text = product.data?.get("name").toString(),
-                                modifier = Modifier.padding(8.dp).weight(1f),
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f),
                                 fontSize = 16.sp
                             )
                             Text(
-                                text="€ " + product.data?.get("price").toString() + " x" + (orders.data?.get("listQuantity") as List<String>)[index],
+                                text = "€ " + product.data?.get("price")
+                                    .toString() + " x" + (orders.data?.get("listQuantity") as List<String>)[index],
                                 modifier = Modifier.padding(8.dp),
                                 fontSize = 16.sp
                             )

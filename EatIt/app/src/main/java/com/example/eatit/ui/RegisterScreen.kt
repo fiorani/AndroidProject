@@ -19,22 +19,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
-import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
-import com.example.eatit.ui.components.LocationField
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.example.eatit.viewModel.UsersViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import java.util.*
-import kotlin.reflect.KFunction3
-import kotlin.reflect.KFunction4
+import kotlin.reflect.KFunction8
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
+    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
@@ -268,15 +262,14 @@ fun RegisterScreen(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
                                 createAccount(
-                                    txtEmail.text, txtPassword.text, User(
-                                        Firebase.auth.currentUser?.uid,
-                                        txtName.text,
-                                        txtEmail.text,
-                                        "",
-                                        0,
-                                        city,
-                                        !isUserRegister.value
-                                    ), onNextButtonClicked
+                                    txtEmail.text,
+                                    txtPassword.text,
+                                    txtName.text,
+                                    "",
+                                    0,
+                                    city,
+                                    !isUserRegister.value,
+                                    onNextButtonClicked
                                 )
                             },
                             contentPadding = ButtonDefaults.ButtonWithIconContentPadding
