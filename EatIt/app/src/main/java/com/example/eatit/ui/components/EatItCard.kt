@@ -13,22 +13,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
-import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -192,8 +187,8 @@ fun RatingCard(rating: Rating) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderCard(
-    orders: DocumentSnapshot,
-    listProducts: List<DocumentSnapshot>,
+    orders: Order,
+    listProducts: List<Product>,
     restaurant: Restaurant
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -235,7 +230,7 @@ fun OrderCard(
                     fontSize = 20.sp
                 )
                 Text(
-                    text = "€" + String.format("%.${2}f", orders.data?.get("totalPrice")),
+                    text = "€" + String.format("%.${2}f",orders.totalPrice),
                     modifier = Modifier.padding(8.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp
@@ -251,24 +246,22 @@ fun OrderCard(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = product.data?.get("name").toString(),
+                                text = product.name.toString(),
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f),
                                 fontSize = 16.sp
                             )
                             Text(
-                                text =  "€" + orders.data?.get("price").toString() + " x" + (orders.data?.get("listQuantity") as List<String>)[index],
+                                text =  "€" + orders.listPrice?.get(index) + " x" +orders.listQuantity?.get(index),
                                 modifier = Modifier.padding(8.dp),
                                 fontSize = 16.sp
                             )
                         }
                     }
-                    var timestamp = orders.data?.get("timestamp") as Timestamp
-                    val date = timestamp.toDate()
                     val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
                     Text(
-                        text = dateFormat.format(date).toString(),
+                        text = dateFormat.format(orders.timestamp).toString(),
                         modifier = Modifier.padding(3.dp),
                         fontWeight = Bold,
                         fontSize = 18.sp
