@@ -31,11 +31,13 @@ import com.example.eatit.R
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -43,15 +45,15 @@ import com.google.firebase.ktx.Firebase
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
     onAddButtonClicked: () -> Unit,
-    cartViewModel: CartViewModel
+    cartViewModel: CartViewModel,
+    usersViewModel: UsersViewModel,
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
+    val user = usersViewModel.user!!
     LaunchedEffect(Unit) {
-        Log.d("DetailsRestaurantScreen", "restaurant: $restaurant")
         products=restaurantsViewModel.getProducts(restaurant?.id.toString())
-        Log.d("DetailsRestaurantScreen", "products: $products")
         ratings=restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
     cartViewModel.selectOrder(
@@ -71,12 +73,15 @@ fun DetailsRestaurantScreen(
         )
     )
     Scaffold(
+
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddButtonClicked) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.add_restaurant)
-                )
+            if(user.isRestaurateur) {
+                FloatingActionButton(onClick = onAddButtonClicked) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.add_restaurant)
+                    )
+                }
             }
         },
     ) { paddingValues ->
@@ -112,7 +117,7 @@ fun DetailsRestaurantScreen(
 
             LazyColumn {
                 items(products.size) { index ->
-                    ProductCard(products[index], cartViewModel)
+                    ProductCard(products[index], cartViewModel, user)
                 }
                 items(ratings.size) { index ->
                     RatingCard(ratings[index])

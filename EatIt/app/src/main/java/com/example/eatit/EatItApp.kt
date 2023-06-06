@@ -16,8 +16,11 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,12 +32,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.eatit.model.User
 import com.example.eatit.ui.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction8
@@ -258,6 +264,10 @@ private fun NavigationGraph(
     val usersViewModel = hiltViewModel<UsersViewModel>()
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val cartViewModel = hiltViewModel<CartViewModel>()
+    var user: User by remember { mutableStateOf(User()) }
+    LaunchedEffect(Unit) {
+        user = usersViewModel.getUser()
+    }
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -302,7 +312,8 @@ private fun NavigationGraph(
                 onAddButtonClicked = {
                     navController.navigate(AppScreen.AddProduct.name)
                 },
-                cartViewModel = cartViewModel
+                cartViewModel = cartViewModel,
+                usersViewModel = usersViewModel,
             )
         }
         composable(route = AppScreen.Settings.name) {

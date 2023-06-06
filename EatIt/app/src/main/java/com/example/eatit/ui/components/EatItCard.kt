@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
+import com.example.eatit.model.User
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -98,7 +99,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel,user: User) {
     EatItCard(onItemClicked = {
     }) {
         Row(
@@ -111,23 +112,25 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel) {
                     .padding(4.dp)
                     .weight(1f)
             )
-            Text(
-                text = product.price.toString() + "€",
-                modifier = Modifier.padding(4.dp),
-            )
-            val (count, updateCount) = remember { mutableStateOf(0) }
-            QuantitySelector(
-                count = count,
-                decreaseItemCount = {
-                    if (count > 0) updateCount(count - 1)
-                    cartViewModel.reduceCount(product)
-                    cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
-                },
-                increaseItemCount = {
-                    updateCount(count + 1)
-                    cartViewModel.increaseCount(product)
-                    Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
-                })
+            if(!user.isRestaurateur){
+                Text(
+                    text = product.price.toString() + "€",
+                    modifier = Modifier.padding(4.dp),
+                )
+                val (count, updateCount) = remember { mutableStateOf(0) }
+                QuantitySelector(
+                    count = count,
+                    decreaseItemCount = {
+                        if (count > 0) updateCount(count - 1)
+                        cartViewModel.reduceCount(product)
+                        cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
+                    },
+                    increaseItemCount = {
+                        updateCount(count + 1)
+                        cartViewModel.increaseCount(product)
+                        Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
+                    })
+            }
         }
         Row {
             Text(
