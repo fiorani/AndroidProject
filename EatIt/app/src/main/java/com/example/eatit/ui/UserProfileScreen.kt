@@ -187,6 +187,7 @@ fun OrderCard1(
                     }
                     Text(
                         text = "12/03/23",
+                        modifier = Modifier.padding(2.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
