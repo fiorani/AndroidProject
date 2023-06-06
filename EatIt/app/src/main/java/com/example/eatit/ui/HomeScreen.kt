@@ -46,6 +46,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user!!
+        usersViewModel.setPosition(user.userPosition.toString())
         restaurants = if(user.isRestaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         }else{
