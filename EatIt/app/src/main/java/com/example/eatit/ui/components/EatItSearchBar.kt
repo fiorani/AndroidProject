@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.unit.dp
+import com.example.eatit.model.Restaurant
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 
@@ -27,7 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EatItSearchBar(
-    restaurants: List<DocumentSnapshot>,
+    restaurants: List<Restaurant>,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel
 ) {
@@ -60,10 +61,10 @@ fun EatItSearchBar(
             .fillMaxWidth()
             .padding(10.dp, 2.dp)
     ) {
-        var searchResults = remember { mutableStateListOf<DocumentSnapshot>() }
+        var searchResults = remember { mutableStateListOf<Restaurant>() }
         searchResults.clear()
         restaurants.forEach { document ->
-            if (document.getString("name")?.contains(query, ignoreCase = true) == true) {
+            if (document.name.toString().contains(query, ignoreCase = true)) {
                 searchResults.add(document)
             }
         }

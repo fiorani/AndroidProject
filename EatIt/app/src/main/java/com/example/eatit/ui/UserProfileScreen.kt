@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.ImageProfile
@@ -87,7 +88,7 @@ fun UserProfileScreen(
             ) {
                 items(orders.size) { item ->
                     val products = remember { cartViewModel.getProducts(orders[item]) }
-                    var restaurant by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
+                    var restaurant by remember { mutableStateOf(Restaurant()) }
                     LaunchedEffect(Unit) {
                         restaurant = restaurantsViewModel.getRestaurant(
                             orders[item].data?.get("restaurantId").toString()
@@ -110,7 +111,7 @@ fun UserProfileScreen(
 fun OrderCard(
     orders: DocumentSnapshot,
     listProducts: List<DocumentSnapshot>,
-    restaurant: List<DocumentSnapshot>
+    restaurant: Restaurant
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -133,9 +134,8 @@ fun OrderCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (restaurant.isNotEmpty()) {
                 Text(
-                    text = restaurant[0].data?.get("name").toString(),
+                    text = restaurant.name.toString(),
                     modifier = Modifier.padding(8.dp),
                     fontSize = 32.sp
                 )
@@ -158,7 +158,7 @@ fun OrderCard(
                         fontSize = 20.sp
                     )
                 }
-            }
+
 
             if (expandedState) {
                 Column(Modifier.fillMaxWidth()) {

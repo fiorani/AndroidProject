@@ -16,10 +16,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.Product
+import com.example.eatit.model.Rating
+import com.example.eatit.model.Restaurant
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.google.firebase.firestore.DocumentSnapshot
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
@@ -41,7 +43,7 @@ private fun EatItCard(onItemClicked: () -> Unit, function: @Composable () -> Uni
 
 @Composable
 fun RestaurantCard(
-    restaurant: DocumentSnapshot,
+    restaurant: Restaurant,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel
 ) {
@@ -50,7 +52,7 @@ fun RestaurantCard(
         onItemClicked()
     }) {
         Column {
-            ImageCard(restaurant.data!!["photo"].toString())
+            ImageCard(restaurant.photo.toString())
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.padding(10.dp)
@@ -60,7 +62,7 @@ fun RestaurantCard(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = restaurant.data!!["name"].toString(),
+                        text = restaurant.name.toString(),
                         modifier = Modifier
                             .padding(4.dp)
                             .width(200.dp),
@@ -68,7 +70,7 @@ fun RestaurantCard(
                         fontWeight = Bold
                     )
                     Text(
-                        text = restaurant.data!!["city"].toString(),
+                        text = restaurant.city.toString(),
                         modifier = Modifier.padding(4.dp),
                         fontSize = 20.sp
                     )
@@ -76,7 +78,7 @@ fun RestaurantCard(
                 Column {
                     var rating: Float by remember { mutableStateOf(3.2f) }
                     RatingBar(
-                        value = restaurant.data!!["avgRating"].toString().toFloat(),
+                        value = restaurant.avgRating.toString().toFloat(),
                         style = RatingBarStyle.Fill(),
                         onValueChange = {
                             rating = it
@@ -96,7 +98,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel) {
     EatItCard(onItemClicked = {
     }) {
         Row(
@@ -104,13 +106,13 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.data!!["name"].toString(),
+                text = product.name.toString(),
                 modifier = Modifier
                     .padding(4.dp)
                     .weight(1f)
             )
             Text(
-                text = product.data!!["price"].toString() + "€",
+                text = product.price.toString() + "€",
                 modifier = Modifier.padding(4.dp),
             )
             val (count, updateCount) = remember { mutableStateOf(0) }
@@ -129,7 +131,7 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
         }
         Row {
             Text(
-                text = product.data!!["description"].toString(),
+                text = product.description.toString(),
                 modifier = Modifier.padding(4.dp),
             )
         }
@@ -137,7 +139,7 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
 }
 
 @Composable
-fun RatingCard(rating: DocumentSnapshot) {
+fun RatingCard(rating: Rating) {
     EatItCard(onItemClicked = {
     }) {
         Column(
@@ -146,19 +148,19 @@ fun RatingCard(rating: DocumentSnapshot) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = rating.data!!["text"].toString(),
+                text = rating.text.toString(),
                 modifier = Modifier.padding(4.dp),
                 fontSize = 20.sp
             )
             Row {
                 Text(
-                    text = rating.data!!["userName"].toString(),
+                    text = rating.userName.toString(),
                     modifier = Modifier.padding(4.dp),
                     fontSize = 15.sp
                 )
                 var valrating: Float by remember { mutableStateOf(3.2f) }
                 RatingBar(
-                    value = rating.data!!["rating"].toString().toFloat(),
+                    value = rating.rating.toString().toFloat(),
                     style = RatingBarStyle.Fill(),
                     onValueChange = {
                         valrating = it

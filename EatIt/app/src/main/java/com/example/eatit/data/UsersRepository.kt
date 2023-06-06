@@ -5,7 +5,6 @@ import com.example.eatit.EatItApp
 import com.example.eatit.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -19,14 +18,15 @@ class UsersRepository(eatItApp: EatItApp) {
 
     fun setPosition(position: String) {
         FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString()).get().addOnSuccessListener {
+            .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
                 it.documents.firstOrNull()?.reference?.update("userPosition", position)
             }
     }
 
     suspend fun getPosition(): String =
         withContext(Dispatchers.IO) {
-            return@withContext try {
+            try {
                 FirebaseFirestore.getInstance().collection("users")
                     .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString()).get().await()
                     .documents.firstOrNull()?.get("userPosition").toString()
@@ -38,7 +38,7 @@ class UsersRepository(eatItApp: EatItApp) {
 
     suspend fun getUser(): User =
         withContext(Dispatchers.IO) {
-            return@withContext try {
+            try {
                 FirebaseFirestore.getInstance().collection("users")
                     .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString())
                     .get().await().documents.firstOrNull()?.toObject(User::class.java)!!

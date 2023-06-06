@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.CartRepository
 import com.example.eatit.model.Order
+import com.example.eatit.model.Product
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,9 +26,9 @@ class CartViewModel @Inject constructor(
         _orderLines = order
     }
 
-    fun reduceCount(product: DocumentSnapshot) = _orderLines?.reduceCount(product, _orderLines!!)
+    fun reduceCount(product: Product) = _orderLines?.reduceCount(product, _orderLines!!)
 
-    fun increaseCount(product: DocumentSnapshot) =
+    fun increaseCount(product: Product) =
         _orderLines?.increaseCount(product, _orderLines!!)
 
     fun getOrders(): List<DocumentSnapshot> {

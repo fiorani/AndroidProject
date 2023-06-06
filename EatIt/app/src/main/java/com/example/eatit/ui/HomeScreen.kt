@@ -20,12 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
+import com.example.eatit.model.Restaurant
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 
 @Composable
@@ -40,21 +41,29 @@ fun HomeScreen(
     if (Firebase.auth.currentUser == null) {
         onLoginClicked()
     }
-    var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
+    var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
+    var user: User by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
-        restaurants = restaurantsViewModel.getRestaurants()
         usersViewModel.setPosition(usersViewModel.getPosition())
+        user = usersViewModel.getUser()
+        restaurants = if(user.isRestaurateur) {
+            restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
+        }else{
+            restaurantsViewModel.getRestaurants()
+        }
     }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                shape = RoundedCornerShape(16.dp),
-                onClick = onAddButtonClicked
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.add_restaurant)
-                )
+            if(user.isRestaurateur){
+                FloatingActionButton(
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = onAddButtonClicked
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.add_restaurant)
+                    )
+                }
             }
         },
     ) { innerPadding ->
