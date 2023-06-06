@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.Order
+import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
@@ -33,7 +35,11 @@ fun UserProfileScreen(
     cartViewModel: CartViewModel
 ) {
     val user: User = usersViewModel.user!!
-    val orders = remember { cartViewModel.getOrders() }
+    var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
+    LaunchedEffect(Unit) {
+        orders = cartViewModel.getOrders()
+    }
+
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
@@ -72,11 +78,12 @@ fun UserProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items(orders.size) { item ->
-                    val products = remember { cartViewModel.getProducts(orders[item]) }
+                    var products by remember { mutableStateOf<List<Product>>(emptyList()) }
                     var restaurant by remember { mutableStateOf(Restaurant()) }
                     LaunchedEffect(Unit) {
+                        products=cartViewModel.getProducts(orders[item])
                         restaurant = restaurantsViewModel.getRestaurant(
-                            orders[item].data?.get("restaurantId").toString()
+                            orders[item].restaurantId.toString()
                         )
                     }
                     OrderCard(

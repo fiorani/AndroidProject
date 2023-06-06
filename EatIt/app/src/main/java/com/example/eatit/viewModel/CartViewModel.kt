@@ -31,11 +31,11 @@ class CartViewModel @Inject constructor(
     fun increaseCount(product: Product) =
         _orderLines?.increaseCount(product, _orderLines!!)
 
-    fun getOrders(): List<DocumentSnapshot> {
+    suspend fun getOrders(): List<Order> {
         return repository.getOrders()
     }
 
-    fun getProducts(order: DocumentSnapshot): List<DocumentSnapshot> {
+    suspend fun getProducts(order: Order): List<Product> {
         return repository.getProducts(order)
     }
 
