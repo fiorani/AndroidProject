@@ -12,6 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
+    private var _userPosition: String? = ""
+    val userPosition
+        get() = _userPosition
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
     }
@@ -24,5 +27,6 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
 
     fun setPosition(position: String) {
         repository.setPosition(position)
+        _userPosition = position
     }
 }

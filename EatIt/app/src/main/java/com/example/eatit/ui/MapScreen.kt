@@ -31,25 +31,24 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MapScreen(
-    
+
     restaurantsViewModel: RestaurantsViewModel,
     modifier: Modifier = Modifier,
     usersViewModel: UsersViewModel
 ) {
     val context = LocalContext.current
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
-    val myPosition by rememberSaveable {mutableStateOf("")}
+    var myPosition by rememberSaveable {mutableStateOf("")}
     val markers = remember { mutableStateListOf<MarkerInfo>() }
     var cameraPositionState = rememberCameraPositionState {
         CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)
     }
-    Log.d("currentLocation1", myPosition)
-    val currentLocation = Geocoder(context).getFromLocationName("fano", 1)
-    Log.d("currentLocation2", currentLocation.toString())
+    myPosition = usersViewModel.userPosition.toString()
+    val currentLocation = Geocoder(context).getFromLocationName(myPosition, 1)
     if (currentLocation != null && currentLocation.size > 0) {
         cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(
-                LatLng(currentLocation[0].latitude, currentLocation[0].longitude), 5f
+                LatLng(currentLocation[0].latitude, currentLocation[0].longitude), 9f
             )
         }
     }

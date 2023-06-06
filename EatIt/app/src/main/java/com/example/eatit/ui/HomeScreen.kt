@@ -23,6 +23,7 @@ import com.example.eatit.R
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
@@ -34,6 +35,7 @@ fun HomeScreen(
     restaurantsViewModel: RestaurantsViewModel,
     onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    usersViewModel: UsersViewModel,
 ) {
     if (Firebase.auth.currentUser == null) {
         onLoginClicked()
@@ -41,6 +43,7 @@ fun HomeScreen(
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
     LaunchedEffect(Unit) {
         restaurants = restaurantsViewModel.getRestaurants()
+        usersViewModel.setPosition(usersViewModel.getPosition())
     }
     Scaffold(
         floatingActionButton = {
