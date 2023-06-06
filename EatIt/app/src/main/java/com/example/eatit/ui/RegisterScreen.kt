@@ -1,21 +1,28 @@
 package com.example.eatit.ui
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.LocationField
+import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -30,6 +37,8 @@ fun RegisterScreen(
     createAccount: KFunction4<String, String, User, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
+    restaurantsViewModel: RestaurantsViewModel,
+    startLocationUpdates: () -> Unit,
 ) {
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.2f)
@@ -207,8 +216,31 @@ fun RegisterScreen(
                         }
                     }
 
-                    //Maps: Don't know if it's working correctly
-                    LocationField {}
+                    var city by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+
+                    ) {
+                        OutlinedTextField(
+                            value = city,
+                            onValueChange = { newText ->
+                                city = newText
+                            },
+                            label = {
+                                Text(stringResource(id = R.string.label_city))
+                            },
+                            modifier = Modifier.weight(4f)
+                        )
+
+                        Icon(
+                            Icons.Filled.LocationSearching,
+                            contentDescription = "get gps",
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable(onClick = startLocationUpdates)
+                        )
+                    }
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
@@ -242,6 +274,7 @@ fun RegisterScreen(
                                         txtEmail.text,
                                         "",
                                         0,
+                                        city
                                     ), onNextButtonClicked
                                 )
                             },
