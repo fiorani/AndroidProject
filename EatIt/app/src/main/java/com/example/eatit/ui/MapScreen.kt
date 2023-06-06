@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,8 +22,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -41,30 +44,44 @@ fun MapScreen(
     var cameraPositionState = rememberCameraPositionState {
         CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)
     }
+    val markers = remember { mutableStateListOf<MarkerInfo>() }
+    LaunchedEffect(restaurants) {
+        markers.clear()
+        for (restaurant in restaurants) {
+            val position = withContext(Dispatchers.IO) {
+                Geocoder(context).getFromLocationName(restaurant["city"].toString(), 1)
+            }
+            if (position != null && position.size > 0) {
+                val latitude = position[0].latitude
+                val longitude = position[0].longitude
+                markers.add(
+                    MarkerInfo(
+                        restaurant["name"].toString(),
+                        LatLng(latitude, longitude)
+                    )
+                )
+            }
+        }
+    }
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             GoogleMap(
                 modifier = Modifier.fillMaxSize()
             ) {
-                for (restaurant in restaurants) {
-                    val position =
-                        Geocoder(context).getFromLocationName(restaurant["city"].toString(), 1)
-                    if (position != null) {
-                        if (position.size > 0) {
-                            Marker(
-                                state = MarkerState(
-                                    position = LatLng(
-                                        position.get(0)?.latitude!!,
-                                        position.get(0)?.longitude!!
-                                    )
-                                ),
-                                title = restaurant["name"].toString()
-                            )
-                        }
-                    }
-
+                markers.forEach { markerInfo ->
+                    Marker(
+                        state = rememberMarkerState(
+                            position = markerInfo.position
+                        ),
+                        title = markerInfo.title
+                    )
                 }
             }
         }
     }
 }
+
+data class MarkerInfo(
+    val title: String,
+    val position: LatLng
+)
