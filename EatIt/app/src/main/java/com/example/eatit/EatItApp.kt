@@ -285,6 +285,7 @@ private fun NavigationGraph(
                 },
                 restaurantsViewModel = restaurantsViewModel,
                 usersViewModel = usersViewModel,
+                startLocationUpdates = startLocationUpdates
             )
         }
         composable(route = AppScreen.AddProduct.name) {

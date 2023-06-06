@@ -6,8 +6,10 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -37,9 +39,10 @@ fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
     usersViewModel: UsersViewModel,
+    startLocationUpdates: () -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var city by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { usersViewModel.userPosition }
     var category by rememberSaveable { mutableStateOf("") }
     var photo by rememberSaveable { mutableStateOf("") }
     var price = 0
@@ -57,15 +60,29 @@ fun AddRestaurantScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            OutlinedTextField(
-                value = city,
-                onValueChange = { newText ->
-                    city = newText
-                },
-                label = {
-                    Text(stringResource(id = R.string.label_city))
-                },
-            )
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = {
+                            newText ->
+                        city = newText
+                    },
+                    label = { Text("Username") },
+                    modifier = Modifier.weight(4f)
+                )
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Localized",
+                    Modifier
+                        .weight(1f)
+                        .clickable(onClick = {
+                            startLocationUpdates()
+                        })
+                )
+            }
             Spacer(modifier = Modifier.size(15.dp))
             OutlinedTextField(
                 value = name,
