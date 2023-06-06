@@ -36,15 +36,25 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
-    LaunchedEffect(Unit) {
-        restaurants = restaurantsViewModel.getRestaurants()
-    }
-    var myPosition by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
-    Log.d("currentLocation", myPosition)
+    val myPosition by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+    val markers = remember { mutableStateListOf<MarkerInfo>() }
     var cameraPositionState = rememberCameraPositionState {
         CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)
     }
-    val markers = remember { mutableStateListOf<MarkerInfo>() }
+    //startLocationUpdates()
+    Log.d("currentLocation1", myPosition)
+    val currentLocation = Geocoder(context).getFromLocationName("fano", 1)
+    Log.d("currentLocation2", currentLocation.toString())
+    if (currentLocation != null && currentLocation.size > 0) {
+        cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(
+                LatLng(currentLocation[0].latitude, currentLocation[0].longitude), 5f
+            )
+        }
+    }
+    LaunchedEffect(Unit) {
+        restaurants = restaurantsViewModel.getRestaurants()
+    }
     LaunchedEffect(restaurants) {
         markers.clear()
         for (restaurant in restaurants) {
@@ -66,7 +76,8 @@ fun MapScreen(
     Scaffold { innerPadding ->
         Column(modifier.padding(innerPadding)) {
             GoogleMap(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
             ) {
                 markers.forEach { markerInfo ->
                     Marker(
