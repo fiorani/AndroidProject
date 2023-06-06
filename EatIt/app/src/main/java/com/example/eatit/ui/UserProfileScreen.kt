@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
@@ -73,9 +74,10 @@ fun UserProfileScreen(
             }
 
             Text(
-                text = "Order list:",
+                text = "List of orders:",
                 modifier = Modifier.padding(8.dp),
-                fontSize = 32.sp
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
             )
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,11 +92,8 @@ fun UserProfileScreen(
                     }
                     OrderCard(
                         orders[item],
-                        restaurantsViewModel,
-                        cartViewModel,
                         products,
                         restaurant
-
                     )
                 }
             }
@@ -107,8 +106,6 @@ fun UserProfileScreen(
 @Composable
 fun OrderCard(
     orders: DocumentSnapshot,
-    restaurantsViewModel: RestaurantsViewModel,
-    cartViewModel: CartViewModel,
     listProducts: List<DocumentSnapshot>,
     restaurant: List<DocumentSnapshot>
 ) {
@@ -133,7 +130,7 @@ fun OrderCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (restaurant.size > 0) {
+            if (restaurant.isNotEmpty()) {
                 Text(
                     text = restaurant[0].data?.get("name").toString(),
                     modifier = Modifier.padding(8.dp),
@@ -141,8 +138,9 @@ fun OrderCard(
                 )
 
                 Text(
-                    text = "total price="+orders.data?.get("totalPrice").toString(),
+                    text = "total price:"+orders.data?.get("totalPrice").toString(),
                     modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
