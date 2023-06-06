@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    startLocationUpdates()
+                    //startLocationUpdates()
                     NavigationApp(
                         warningViewModel = warningViewModel,
                         signIn = ::signIn,

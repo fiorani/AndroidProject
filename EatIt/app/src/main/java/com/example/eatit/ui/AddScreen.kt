@@ -33,7 +33,7 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
@@ -48,6 +48,9 @@ fun AddRestaurantScreen(
     var price = 0
     var numRatings = 0
     var avgRating = 0.toDouble()
+    LaunchedEffect(Unit) {
+        city = usersViewModel.getPosition()
+    }
 
     Scaffold { paddingValues ->
         Column(
@@ -57,32 +60,15 @@ fun AddRestaurantScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-
-            ) {
-                OutlinedTextField(
-                    value = city,
-                    onValueChange = { newText ->
-                        city = newText
-                    },
-                    label = {
-                        Text(stringResource(id = R.string.label_city))
-                    },
-                    modifier = Modifier.weight(4f)
-                )
-
-                Icon(
-                    Icons.Filled.LocationSearching,
-                    contentDescription = "get gps",
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable(onClick = {
-                            city= usersViewModel.getPosition.value
-                        })
-                )
-            }
+            OutlinedTextField(
+                value = city,
+                onValueChange = { newText ->
+                    city = newText
+                },
+                label = {
+                    Text(stringResource(id = R.string.label_city))
+                },
+            )
             Spacer(modifier = Modifier.size(15.dp))
             OutlinedTextField(
                 value = name,

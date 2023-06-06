@@ -36,6 +36,7 @@ fun RegisterScreen(
 
     usersViewModel: UsersViewModel
 ) {
+
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.2f)
         Column(
@@ -212,31 +213,20 @@ fun RegisterScreen(
                         }
                     }
 
-                    var city by rememberSaveable { usersViewModel.getPosition }
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-
-                    ) {
-                        OutlinedTextField(
-                            value = city,
-                            onValueChange = { newText ->
-                                city = newText
-                            },
-                            label = {
-                                Text(stringResource(id = R.string.label_city))
-                            },
-                            modifier = Modifier.weight(4f)
-                        )
-
-                        Icon(
-                            Icons.Filled.LocationSearching,
-                            contentDescription = "get gps",
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable(onClick = {  city= usersViewModel.getPosition.value })
-                        )
+                    var city by rememberSaveable { mutableStateOf("") }
+                    LaunchedEffect(Unit) {
+                        city = usersViewModel.getPosition()
                     }
+                    OutlinedTextField(
+                        value = city,
+                        onValueChange = { newText ->
+                            city = newText
+                        },
+                        label = {
+                            Text(stringResource(id = R.string.label_city))
+                        },
+                        modifier = Modifier.weight(4f)
+                    )
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))

@@ -15,19 +15,14 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
     }
-    private var _userPosition = mutableStateOf("")
     fun getUser(): List<DocumentSnapshot> {
         return repository.getUser()
     }
-    val getPosition
-        get() = _userPosition
+    suspend fun getPosition(): String {
+        return repository.getPosition()
+    }
 
     fun setPosition(position: String) {
         repository.setPosition(position)
-        _userPosition.value = position
-    }
-
-    private fun resetPosition() {
-        _userPosition.value = ""
     }
 }
