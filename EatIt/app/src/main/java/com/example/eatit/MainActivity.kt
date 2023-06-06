@@ -39,6 +39,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -242,39 +244,46 @@ class MainActivity : ComponentActivity() {
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "createUserWithEmail:success")
-                    usersViewModel.addNewUser(user)
-                    signIn(email, password, onNextButtonClicked)
-                } else {
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+        try {
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "createUserWithEmail:success")
+                        usersViewModel.addNewUser(user)
+                        signIn(email, password, onNextButtonClicked)
+                    } else {
+                        task.exception?.let { errorToast("createUserWithEmail:failure", it) }
+                    }
                 }
-            }
+        } catch (e : IllegalArgumentException) {
+            errorToast("signInWithEmail:failure", e)
+        }
     }
 
     private fun signIn(email: String, password: String, onNextButtonClicked: () -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithEmail:success")
-                    onNextButtonClicked()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+        try {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "signInWithEmail:success")
+                        onNextButtonClicked()
+                    } else {
+                        task.exception?.let { errorToast("signInWithEmail:failure", it) }
+                    }
                 }
-            }
+        } catch(e: IllegalArgumentException ) {
+            errorToast("signInWithEmail:failure", e)
+        }
+    }
+
+    private fun errorToast(errorMsg: String, e : Exception){
+        // If sign in fails, display a message to the user.
+        Log.w(TAG, errorMsg, e)
+        Toast.makeText(
+            baseContext,
+            "Authentication failed.",
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 }
 
