@@ -30,6 +30,7 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,10 +38,11 @@ import java.util.*
 fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-    startLocationUpdates: () -> Unit,
+    
+    usersViewModel: UsersViewModel
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var city by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+    var city by rememberSaveable { mutableStateOf("") }
     var category by rememberSaveable { mutableStateOf("") }
     var photo by rememberSaveable { mutableStateOf("") }
     var price = 0
@@ -76,7 +78,9 @@ fun AddRestaurantScreen(
                     contentDescription = "get gps",
                     modifier = Modifier
                         .weight(1f)
-                        .clickable(onClick = startLocationUpdates)
+                        .clickable(onClick = {
+                            city= usersViewModel.getPosition.value
+                        })
                 )
             }
             Spacer(modifier = Modifier.size(15.dp))

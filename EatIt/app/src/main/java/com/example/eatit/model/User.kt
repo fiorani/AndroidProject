@@ -11,7 +11,8 @@ data class User(
     var photo: String? = null,
     var age: Int = 0,
     var address: String? = null,
-    var isRestaurateur: Boolean = false
+    var isRestaurateur: Boolean = false,
+    var userPosition: String? = null
 ) {
     constructor(
         mail: String,

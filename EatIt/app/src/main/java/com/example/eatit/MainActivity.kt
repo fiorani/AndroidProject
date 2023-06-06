@@ -112,9 +112,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    startLocationUpdates()
                     NavigationApp(
                         warningViewModel = warningViewModel,
-                        startLocationUpdates = ::startLocationUpdates,
                         signIn = ::signIn,
                         createAccount = ::createAccount,
                     )
@@ -127,14 +127,14 @@ class MainActivity : ComponentActivity() {
     }
 
     fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
-        val restaurantsViewModel by viewModels<RestaurantsViewModel>()
+        val userViewModel by viewModels<UsersViewModel>()
         queue = Volley.newRequestQueue(this)
         val url = "https://nominatim.openstreetmap.org/reverse?lat=" + location.latitude +
                 "&lon=" + location.longitude + "&format=jsonv2&limit=1"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
-                restaurantsViewModel.setGPSRestaurant(response.getString("display_name"))
+                userViewModel.setPosition(response.getString("display_name"))
                 connectivityManager.unregisterNetworkCallback(networkCallback)
                 requestingLocationUpdates.value = false
             },

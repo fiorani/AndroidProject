@@ -16,11 +16,9 @@ class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
     private var _restaurantSelected: DocumentSnapshot? = null
-    private var _restaurantFromGPS = mutableStateOf("")
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
-        resetGPSRestaurant()
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
@@ -50,16 +48,7 @@ class RestaurantsViewModel @Inject constructor(
         _restaurantSelected = restaurant
     }
 
-    val restaurantFromGPS
-        get() = _restaurantFromGPS
 
-    fun setGPSRestaurant(restaurant: String) {
-        _restaurantFromGPS.value = restaurant
-    }
-
-    private fun resetGPSRestaurant() {
-        _restaurantFromGPS.value = ""
-    }
 
 
 }

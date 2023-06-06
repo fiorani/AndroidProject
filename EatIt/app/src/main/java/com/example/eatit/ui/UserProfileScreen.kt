@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
-import com.example.eatit.ui.components.EatItImageProfile
+import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -49,7 +49,7 @@ fun UserProfileScreen(
         Column(modifier.padding(innerPadding)) {
             if (user.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    EatItImageProfile(user[0].data?.get("photo").toString())
+                    ImageProfile(user[0].data?.get("photo").toString())
                     Column(
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start,

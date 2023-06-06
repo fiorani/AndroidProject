@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.eatit.R
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import java.util.*
 import kotlin.reflect.KFunction8
 
@@ -32,7 +33,8 @@ fun RegisterScreen(
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-    startLocationUpdates: () -> Unit,
+
+    usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.2f)
@@ -210,7 +212,7 @@ fun RegisterScreen(
                         }
                     }
 
-                    var city by rememberSaveable { restaurantsViewModel.restaurantFromGPS }
+                    var city by rememberSaveable { usersViewModel.getPosition }
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
@@ -232,7 +234,7 @@ fun RegisterScreen(
                             contentDescription = "get gps",
                             modifier = Modifier
                                 .weight(1f)
-                                .clickable(onClick = startLocationUpdates)
+                                .clickable(onClick = {  city= usersViewModel.getPosition.value })
                         )
                     }
 

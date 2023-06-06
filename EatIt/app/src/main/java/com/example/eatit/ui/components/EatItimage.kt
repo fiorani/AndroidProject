@@ -1,6 +1,9 @@
 package com.example.eatit.ui.components
 
 import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -9,12 +12,13 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun EatItImageCard(photo: String) {
+fun ImageCard(photo: String) {
     if (photo != "") {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -32,7 +36,7 @@ fun EatItImageCard(photo: String) {
 }
 
 @Composable
-fun EatItImageProfile(photo: String) {
+fun ImageProfile(photo: String) {
     if (photo != "") {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -52,5 +56,29 @@ fun EatItImageProfile(photo: String) {
             contentScale = ContentScale.FillWidth,
         )
 
+    }
+}
+
+@Composable
+fun BackgroundImage(alpha: Float) {
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val imageModifier = Modifier.fillMaxSize()
+        val backgroundImage = painterResource(
+            id = LocalContext.current.resources.getIdentifier(
+                "background_image",
+                "drawable",
+                LocalContext.current.packageName
+            )
+        )
+
+        Image(
+            painter = backgroundImage,
+            contentDescription = null,
+            modifier = imageModifier,
+            contentScale = ContentScale.FillBounds,
+            alpha = alpha
+        )
     }
 }

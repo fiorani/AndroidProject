@@ -190,7 +190,6 @@ fun BottomAppBarFunction(
 @Composable
 fun NavigationApp(
     warningViewModel: WarningViewModel,
-    startLocationUpdates: () -> Unit,
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
@@ -224,7 +223,6 @@ fun NavigationApp(
         NavigationGraph(
             navController,
             innerPadding,
-            startLocationUpdates,
             Modifier,
             signIn,
             createAccount
@@ -249,7 +247,7 @@ fun NavigationApp(
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    startLocationUpdates: () -> Unit,
+    
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
@@ -283,7 +281,8 @@ private fun NavigationGraph(
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
                 restaurantsViewModel = restaurantsViewModel,
-                startLocationUpdates = startLocationUpdates
+
+                usersViewModel = usersViewModel
             )
         }
         composable(route = AppScreen.AddProduct.name) {
@@ -310,8 +309,9 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(
-                startLocationUpdates = startLocationUpdates,
-                restaurantsViewModel = restaurantsViewModel
+                
+                restaurantsViewModel = restaurantsViewModel,
+                usersViewModel = usersViewModel,
             )
         }
         composable(route = AppScreen.UserProfile.name) {
@@ -332,7 +332,7 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Login.name)
                 },
                 restaurantsViewModel,
-                startLocationUpdates
+                usersViewModel = usersViewModel,
             )
         }
         composable(route = AppScreen.Login.name) {
