@@ -1,6 +1,7 @@
 package com.example.eatit.ui
 
 import android.graphics.Paint.Align
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -37,7 +38,10 @@ import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -185,11 +189,14 @@ fun OrderCard1(
                             )
                         }
                     }
+                    var timestamp = orders.data?.get("timestamp") as Timestamp
+                    val date = timestamp.toDate()
+                    val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
                     Text(
-                        text = "12/03/23",
-                        modifier = Modifier.padding(2.dp),
+                        text = dateFormat.format(date).toString(),
+                        modifier = Modifier.padding(3.dp),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontSize = 18.sp
                     )
                 }
             }
