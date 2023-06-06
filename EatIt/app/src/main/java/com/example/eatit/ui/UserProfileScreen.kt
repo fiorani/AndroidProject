@@ -1,20 +1,17 @@
 package com.example.eatit.ui
 
+import android.graphics.Paint.Align
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,8 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.Restaurant
@@ -94,10 +97,10 @@ fun UserProfileScreen(
                             orders[item].data?.get("restaurantId").toString()
                         )
                     }
-                    OrderCard(
+                    OrderCard1(
                         orders[item],
                         products,
-                        restaurant
+                        restaurant,
                     )
                 }
             }
@@ -108,7 +111,7 @@ fun UserProfileScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderCard(
+fun OrderCard1(
     orders: DocumentSnapshot,
     listProducts: List<DocumentSnapshot>,
     restaurant: Restaurant
@@ -182,6 +185,11 @@ fun OrderCard(
                             )
                         }
                     }
+                    Text(
+                        text = "12/03/23",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 }
             }
             Row(
@@ -203,5 +211,3 @@ fun OrderCard(
         }
     }
 }
-
-
