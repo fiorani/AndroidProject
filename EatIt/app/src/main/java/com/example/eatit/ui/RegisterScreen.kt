@@ -274,7 +274,8 @@ fun RegisterScreen(
                                         txtEmail.text,
                                         "",
                                         0,
-                                        city
+                                        city,
+                                        !isUserRegister.value
                                     ), onNextButtonClicked
                                 )
                             },

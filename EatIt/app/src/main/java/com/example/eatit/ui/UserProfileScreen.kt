@@ -148,7 +148,7 @@ fun OrderCard(
                         fontSize = 20.sp
                     )
                     Text(
-                        text = "€ " + orders.data?.get("totalPrice").toString(),
+                        text = "€" + String.format("%.${2}f", orders.data?.get("totalPrice")),
                         modifier = Modifier.padding(8.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
@@ -169,18 +169,10 @@ fun OrderCard(
                                 fontSize = 16.sp
                             )
                             Text(
-                                text="€ " + product.data?.get("price").toString(),
+                                text="€ " + product.data?.get("price").toString() + " x" + (orders.data?.get("listQuantity") as List<String>)[index],
                                 modifier = Modifier.padding(8.dp),
                                 fontSize = 16.sp
                             )
-                            val quantity = (orders.data?.get("listQuantity") as List<String>)[index]
-                            if (quantity.toInt() > 1) {
-                                Text(
-                                    text="x$quantity",
-                                    modifier = Modifier.padding(8.dp),
-                                    fontSize = 16.sp
-                                )
-                            }
                         }
                     }
                 }
