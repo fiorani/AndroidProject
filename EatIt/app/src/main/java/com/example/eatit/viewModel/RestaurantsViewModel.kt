@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.RestaurantsRepository
 import com.example.eatit.model.Product
+import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,36 +15,39 @@ import javax.inject.Inject
 class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
-    private var _restaurantSelected: DocumentSnapshot? = null
+    private var _restaurantSelected: Restaurant? = null
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
-        repository.insertNewProduct(_restaurantSelected?.id.toString(), product)
+        _restaurantSelected?.id?.let { repository.insertNewProduct(it, product) }
     }
 
-    suspend fun getRestaurants(): List<DocumentSnapshot> {
+    suspend fun getRestaurants(): List<Restaurant> {
         return repository.getRestaurants()
     }
+    suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> {
+        return repository.getRestaurantsByUserId(userId)
+    }
 
-    fun getProducts(restaurantId: String): List<DocumentSnapshot> {
+    suspend fun getProducts(restaurantId: String): List<Product> {
         return repository.getProducts(restaurantId)
     }
 
-    fun getRatings(restaurantId: String): List<DocumentSnapshot> {
+    suspend fun getRatings(restaurantId: String): List<Rating> {
         return repository.getRatings(restaurantId)
     }
 
-    suspend fun getRestaurant(restaurantId: String): MutableList<DocumentSnapshot> {
+    suspend fun getRestaurant(restaurantId: String): Restaurant {
         return repository.getRestaurant(restaurantId)
     }
 
     val restaurantSelected
         get() = _restaurantSelected
 
-    fun selectRestaurant(restaurant: DocumentSnapshot) {
+    fun selectRestaurant(restaurant: Restaurant) {
         _restaurantSelected = restaurant
     }
 

@@ -2,6 +2,7 @@ package com.example.eatit.model
 
 import android.text.TextUtils
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.ktx.Firebase
 import java.util.Date
@@ -11,6 +12,7 @@ data class Rating(
     var userName: String? = null,
     var rating: Double = 0.toDouble(),
     var text: String? = null,
+    var id: DocumentId? = null,
     @ServerTimestamp var timestamp: Date? = null,
 ) {
 

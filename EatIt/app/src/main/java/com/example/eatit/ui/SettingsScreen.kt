@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -33,12 +34,14 @@ fun SettingsScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            val user = remember { usersViewModel.getUser() }
+            var user: User by remember { mutableStateOf(User()) }
             var name by rememberSaveable { mutableStateOf("") }
             var city by rememberSaveable { usersViewModel.userPosition }
-            if (user.isNotEmpty()) {
-                OutlinedTextField(
-                    value = user[0].data?.get("userName").toString(),
+            LaunchedEffect(Unit) {
+                user = usersViewModel.getUser()
+            }
+            OutlinedTextField(
+                    value = user.userName.toString(),
                     onValueChange = {
                         name = it
                     },
@@ -72,7 +75,7 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.size(15.dp))
-            }
+
 
             Button(
                 onClick = {

@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.example.eatit.model.Restaurant
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -36,7 +37,7 @@ fun MapScreen(
     usersViewModel: UsersViewModel
 ) {
     val context = LocalContext.current
-    var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
+    var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var myPosition by rememberSaveable { mutableStateOf("") }
     val markers = remember { mutableStateListOf<MarkerInfo>() }
     var cameraPositionState = rememberCameraPositionState {
@@ -58,14 +59,14 @@ fun MapScreen(
         markers.clear()
         for (restaurant in restaurants) {
             val position = withContext(Dispatchers.IO) {
-                Geocoder(context).getFromLocationName(restaurant["city"].toString(), 1)
+                Geocoder(context).getFromLocationName(restaurant.city.toString(), 1)
             }
             if (position != null && position.size > 0) {
                 val latitude = position[0].latitude
                 val longitude = position[0].longitude
                 markers.add(
                     MarkerInfo(
-                        restaurant["name"].toString(),
+                        restaurant.name.toString(),
                         LatLng(latitude, longitude)
                     )
                 )

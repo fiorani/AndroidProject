@@ -1,7 +1,6 @@
 package com.example.eatit.model
 
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.ktx.Firebase
 import java.util.Date
@@ -30,9 +29,9 @@ data class Order(
         this.listPrice = prices
     }
 
-    fun reduceCount(product: DocumentSnapshot, order: Order): Order {
+    fun reduceCount(product: Product, order: Order): Order {
         val orderLines = order
-        val productIndex = orderLines.listProductId?.indexOf(product.id)
+        val productIndex = orderLines.listProductId?.indexOf(product.id.toString())
         if (productIndex != null && productIndex != -1) {
             val currentQuantity =
                 orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
@@ -55,9 +54,9 @@ data class Order(
         return updatePrice(orderLines)
     }
 
-    fun increaseCount(product: DocumentSnapshot, order: Order): Order {
+    fun increaseCount(product: Product, order: Order): Order {
         val orderLines = order
-        val productIndex = orderLines.listProductId?.indexOf(product.id)
+        val productIndex = orderLines.listProductId?.indexOf(product.id.toString())
 
         if (productIndex != null && productIndex != -1) {
             // Il prodotto esiste già nell'ordine, incrementa la quantità
@@ -70,8 +69,8 @@ data class Order(
             )  // Aggiorna la quantità nella lista
         } else {
             // Il prodotto non esiste nell'ordine, aggiungilo
-            orderLines.listProductId?.add(product.id)
-            orderLines.listPrice?.add(product.data!!["price"].toString())
+            orderLines.listProductId?.add(product.id.toString())
+            orderLines.listPrice?.add(product.price.toString())
             orderLines.listQuantity?.add("1")  // Imposta la quantità a 1 per il nuovo prodotto
         }
 

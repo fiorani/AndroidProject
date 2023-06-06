@@ -17,13 +17,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
 import com.example.eatit.model.Order
+import com.example.eatit.model.Product
+import com.example.eatit.model.Rating
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.RatingCard
@@ -39,8 +45,12 @@ fun DetailsRestaurantScreen(
     cartViewModel: CartViewModel
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
-    val products = remember { restaurantsViewModel.getProducts(restaurant?.id.toString()) }
-    val ratings = remember { restaurantsViewModel.getRatings(restaurant?.id.toString()) }
+    var products by remember { mutableStateOf<List<Product>>(emptyList()) }
+    var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
+    LaunchedEffect(Unit) {
+        products=restaurantsViewModel.getProducts(restaurant?.id.toString())
+        ratings=restaurantsViewModel.getRatings(restaurant?.id.toString())
+    }
     cartViewModel.selectOrder(
         Order(
             userId = Firebase.auth.currentUser?.uid.toString(),
@@ -73,7 +83,7 @@ fun DetailsRestaurantScreen(
                 .padding(paddingValues)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                ImageProfile(restaurant?.data?.get("photo").toString())
+                ImageProfile(restaurant?.photo.toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
@@ -81,14 +91,14 @@ fun DetailsRestaurantScreen(
                         .height(200.dp)
                 ) {
                     Text(
-                        text = restaurant?.data?.get("name").toString(),
+                        text = restaurant?.name.toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
                         )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        text = restaurant?.data?.get("city").toString(),
+                        text = restaurant?.city.toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )

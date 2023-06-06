@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.Restaurant
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.viewModel.CartViewModel
@@ -45,14 +47,16 @@ fun UserProfileScreen(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel
 ) {
-    val user = remember { usersViewModel.getUser() }
+    var user: User by remember { mutableStateOf(User()) }
     val orders = remember { cartViewModel.getOrders() }
+    LaunchedEffect(Unit) {
+        user = usersViewModel.getUser()
+    }
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-            if (user.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    ImageProfile(user[0].data?.get("photo").toString())
+                    ImageProfile(user.photo.toString())
                     Column(
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start,
@@ -60,21 +64,21 @@ fun UserProfileScreen(
                             .height(200.dp)
                     ) {
                         Text(
-                            text = user[0].data!!["userName"].toString(),
+                            text = user.userName.toString(),
                             color = MaterialTheme.colorScheme.background,
                             style = MaterialTheme.typography.titleLarge,
 
                             )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
-                            text = user[0].data!!["address"].toString(),
+                            text = user.address.toString(),
                             color = MaterialTheme.colorScheme.background,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                     }
                 }
-            }
+
 
             Text(
                 text = "List of orders:",
@@ -87,7 +91,7 @@ fun UserProfileScreen(
             ) {
                 items(orders.size) { item ->
                     val products = remember { cartViewModel.getProducts(orders[item]) }
-                    var restaurant by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
+                    var restaurant by remember { mutableStateOf(Restaurant()) }
                     LaunchedEffect(Unit) {
                         restaurant = restaurantsViewModel.getRestaurant(
                             orders[item].data?.get("restaurantId").toString()
@@ -110,7 +114,7 @@ fun UserProfileScreen(
 fun OrderCard1(
     orders: DocumentSnapshot,
     listProducts: List<DocumentSnapshot>,
-    restaurant: List<DocumentSnapshot>
+    restaurant: Restaurant
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -133,9 +137,8 @@ fun OrderCard1(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (restaurant.isNotEmpty()) {
                 Text(
-                    text = restaurant[0].data?.get("name").toString(),
+                    text = restaurant.name.toString(),
                     modifier = Modifier.padding(8.dp),
                     fontSize = 32.sp
                 )
@@ -158,7 +161,7 @@ fun OrderCard1(
                         fontSize = 20.sp
                     )
                 }
-            }
+
 
             if (expandedState) {
                 Column(Modifier.fillMaxWidth()) {
