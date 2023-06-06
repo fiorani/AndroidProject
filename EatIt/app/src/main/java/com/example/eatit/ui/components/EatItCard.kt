@@ -1,7 +1,10 @@
 package com.example.eatit.ui.components
 
 import android.util.Log
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -10,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,8 +27,12 @@ import com.example.eatit.model.User
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentSnapshot
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -181,173 +189,108 @@ fun RatingCard(rating: Rating) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderCard(
-    customerName: String,
-    customerAddress: String,
-    total: Float,
-    orderDate: String
+    orders: DocumentSnapshot,
+    listProducts: List<DocumentSnapshot>,
+    restaurant: Restaurant
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
-
-    EatItCard(onItemClicked = {}) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            )
+            .padding(8.dp),
+        onClick = {
+            expandedState = !expandedState
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = orderDate,
-                modifier = Modifier.rotate(-90f),
-                textAlign = TextAlign.Center,
-                lineHeight = 0.sp,
-                fontSize = 20.sp
+                text = restaurant.name.toString(),
+                modifier = Modifier.padding(8.dp),
+                fontSize = 32.sp
             )
-            Column(
-                modifier = Modifier
-                    .padding(0.dp, 10.dp)
-                    .width(500.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = customerName,
-                    fontSize = 20.sp
-                )
-
-                Text(
-                    text = customerAddress,
-                    fontSize = 20.sp
-                )
-
-                Spacer(modifier = Modifier.size(25.dp))
-
-                Row(
+                    text = "Total price:",
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Totale:",
-                        fontWeight = Bold,
-                        fontSize = 20.sp
-                    )
-
-                    Text(
-                        text = "€ $total",
-                        fontWeight = Bold,
-                        fontSize = 20.sp
-                    )
-                }
-            }
-        }
-
-        if (expandedState) {
-            Divider(modifier = Modifier.padding(10.dp))
-            Text(
-                modifier = Modifier.padding(20.dp, 0.dp),
-                text = "Ordine:",
-                fontWeight = Bold,
-                fontSize = 25.sp,
-                overflow = TextOverflow.Ellipsis
-            )
-            Column(
-                //Non si possono utilizzare lazycolumn qui :(
-                modifier = Modifier.padding(20.dp, 0.dp),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Patate",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "x5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "€ 3.5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Patate",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "x5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "€ 3.5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Patate",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "x5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "€ 3.5",
-                        fontSize = 20.sp,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center
-        ) {
-            IconButton(
-                modifier = Modifier
-                    .weight(1f)
-                    .rotate(rotationState),
-                onClick = {
-                    expandedState = !expandedState
-                }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Drop-Down Arrow"
+                        .padding(8.dp)
+                        .weight(1f),
+                    fontWeight = Bold,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "€" + String.format("%.${2}f", orders.data?.get("totalPrice")),
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = Bold,
+                    fontSize = 20.sp
                 )
             }
-        }
-    }
-}
 
-@Preview("default")
-@Composable
-fun Preview() {
-    EatItTheme {
-        OrderCard(
-            customerName = "Mario Rossi",
-            customerAddress = "Via Roma 1",
-            total = 10f,
-            orderDate = "12/12/2021"
-        )
+
+            if (expandedState) {
+                Column(Modifier.fillMaxWidth()) {
+                    listProducts.forEachIndexed { index, product ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = product.data?.get("name").toString(),
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f),
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text =  "€" + orders.data?.get("price").toString() + " x" + (orders.data?.get("listQuantity") as List<String>)[index],
+                                modifier = Modifier.padding(8.dp),
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
+                    var timestamp = orders.data?.get("timestamp") as Timestamp
+                    val date = timestamp.toDate()
+                    val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+                    Text(
+                        text = dateFormat.format(date).toString(),
+                        modifier = Modifier.padding(3.dp),
+                        fontWeight = Bold,
+                        fontSize = 18.sp
+                    )
+                }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .rotate(rotationState),
+                    onClick = {
+                        expandedState = !expandedState
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = "Drop-Down Arrow"
+                    )
+                }
+            }
+        }
     }
 }
