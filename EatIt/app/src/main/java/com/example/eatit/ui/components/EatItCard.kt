@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -203,17 +204,22 @@ fun OrderCard(
                     easing = LinearOutSlowInEasing
                 )
             )
-            .padding(8.dp),
+            .padding(20.dp, 10.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        shape = CardDefaults.shape,
         onClick = {
             expandedState = !expandedState
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp, 0.dp)
         ) {
             Text(
                 text = restaurant.name.toString(),
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(10.dp),
+                fontWeight = Bold,
                 fontSize = 32.sp
             )
             Row(
@@ -221,16 +227,34 @@ fun OrderCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Total price:",
+                    text = "Order date:",
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(10.dp, 1.dp)
+                        .weight(1f),
+                    fontSize = 20.sp
+                )
+                val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+                Text(
+                    text = dateFormat.format(orders.timestamp).toString(),
+                    modifier = Modifier.padding(10.dp, 1.dp),
+                    fontSize = 18.sp
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Order total:",
+                    modifier = Modifier
+                        .padding(10.dp, 1.dp)
                         .weight(1f),
                     fontWeight = Bold,
                     fontSize = 20.sp
                 )
                 Text(
                     text = "€" + String.format("%.${2}f", orders.totalPrice),
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(10.dp, 2.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp
                 )
@@ -239,6 +263,21 @@ fun OrderCard(
 
             if (expandedState) {
                 Column(Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "DETAILS",
+                            modifier = Modifier
+                                .padding(10.dp),
+                            fontSize = 20.sp,
+                            fontWeight = Bold,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        )
+                        Divider(modifier = Modifier.padding(10.dp))
+                    }
+
                     listProducts.forEachIndexed { index, product ->
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -247,26 +286,19 @@ fun OrderCard(
                             Text(
                                 text = product.name.toString(),
                                 modifier = Modifier
-                                    .padding(8.dp)
+                                    .padding(10.dp, 1.dp)
                                     .weight(1f),
                                 fontSize = 16.sp
                             )
                             Text(
-                                text = "€" + orders.listPrice?.get(index) + " x" + orders.listQuantity?.get(
+                                text = "€" + orders.listPrice?.get(index) + "  × " + orders.listQuantity?.get(
                                     index
                                 ),
-                                modifier = Modifier.padding(8.dp),
+                                modifier = Modifier.padding(10.dp, 1.dp),
                                 fontSize = 16.sp
                             )
                         }
                     }
-                    val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
-                    Text(
-                        text = dateFormat.format(orders.timestamp).toString(),
-                        modifier = Modifier.padding(3.dp),
-                        fontWeight = Bold,
-                        fontSize = 18.sp
-                    )
                 }
             }
             Row(

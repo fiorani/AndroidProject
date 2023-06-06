@@ -67,10 +67,34 @@ fun UserProfileScreen(
                 }
             }
 
+            /*Card(
+                modifier = Modifier.fillMaxWidth(),
+            ){
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ImageProfile(user.photo.toString())
+                    Column() {
+                        Text(
+                            text = user.userName.toString(),
+                            modifier = Modifier.padding(20.dp, 2.dp),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = user.address.toString(),
+                            modifier = Modifier.padding(20.dp, 2.dp),
+                            fontSize = 20.sp
+                        )
+                    }
+                }
+            }*/
+
 
             Text(
-                text = "List of orders:",
-                modifier = Modifier.padding(8.dp),
+                text = "My orders:",
+                modifier = Modifier.padding(20.dp, 10.dp),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
