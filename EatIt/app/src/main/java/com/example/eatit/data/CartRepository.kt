@@ -3,10 +3,14 @@ package com.example.eatit.data
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.Order
+import com.example.eatit.model.Product
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class CartRepository(eatItApp: EatItApp) {
     @WorkerThread
@@ -14,38 +18,34 @@ class CartRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("orders").add(order)
     }
 
-    fun getOrders(): List<DocumentSnapshot> {
-        val orders = mutableListOf<DocumentSnapshot>()
-        FirebaseFirestore.getInstance().collection("orders").get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    if (document.data["userId"].toString()
-                            .contains(Firebase.auth.currentUser?.uid.toString(), ignoreCase = true)
-                    ) {
-                        orders.add(document)
-                    }
+    suspend fun getOrders(): List<Order> = withContext(Dispatchers.IO) {
+        try {
+            FirebaseFirestore.getInstance().collection("orders").get().await()
+                .documents.mapNotNull { documentSnapshot ->
+                    val order = documentSnapshot.toObject(Order::class.java)
+                    order?.id = documentSnapshot.id
+                    order
                 }
-            }.addOnFailureListener { exception ->
-                println("Error getting restaurants: $exception")
-            }
-        return orders
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
-    fun getProducts(order: DocumentSnapshot): List<DocumentSnapshot> {
-        val products = mutableListOf<DocumentSnapshot>()
-        FirebaseFirestore.getInstance().collection("restaurants")
-            .document(order.data?.get("restaurantId").toString())
-            .collection("products").get().addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    for (product in order.data?.get("listProductId") as ArrayList<String>) {
-                        if (product.contains(document.id)) {
-                            products.add(document)
-                        }
-                    }
+    suspend fun getProducts(order: Order): List<Product> = withContext(Dispatchers.IO) {
+        try{
+            val products = mutableListOf<Product>()
+            val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants").document(order.restaurantId.toString())
+            .collection("products").get().await()
+            .documents
+            for (documentSnapshot in querySnapshot) {
+                if (order.listProductId?.contains(documentSnapshot.id) == true) {
+                    val product = documentSnapshot.toObject(Product::class.java)
+                    product?.let { products.add(it) }
                 }
-            }.addOnFailureListener { exception ->
-                println("Error getting restaurants: $exception")
             }
-        return products
+            products
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }
