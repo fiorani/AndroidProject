@@ -17,8 +17,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
@@ -73,7 +75,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         locationRequest =
-            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).apply {
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
                 setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
             }.build()
         locationCallback = object : LocationCallback() {
@@ -116,6 +118,7 @@ class MainActivity : ComponentActivity() {
                         warningViewModel = warningViewModel,
                         signIn = ::signIn,
                         createAccount = ::createAccount,
+                        startLocationUpdates=::startLocationUpdates,
                     )
                 }
                 if (requestingLocationUpdates.value) {
@@ -180,7 +183,7 @@ class MainActivity : ComponentActivity() {
                 permission
             ) == PackageManager.PERMISSION_GRANTED -> {
                 locationRequest =
-                    LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).apply {
+                    LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
                         setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
                         setWaitForAccurateLocation(true)
                     }.build()

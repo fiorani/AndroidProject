@@ -36,8 +36,7 @@ import java.util.*
 fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-
-    usersViewModel: UsersViewModel
+    usersViewModel: UsersViewModel,
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var city by rememberSaveable { mutableStateOf("") }

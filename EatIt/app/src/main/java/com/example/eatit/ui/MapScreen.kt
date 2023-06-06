@@ -42,7 +42,7 @@ fun MapScreen(
     var cameraPositionState = rememberCameraPositionState {
         CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)
     }
-    myPosition = usersViewModel.userPosition.toString()
+    myPosition = usersViewModel.userPosition.value
     val currentLocation = Geocoder(context).getFromLocationName(myPosition, 1)
     if (currentLocation != null && currentLocation.size > 0) {
         cameraPositionState = rememberCameraPositionState {

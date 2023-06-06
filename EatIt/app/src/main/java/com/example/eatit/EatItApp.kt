@@ -193,6 +193,7 @@ fun NavigationApp(
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
+    startLocationUpdates: () -> Unit,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
@@ -225,7 +226,8 @@ fun NavigationApp(
             innerPadding,
             Modifier,
             signIn,
-            createAccount
+            createAccount,
+            startLocationUpdates
         )
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)
@@ -247,10 +249,10 @@ fun NavigationApp(
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
+    startLocationUpdates: () -> Unit,
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
@@ -282,8 +284,7 @@ private fun NavigationGraph(
                     navController.popBackStack(AppScreen.Home.name, inclusive = false)
                 },
                 restaurantsViewModel = restaurantsViewModel,
-
-                usersViewModel = usersViewModel
+                usersViewModel = usersViewModel,
             )
         }
         composable(route = AppScreen.AddProduct.name) {
@@ -306,11 +307,10 @@ private fun NavigationGraph(
         composable(route = AppScreen.Settings.name) {
             SettingsScreen(settingsViewModel, onNextButtonClicked = {
                 navController.navigate(AppScreen.Login.name)
-            })
+            },usersViewModel = usersViewModel,startLocationUpdates = startLocationUpdates)
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(
-
                 restaurantsViewModel = restaurantsViewModel,
                 usersViewModel = usersViewModel,
             )

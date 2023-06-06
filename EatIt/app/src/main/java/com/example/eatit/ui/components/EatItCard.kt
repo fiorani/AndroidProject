@@ -127,7 +127,7 @@ fun ProductCard(product: DocumentSnapshot, cartViewModel: CartViewModel) {
                     Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
                 })
         }
-        Row() {
+        Row {
             Text(
                 text = product.data!!["description"].toString(),
                 modifier = Modifier.padding(4.dp),

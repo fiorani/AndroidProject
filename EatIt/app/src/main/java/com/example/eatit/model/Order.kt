@@ -43,7 +43,7 @@ data class Order(
                 orderLines.listPrice?.removeAt(productIndex)
                 return updatePrice(orderLines)
             }
-            if (newQuantity!! > 0) {
+            if (newQuantity > 0) {
                 orderLines.listQuantity?.set(
                     productIndex,
                     newQuantity.toString()

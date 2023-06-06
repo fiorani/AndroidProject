@@ -5,6 +5,4 @@ data class Product(
     var description: String? = null,
     var price: String? = null,
     var photo: String? = null
-) {
-
-}
+)

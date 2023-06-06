@@ -1,5 +1,6 @@
 package com.example.eatit.viewModel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
-    private var _userPosition: String? = ""
+    private var _userPosition = mutableStateOf("")
     val userPosition
         get() = _userPosition
 
@@ -28,7 +29,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     }
 
     fun setPosition(position: String) {
+        _userPosition.value = position
         repository.setPosition(position)
-        _userPosition = position
     }
 }
