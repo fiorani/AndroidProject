@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -136,23 +137,51 @@ fun OrderCard(
                     modifier = Modifier.padding(8.dp),
                     fontSize = 32.sp
                 )
-
-                Text(
-                    text = "total price:"+orders.data?.get("totalPrice").toString(),
-                    modifier = Modifier.padding(8.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Total price:",
+                        modifier = Modifier.padding(8.dp).weight(1f),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = "€ " + orders.data?.get("totalPrice").toString(),
+                        modifier = Modifier.padding(8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
             }
 
             if (expandedState) {
                 Column(Modifier.fillMaxWidth()) {
                     listProducts.forEachIndexed { index, product ->
-                        Text(
-                            text = product.data?.get("name").toString()+" price="+product.data?.get("price").toString()+"*"+(orders.data?.get("listQuantity") as List<String>)[index],
-                            modifier = Modifier.padding(8.dp),
-                            fontSize = 16.sp
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = product.data?.get("name").toString(),
+                                modifier = Modifier.padding(8.dp).weight(1f),
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text="€ " + product.data?.get("price").toString(),
+                                modifier = Modifier.padding(8.dp).weight(1f),
+                                fontSize = 16.sp
+                            )
+                            val quantity = (orders.data?.get("listQuantity") as List<String>)[index]
+                            if (quantity.toInt() > 1) {
+                                Text(
+                                    text="x$quantity",
+                                    modifier = Modifier.padding(8.dp),
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
                     }
                 }
             }
