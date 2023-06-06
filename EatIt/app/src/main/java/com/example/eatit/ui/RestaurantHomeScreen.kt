@@ -39,7 +39,7 @@ fun RestaurantHomeScreen() {
                     items(filteredData) { customerName ->
                         OrderCard(customerName = "Marco", customerAddress= "Via O. Brobrio", total = 14.60f, orderDate = "19-10-2023")
                     }
-                }*/
+                }
             }
 
             LazyColumn {
@@ -50,7 +50,7 @@ fun RestaurantHomeScreen() {
                         total = 14.60f,
                         orderDate = "19-10-2023"
                     )
-                }
+                }*/
             }
         }
     }
