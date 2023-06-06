@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.viewModel.CartViewModel
@@ -42,14 +43,16 @@ fun UserProfileScreen(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel
 ) {
-    val user = remember { usersViewModel.getUser() }
+    var user: User by remember { mutableStateOf(User()) }
     val orders = remember { cartViewModel.getOrders() }
+    LaunchedEffect(Unit) {
+        user = usersViewModel.getUser()
+    }
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-            if (user.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    ImageProfile(user[0].data?.get("photo").toString())
+                    ImageProfile(user.photo.toString())
                     Column(
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start,
@@ -57,21 +60,21 @@ fun UserProfileScreen(
                             .height(200.dp)
                     ) {
                         Text(
-                            text = user[0].data!!["userName"].toString(),
+                            text = user.userName.toString(),
                             color = MaterialTheme.colorScheme.background,
                             style = MaterialTheme.typography.titleLarge,
 
                             )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
-                            text = user[0].data!!["address"].toString(),
+                            text = user.address.toString(),
                             color = MaterialTheme.colorScheme.background,
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                     }
                 }
-            }
+
 
             Text(
                 text = "List of orders:",

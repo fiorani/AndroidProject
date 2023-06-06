@@ -20,7 +20,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         repository.insertNewUser(user)
     }
 
-    fun getUser(): List<DocumentSnapshot> {
+    suspend fun getUser(): User  {
         return repository.getUser()
     }
 
