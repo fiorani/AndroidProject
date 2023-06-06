@@ -63,7 +63,7 @@ fun UserProfileScreen(
                             )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
-                            text = user[0].data!!["userName"].toString(),
+                            text = user[0].data!!["address"].toString(),
                             color = MaterialTheme.colorScheme.background,
                             style = MaterialTheme.typography.titleMedium
                         )

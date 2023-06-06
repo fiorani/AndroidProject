@@ -333,7 +333,9 @@ private fun NavigationGraph(
                 },
                 onLoginButtonClicked = {
                     navController.navigate(AppScreen.Login.name)
-                }
+                },
+                restaurantsViewModel,
+                startLocationUpdates
             )
         }
         composable(route = AppScreen.Login.name) {
