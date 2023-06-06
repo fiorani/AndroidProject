@@ -6,10 +6,8 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -38,7 +36,7 @@ import java.util.*
 fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
-    
+
     usersViewModel: UsersViewModel
 ) {
     var name by rememberSaveable { mutableStateOf("") }

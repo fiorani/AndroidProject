@@ -1,6 +1,5 @@
 package com.example.eatit.viewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
@@ -15,12 +14,15 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     private var _userPosition: String? = ""
     val userPosition
         get() = _userPosition
+
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
     }
+
     fun getUser(): List<DocumentSnapshot> {
         return repository.getUser()
     }
+
     suspend fun getPosition(): String {
         return repository.getPosition()
     }

@@ -1,7 +1,6 @@
 package com.example.eatit.ui
 
 import android.location.Geocoder
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -38,7 +37,7 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     var restaurants by remember { mutableStateOf<List<DocumentSnapshot>>(emptyList()) }
-    var myPosition by rememberSaveable {mutableStateOf("")}
+    var myPosition by rememberSaveable { mutableStateOf("") }
     val markers = remember { mutableStateListOf<MarkerInfo>() }
     var cameraPositionState = rememberCameraPositionState {
         CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 10f)

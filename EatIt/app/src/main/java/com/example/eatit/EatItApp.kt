@@ -247,7 +247,7 @@ fun NavigationApp(
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    
+
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
@@ -310,7 +310,7 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(
-                
+
                 restaurantsViewModel = restaurantsViewModel,
                 usersViewModel = usersViewModel,
             )

@@ -29,7 +29,6 @@ import com.android.volley.toolbox.Volley
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.model.User
 import com.example.eatit.ui.theme.EatItTheme
-import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.android.gms.location.FusedLocationProviderClient

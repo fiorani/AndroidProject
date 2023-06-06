@@ -1,6 +1,5 @@
 package com.example.eatit.viewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.RestaurantsRepository
@@ -47,8 +46,6 @@ class RestaurantsViewModel @Inject constructor(
     fun selectRestaurant(restaurant: DocumentSnapshot) {
         _restaurantSelected = restaurant
     }
-
-
 
 
 }
