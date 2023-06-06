@@ -39,6 +39,8 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction8
@@ -264,7 +266,10 @@ private fun NavigationGraph(
     val cartViewModel = hiltViewModel<CartViewModel>()
     var user: User by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
-        user = usersViewModel.getUser()
+        if(Firebase.auth.currentUser != null)
+        {
+            user = usersViewModel.getUser()
+        }
     }
     NavHost(
         navController = navController,
