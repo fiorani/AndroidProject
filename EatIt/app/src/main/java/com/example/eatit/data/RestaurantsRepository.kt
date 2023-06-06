@@ -40,7 +40,10 @@ class RestaurantsRepository(eatItApp: EatItApp) {
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> = withContext(Dispatchers.IO) {
         try {
             FirebaseFirestore.getInstance().collection("restaurants").whereEqualTo("userId", userId).get().await()
-                .documents.mapNotNull { it.toObject(Restaurant::class.java) }
+                .documents.mapNotNull {  documentSnapshot ->
+                    val restaurant = documentSnapshot.toObject(Restaurant::class.java)
+                    restaurant?.id = documentSnapshot.id
+                    restaurant }
         } catch (e: Exception) {
             throw e
         }
