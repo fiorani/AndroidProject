@@ -1,9 +1,7 @@
 package com.example.eatit
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -13,15 +11,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -32,12 +28,9 @@ import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -45,37 +38,21 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
     private lateinit var auth: FirebaseAuth
-    private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
+    private lateinit var locationCallback: LocationCallback
+    private var queue: RequestQueue? = null
+    private val warningViewModel by viewModels<WarningViewModel>()
+    private val REQUESTING_LOCATION_UPDATES_KEY = "REQUESTING_LOCATION_UPDATES_KEY"
+    private var requestingLocationUpdates = false
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private lateinit var connectivityManager: ConnectivityManager
-    private var requestingLocationUpdates = mutableStateOf(false)
-    private var queue: RequestQueue? = null
-    val location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
-    val warningViewModel by viewModels<WarningViewModel>()
+    var location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        connectivityManager =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        locationPermissionRequest = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-                startLocationUpdates()
-            } else {
-                warningViewModel.setPermissionSnackBarVisibility(true)
-            }
-        }
-        locationRequest =
-            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
-                setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-            }.build()
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
@@ -91,19 +68,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        updateValuesFromBundle(savedInstanceState)
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                if (requestingLocationUpdates.value) {
+                if (requestingLocationUpdates) {
                     sendRequest(location.value, connectivityManager)
                     warningViewModel.setConnectivitySnackBarVisibility(false)
                 }
             }
-
             override fun onLost(network: Network) {
                 warningViewModel.setConnectivitySnackBarVisibility(true)
             }
         }
-
         setContent {
             EatItTheme {
                 // A surface container using the 'background' color from the theme
@@ -119,13 +95,26 @@ class MainActivity : ComponentActivity() {
                         startLocationUpdates = ::startLocationUpdates,
                     )
                 }
-                if (requestingLocationUpdates.value) {
+                if (requestingLocationUpdates) {
                     connectivityManager.registerDefaultNetworkCallback(networkCallback)
                 }
             }
         }
     }
+    private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
+        savedInstanceState ?: return
+        // Update the value of requestingLocationUpdates from the Bundle.
 
+        if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+            requestingLocationUpdates = savedInstanceState.getBoolean(
+                REQUESTING_LOCATION_UPDATES_KEY)
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        if (requestingLocationUpdates) startLocationUpdates()
+
+    }
     fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
         val userViewModel by viewModels<UsersViewModel>()
         queue = Volley.newRequestQueue(this)
@@ -136,7 +125,7 @@ class MainActivity : ComponentActivity() {
             { response ->
                 userViewModel.setPosition(response.getString("display_name"))
                 connectivityManager.unregisterNetworkCallback(networkCallback)
-                requestingLocationUpdates.value = false
+                requestingLocationUpdates = false
             },
             { error ->
                 Log.d("MAINACTIVITY-SENDREQUEST", error.toString())
@@ -145,81 +134,6 @@ class MainActivity : ComponentActivity() {
         jsonObjectRequest.tag = TAG
         queue?.add(jsonObjectRequest)
     }
-
-    override fun onResume() {
-        super.onResume()
-        if (requestingLocationUpdates.value) startLocationUpdates()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopLocationUpdates()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        queue?.cancelAll(TAG)
-        if (requestingLocationUpdates.value)
-            (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .unregisterNetworkCallback(networkCallback)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (requestingLocationUpdates.value)
-            (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .registerDefaultNetworkCallback(networkCallback)
-    }
-
-    private fun startLocationUpdates() {
-        requestingLocationUpdates.value = true
-        val permission = Manifest.permission.ACCESS_COARSE_LOCATION
-        when {
-            //permission already granted
-            ContextCompat.checkSelfPermission(
-                this,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                locationRequest =
-                    LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
-                        setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-                        setWaitForAccurateLocation(true)
-                    }.build()
-
-                val gpsEnabled = checkGPS()
-                if (gpsEnabled) {
-                    fusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        locationCallback,
-                        Looper.getMainLooper()
-                    )
-                } else {
-                    warningViewModel.setGPSAlertDialogVisibility(true)
-                }
-            }
-            //permission already denied
-            shouldShowRequestPermissionRationale(permission) -> {
-                warningViewModel.setPermissionSnackBarVisibility(true)
-            }
-
-            else -> {
-                //first time: ask for permissions
-                locationPermissionRequest.launch(
-                    permission
-                )
-            }
-        }
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-    }
-
-    private fun checkGPS(): Boolean {
-        val mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
     private fun isOnline(connectivityManager: ConnectivityManager): Boolean {
         val capabilities =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -229,6 +143,42 @@ class MainActivity : ComponentActivity() {
             return true
         }
         return false
+    }
+
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+    }
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+
+    }
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, requestingLocationUpdates)
+            super.onSaveInstanceState(outState)
+    }
+    override fun onStop() {
+        super.onStop()
+        queue?.cancelAll(TAG)
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     companion object {
