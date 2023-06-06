@@ -12,7 +12,7 @@ data class Rating(
     var userName: String? = null,
     var rating: Double = 0.toDouble(),
     var text: String? = null,
-    var id: DocumentId? = null,
+    var id: String? = null,
     @ServerTimestamp var timestamp: Date? = null,
 ) {
 

@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,9 @@ fun DetailsRestaurantScreen(
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
     LaunchedEffect(Unit) {
+        Log.d("DetailsRestaurantScreen", "restaurant: $restaurant")
         products=restaurantsViewModel.getProducts(restaurant?.id.toString())
+        Log.d("DetailsRestaurantScreen", "products: $products")
         ratings=restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
     cartViewModel.selectOrder(
