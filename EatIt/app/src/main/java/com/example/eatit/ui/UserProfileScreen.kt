@@ -170,7 +170,7 @@ fun OrderCard(
                             )
                             Text(
                                 text="€ " + product.data?.get("price").toString(),
-                                modifier = Modifier.padding(8.dp).weight(1f),
+                                modifier = Modifier.padding(8.dp),
                                 fontSize = 16.sp
                             )
                             val quantity = (orders.data?.get("listQuantity") as List<String>)[index]
