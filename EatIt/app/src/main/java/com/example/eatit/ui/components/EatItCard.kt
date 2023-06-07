@@ -125,6 +125,7 @@ fun ProductCard(product: Product, restaurantViewModel: RestaurantsViewModel, ord
                         ?.toInt()!!
             }
 
+<<<<<<< HEAD
             val (count, updateCount) = remember { mutableStateOf(quantity) }
             QuantitySelector(count = count, decreaseItemCount = {
                 if (count > 0) updateCount(count - 1)
@@ -148,6 +149,16 @@ fun ProductCard(product: Product, restaurantViewModel: RestaurantsViewModel, ord
                 )
             }
         }
+=======
+        val (count, updateCount) = remember { mutableStateOf(quantity) }
+        QuantitySelector(count = count, decreaseItemCount = {
+            if (count > 0) updateCount(count - 1)
+            order.reduceCount(product)
+        }, increaseItemCount = {
+            updateCount(count + 1)
+            order.increaseCount(product)
+        })
+>>>>>>> f6f071f089e837c0d30d0447f4ba0ec24680d34c
 
     }
 }

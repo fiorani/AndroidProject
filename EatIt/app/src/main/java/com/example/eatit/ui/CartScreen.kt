@@ -65,7 +65,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 )
                 Button(
                     modifier = Modifier.padding(20.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { cartViewModel.addNewOrder(cartViewModel.orderSelected!!) }
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 10.dp),
