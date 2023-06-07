@@ -1,6 +1,7 @@
 package com.example.eatit.ui
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +35,8 @@ fun RegisterScreen(
 
     usersViewModel: UsersViewModel
 ) {
+    var colorCustomer = MaterialTheme.colorScheme.tertiary
+    var colorRestaurant = MaterialTheme.colorScheme.primary
 
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.15f)
@@ -47,7 +51,7 @@ fun RegisterScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(65.dp, 10.dp),
+                    .padding(65.dp, 20.dp, 65.dp, 0.dp),
                 text = "Do you want to register as a customer or as a restaurant?",
                 fontSize = 20.sp
             )
@@ -55,12 +59,20 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
+                if (isUserRegister.value){
+                    colorCustomer = MaterialTheme.colorScheme.tertiary
+                    colorRestaurant = MaterialTheme.colorScheme.primary
+                } else {
+                    colorRestaurant = MaterialTheme.colorScheme.tertiary
+                    colorCustomer = MaterialTheme.colorScheme.primary
+                }
                 Button(
                     modifier = Modifier.padding(10.dp),
                     onClick = {
                         isUserRegister.value = true
                         strTitle = "User registration"
                     },
+                    colors = ButtonDefaults.buttonColors(colorCustomer),
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
                     Text(
@@ -75,6 +87,7 @@ fun RegisterScreen(
                         isUserRegister.value = false
                         strTitle = "Restaurant registration"
                     },
+                    colors = ButtonDefaults.buttonColors(colorRestaurant),
                     contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
                     Text(
@@ -283,6 +296,8 @@ fun RegisterScreen(
             ) {
                 Column {
                     Text(
+                        modifier = Modifier
+                            .padding(10.dp, 0.dp),
                         text = "Already have an account?",
                         fontSize = 20.sp
                     )
