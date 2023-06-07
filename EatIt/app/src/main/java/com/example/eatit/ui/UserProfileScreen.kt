@@ -52,7 +52,7 @@ fun UserProfileScreen(
                         .height(200.dp)
                 ) {
                     Text(
-                        text = user.userName.toString(),
+                        text = user.name.toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 

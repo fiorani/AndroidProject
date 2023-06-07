@@ -77,7 +77,7 @@ fun DetailsRestaurantScreen(
             listPrice = ArrayList(
                 listOf()
             ),
-            totalPrice = 0.0,
+            totalPrice = 0.0f,
         )
     }
 
@@ -126,7 +126,7 @@ fun DetailsRestaurantScreen(
                         )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        text = restaurant?.city.toString(),
+                        text = restaurant?.address.toString(),
                         color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )

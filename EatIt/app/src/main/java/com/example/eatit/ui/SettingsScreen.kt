@@ -41,7 +41,7 @@ fun SettingsScreen(
                 user = usersViewModel.getUser()
             }
             OutlinedTextField(
-                value = user.userName.toString(),
+                value = user.name.toString(),
                 onValueChange = {
                     name = it
                 },
