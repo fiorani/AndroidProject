@@ -163,7 +163,7 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             Button(
-                modifier = Modifier.width(10.dp),
+                modifier = Modifier.width(300.dp),
                 onClick = {
                     val permissionCheckResult =
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -185,7 +185,7 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             Button(
-                modifier = Modifier.width(10.dp),
+                modifier = Modifier.width(300.dp),
                 onClick = {
                     showChangedPsw.value = true
                     usersViewModel.changePsw()
@@ -219,6 +219,7 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             Button(
+                modifier = Modifier.width(300.dp),
                 onClick = {
                     Firebase.auth.signOut()
                     onNextButtonClicked()
