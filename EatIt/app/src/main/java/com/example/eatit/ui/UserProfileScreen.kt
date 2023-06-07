@@ -24,6 +24,11 @@ import com.example.eatit.ui.components.OrderProfileCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
+import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
+import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,68 +42,61 @@ fun UserProfileScreen(
     val user: User = usersViewModel.user!!
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
     LaunchedEffect(Unit) {
-        orders = cartViewModel.getOrders()
+        if (user.restaurateur){
+            orders = cartViewModel.getOrders()
+        }else{
+            orders = cartViewModel.getOrders()
+        }
     }
 
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                ImageProfile(user.photo.toString())
-                Column(
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .height(200.dp)
-                ) {
-                    Text(
-                        text = user.name.toString(),
-                        style = MaterialTheme.typography.titleLarge,
-
-                        )
-                    Spacer(modifier = Modifier.size(15.dp))
-                    Text(
-                        text = user.position.toString(),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.size(15.dp))
-                }
-            }
-
-            /*Card(
-                modifier = Modifier.fillMaxWidth(),
-            ){
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(0.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ImageProfile(user.photo.toString())
-                    Column() {
-                        Text(
-                            text = user.userName.toString(),
-                            modifier = Modifier.padding(20.dp, 2.dp),
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = user.address.toString(),
-                            modifier = Modifier.padding(20.dp, 2.dp),
-                            fontSize = 20.sp
-                        )
-                    }
-                }
-            }*/
-
-
-            Text(
-                text = "My orders:",
-                modifier = Modifier.padding(20.dp, 10.dp),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
+            val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                item{
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        ImageProfile(user.photo.toString())
+                        Column(
+                            verticalArrangement = Arrangement.Bottom,
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .height(200.dp)
+                        ) {
+                            Text(
+                                text = user.name.toString(),
+                                style = MaterialTheme.typography.titleLarge,
+
+                                )
+                            Spacer(modifier = Modifier.size(15.dp))
+                            Text(
+                                text = user.position.toString(),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.size(15.dp))
+                        }
+                    }
+                    Text(
+                        text = "Statistic order:",
+                        modifier = Modifier.padding(20.dp, 10.dp),
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Chart(
+                        chart = lineChart(),
+                        model = chartEntryModel,
+                        startAxis = startAxis(),
+                        bottomAxis = bottomAxis(),
+                    )
+                    Text(
+                        text = "My orders:",
+                        modifier = Modifier.padding(20.dp, 10.dp),
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 items(orders.size) { item ->
                     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
                     var restaurant by remember { mutableStateOf(Restaurant()) }
