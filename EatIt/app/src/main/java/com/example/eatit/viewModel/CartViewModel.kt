@@ -33,5 +33,9 @@ class CartViewModel @Inject constructor(
         return repository.getProducts(order)
     }
 
+    fun resetOrder() {
+        _orderLines = null
+    }
+
 
 }

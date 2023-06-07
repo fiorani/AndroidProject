@@ -130,7 +130,6 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel, order: Order) {
         QuantitySelector(count = count, decreaseItemCount = {
             if (count > 0) updateCount(count - 1)
             order.reduceCount(product)
-            //cartViewModel.addNewOrder(cartViewModel.orderSelected!!)
         }, increaseItemCount = {
             updateCount(count + 1)
             order.increaseCount(product)

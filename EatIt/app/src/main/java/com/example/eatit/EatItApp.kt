@@ -281,6 +281,7 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Login.name)
                 },
                 usersViewModel = usersViewModel,
+                cartViewModel = cartViewModel
             )
         }
         composable(route = AppScreen.AddRestaurant.name) {

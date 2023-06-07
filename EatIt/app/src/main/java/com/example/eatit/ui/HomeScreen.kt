@@ -24,6 +24,7 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -37,10 +38,12 @@ fun HomeScreen(
     onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
     usersViewModel: UsersViewModel,
+    cartViewModel: CartViewModel
 ) {
     if (Firebase.auth.currentUser == null) {
         onLoginClicked()
     }
+    cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
