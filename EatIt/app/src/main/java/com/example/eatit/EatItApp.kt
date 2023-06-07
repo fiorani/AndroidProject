@@ -126,39 +126,27 @@ fun BottomAppBarFunction(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(onClick = onHomeButtonClicked) {
-                    Icon(
-                        Icons.Outlined.Home,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-
-                }
-                if (currentScreen == AppScreen.Home.name) {
-                    IconButton(onClick = onHomeButtonClicked) {
+                    if (currentScreen == AppScreen.Home.name) {
                         Icon(
                             Icons.Filled.Home,
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }else{
-                    IconButton(onClick = onHomeButtonClicked) {
+                    } else {
                         Icon(
                             Icons.Outlined.Home,
                             contentDescription = stringResource(id = R.string.settings),
                         )
-
                     }
                 }
-                if (currentScreen == AppScreen.UserProfile.name) {
-                    IconButton(onClick = onHomeButtonClicked) {
+                IconButton(onClick = onUserProfileButtonClicked) {
+                    if (currentScreen == AppScreen.UserProfile.name) {
                         Icon(
                             Icons.Filled.AccountCircle,
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }else{
-                    IconButton(onClick = onHomeButtonClicked) {
+                    } else {
                         Icon(
                             Icons.Outlined.AccountCircle,
                             contentDescription = stringResource(id = R.string.settings),
@@ -166,50 +154,42 @@ fun BottomAppBarFunction(
 
                     }
                 }
-                if (currentScreen == AppScreen.Cart.name) {
-                    IconButton(onClick = onHomeButtonClicked) {
+                IconButton(onClick = onCartButtonClicked) {
+                    if (currentScreen == AppScreen.Cart.name) {
                         Icon(
                             Icons.Filled.ShoppingCart,
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }else{
-                    IconButton(onClick = onHomeButtonClicked) {
+                    } else {
                         Icon(
                             Icons.Outlined.ShoppingCart,
                             contentDescription = stringResource(id = R.string.settings),
                         )
-
                     }
                 }
-                if (currentScreen == AppScreen.Map.name) {
-                    IconButton(onClick = onHomeButtonClicked) {
+                IconButton(onClick = onMapButtonClicked) {
+                    if (currentScreen == AppScreen.Map.name) {
                         Icon(
                             Icons.Filled.Map,
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }else{
-                    IconButton(onClick = onHomeButtonClicked) {
+                    } else {
                         Icon(
                             Icons.Outlined.Map,
                             contentDescription = stringResource(id = R.string.settings),
                         )
-
                     }
                 }
-                if (currentScreen == AppScreen.Settings.name) {
-                    IconButton(onClick = onHomeButtonClicked) {
+                IconButton(onClick = onSettingsButtonClicked) {
+                    if (currentScreen == AppScreen.Settings.name) {
                         Icon(
                             Icons.Filled.Settings,
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }else{
-                    IconButton(onClick = onHomeButtonClicked) {
+                    } else {
                         Icon(
                             Icons.Outlined.Settings,
                             contentDescription = stringResource(id = R.string.settings),
@@ -217,6 +197,7 @@ fun BottomAppBarFunction(
 
                     }
                 }
+
             }
         }
     )
