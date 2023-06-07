@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +35,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
@@ -59,11 +57,11 @@ fun SettingsScreen(
             var user: User by remember { mutableStateOf(User()) }
             val textState = remember { mutableStateOf(user.name.toString()) }
             var city by rememberSaveable { usersViewModel.userPosition }
-            var showDialog = remember { mutableStateOf(false) }
+            val showDialog = remember { mutableStateOf(false) }
             val focusManager = LocalFocusManager.current
-            var changedThing = remember { mutableStateOf("") }
-            var showChangedPsw = remember { mutableStateOf(false) }
-            var themeChanged = remember { mutableStateOf(false) }
+            val changedThing = remember { mutableStateOf("") }
+            val showChangedPsw = remember { mutableStateOf(false) }
+            val themeChanged = remember { mutableStateOf(false) }
             val light = LocalContext.current.getString(R.string.light_theme)
             val dark = LocalContext.current.getString(R.string.dark_theme)
             LaunchedEffect(Unit) {
@@ -221,7 +219,7 @@ fun SettingsScreen(
             }
 
             if (showDialog.value) {
-                showAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
+                ShowAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
             }
 
             if (themeChanged.value) {
@@ -247,7 +245,7 @@ fun SettingsScreen(
 }
 
 @Composable
-fun showAlertDialog(showDialog:  MutableState<Boolean>, changedThing: String)
+fun ShowAlertDialog(showDialog:  MutableState<Boolean>, changedThing: String)
 {
     AlertDialog(
         onDismissRequest = {
