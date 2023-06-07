@@ -60,7 +60,8 @@ class RestaurantsRepository(eatItApp: EatItApp) {
                 .documents.mapNotNull { documentSnapshot ->
                     val product = documentSnapshot.toObject(Product::class.java)
                     product?.id = documentSnapshot.id
-                    product }
+                    product
+                }
         } catch (e: Exception) {
             throw e
         }

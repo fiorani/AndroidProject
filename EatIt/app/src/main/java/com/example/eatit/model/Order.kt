@@ -1,8 +1,6 @@
 package com.example.eatit.model
 
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ServerTimestamp
-import com.google.firebase.ktx.Firebase
 import java.util.Date
 
 data class Order(
@@ -17,7 +15,7 @@ data class Order(
 ) {
     fun reduceCount(product: Product): Order {
         var productIndex = 0
-        if(this.listProductId?.contains(product.id.toString()) == true) {
+        if (this.listProductId?.contains(product.id.toString()) == true) {
             productIndex = this.listProductId?.indexOf(product.id.toString())!!
             this.listQuantity?.set(
                 productIndex,
@@ -33,7 +31,7 @@ data class Order(
     }
 
     fun increaseCount(product: Product): Order {
-        if(this.listProductId?.contains(product.id.toString()) == true) {
+        if (this.listProductId?.contains(product.id.toString()) == true) {
             val productIndex = this.listProductId?.indexOf(product.id.toString())!!
             this.listQuantity?.set(
                 productIndex,

@@ -21,7 +21,7 @@ fun QuantitySelector(
     increaseItemCount: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier,verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "Qty",
             fontSize = 20.sp

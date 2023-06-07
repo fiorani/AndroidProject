@@ -101,7 +101,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel, order: Order) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,8 +120,10 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
             )
         }
         var quantity = 0
-        if(order.listProductId?.contains(product.id.toString()) == true) {
-            quantity = order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)?.toInt()!!
+        if (order.listProductId?.contains(product.id.toString()) == true) {
+            quantity =
+                order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)
+                    ?.toInt()!!
         }
 
         val (count, updateCount) = remember { mutableStateOf(quantity) }
@@ -136,9 +138,10 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
 
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingCard(product: Product,order: Order){
+fun ShoppingCard(product: Product, order: Order) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -174,6 +177,7 @@ fun ShoppingCard(product: Product,order: Order){
         }
     }
 }
+
 @Composable
 fun SectionShoppingCard(
     sectionName: String,
@@ -194,10 +198,11 @@ fun SectionShoppingCard(
         )
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionMenuCard(
-    sectionName: String, products: List<Product>, cartViewModel: CartViewModel,order: Order
+    sectionName: String, products: List<Product>, cartViewModel: CartViewModel, order: Order
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -246,6 +251,7 @@ fun SectionMenuCard(
     }
 
 }
+
 @Composable
 fun RatingCard(rating: Rating) {
     EatItCard(onItemClicked = {
