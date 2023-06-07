@@ -38,6 +38,7 @@ class CartRepository(eatItApp: EatItApp) {
             for (documentSnapshot in querySnapshot) {
                 if (order.listProductId?.contains(documentSnapshot.id) == true) {
                     val product = documentSnapshot.toObject(Product::class.java)
+                    product?.id = documentSnapshot.id
                     product?.let { products.add(it) }
                 }
             }

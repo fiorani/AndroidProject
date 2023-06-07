@@ -21,7 +21,7 @@ class UsersRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("userPosition", position)
+                it.documents.firstOrNull()?.reference?.update("position", position)
             }
     }
 
@@ -29,7 +29,7 @@ class UsersRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("userName", name)
+                it.documents.firstOrNull()?.reference?.update("name", name)
             }
     }
 
@@ -60,7 +60,7 @@ class UsersRepository(eatItApp: EatItApp) {
             try {
                 FirebaseFirestore.getInstance().collection("users")
                     .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get().await()
-                    .documents.firstOrNull()?.get("userPosition").toString()
+                    .documents.firstOrNull()?.get("position").toString()
             } catch (e: Exception) {
                 throw e
             }
@@ -72,6 +72,17 @@ class UsersRepository(eatItApp: EatItApp) {
             try {
                 FirebaseFirestore.getInstance().collection("users")
                     .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString())
+                    .get().await().documents.firstOrNull()?.toObject(User::class.java)!!
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+
+    suspend fun getUserById(userId: String): User =
+        withContext(Dispatchers.IO) {
+            try {
+                FirebaseFirestore.getInstance().collection("users")
+                    .whereEqualTo("id", userId)
                     .get().await().documents.firstOrNull()?.toObject(User::class.java)!!
             } catch (e: Exception) {
                 throw e

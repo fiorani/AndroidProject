@@ -8,20 +8,8 @@ import java.util.Date
 
 data class Rating(
     var userId: String? = null,
-    var userName: String? = null,
-    var rating: Double = 0.toDouble(),
+    var rating: Float = 0.0f,
     var text: String? = null,
     var id: String? = null,
     @ServerTimestamp var timestamp: Date? = null,
-) {
-
-    constructor(rating: Double, text: String) : this() {
-        this.userId = Firebase.auth.uid
-        this.userName = Firebase.auth.currentUser?.displayName
-        if (TextUtils.isEmpty(this.userName)) {
-            this.userName = Firebase.auth.currentUser?.email
-        }
-        this.rating = rating
-        this.text = text
-    }
-}
+)

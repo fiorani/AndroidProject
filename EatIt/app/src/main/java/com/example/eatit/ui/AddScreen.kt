@@ -6,9 +6,17 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
@@ -19,7 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
@@ -31,6 +44,11 @@ import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.patrykandpatrick.vico.core.extension.getFieldValue
+import kotlinx.coroutines.selects.select
 import java.util.*
 
 
@@ -43,11 +61,9 @@ fun AddRestaurantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var city by rememberSaveable { usersViewModel.userPosition }
-    var category by rememberSaveable { mutableStateOf("") }
     var photo by rememberSaveable { mutableStateOf("") }
-    var price = 0
     var numRatings = 0
-    var avgRating = 0.toDouble()
+    var avgRating = 0.0f
     LaunchedEffect(Unit) {
         city = usersViewModel.getPosition()
     }
@@ -87,15 +103,6 @@ fun AddRestaurantScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            OutlinedTextField(
-                value = category,
-                onValueChange = { category = it },
-                label = { Text(stringResource(id = R.string.label_category)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -170,12 +177,11 @@ fun AddRestaurantScreen(
                     restaurantsViewModel.addNewRestaurant(
                         Restaurant(
                             name = name,
-                            city = city,
-                            category = category,
+                            address  = city,
                             photo = photo,
-                            price = price,
                             numRatings = numRatings,
-                            avgRating = avgRating
+                            avgRating = avgRating,
+                            userId = Firebase.auth.uid
                         )
                     )
                     onNextButtonClicked()
@@ -196,6 +202,7 @@ fun AddProductScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
 ) {
+
     var name by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var price by rememberSaveable { mutableStateOf("") }
@@ -209,6 +216,13 @@ fun AddProductScreen(
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
+
+            LocalContext.current.resources.getStringArray(R.array.categories).forEach { type ->
+                AssistChip(
+                    onClick = { /* Do something! */ },
+                    label = { Text(type) }
+                )
+            }
 
             OutlinedTextField(
                 value = name,
@@ -289,14 +303,23 @@ fun AddProductScreen(
 
             Button(
                 onClick = {
-                    restaurantsViewModel.addNewProduct(
-                        Product(
-                            name = name,
-                            description = description,
-                            price = price,
-                            photo = photoURI
+                    if (restaurantsViewModel.productSelected != null) {
+                        restaurantsViewModel.setProduct(
+                            Product(
+                                name = name,
+                                description = description,
+                                photo = photoURI
+                            ))
+                    } else {
+                        restaurantsViewModel.addNewProduct(
+                            Product(
+                                name = name,
+                                description = description,
+                                photo = photoURI,
+                                section = ""
+                            )
                         )
-                    )
+                    }
                     onNextButtonClicked()
                 },
                 colors = ButtonDefaults.buttonColors(Color.Green),

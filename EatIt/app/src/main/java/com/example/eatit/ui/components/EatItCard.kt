@@ -1,6 +1,5 @@
 package com.example.eatit.ui.components
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -8,22 +7,22 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.text.font.FontStyle.Companion.Italic
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.model.Order
-import com.example.eatit.model.Product
-import com.example.eatit.model.Rating
-import com.example.eatit.model.Restaurant
-import com.example.eatit.model.User
+import com.example.eatit.model.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -74,7 +73,7 @@ fun RestaurantCard(
                         fontWeight = Bold
                     )
                     Text(
-                        text = restaurant.city.toString(),
+                        text = restaurant.address.toString(),
                         modifier = Modifier.padding(4.dp),
                         fontSize = 20.sp
                     )
@@ -88,7 +87,6 @@ fun RestaurantCard(
                             rating = it
                         },
                         onRatingChanged = {
-                            Log.d("TAG", "onRatingChanged: $it")
                         },
                         modifier = Modifier.padding(1.dp, 4.dp),
                         spaceBetween = 1.dp,
@@ -102,46 +100,171 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel, user: User) {
-    EatItCard(onItemClicked = {
-    }) {
+fun ProductCard(product: Product, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp, 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row {
+            Icon(
+                imageVector = Icons.Default.Fastfood, contentDescription = "Agriculture"
+            )
+            Text(
+                modifier = Modifier.padding(10.dp, 0.dp),
+                text = product.name.toString() + " - " + product.price.toString() + "€",
+                fontSize = 20.sp
+            )
+        }
+        if (!user.restaurateur) {
+            var quantity = 0
+            if (order.listProductId?.contains(product.id.toString()) == true) {
+                quantity =
+                    order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)
+                        ?.toInt()!!
+            }
+            val (count, updateCount) = remember { mutableStateOf(quantity) }
+            QuantitySelector(count = count, decreaseItemCount = {
+                if (count > 0) updateCount(count - 1)
+                order.reduceCount(product)
+            }, increaseItemCount = {
+                updateCount(count + 1)
+                order.increaseCount(product)
+            })
+        } else {
+            IconButton(
+                onClick =
+                {
+                    restaurantViewModel.selectProduct(product)
+                    onAddButtonClicked()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit"
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShoppingCard(product: Product, order: Order) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Card(
+            modifier = Modifier.padding(5.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+            elevation = CardDefaults.cardElevation(8.dp),
+            shape = CardDefaults.shape
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier.padding(17.dp, 7.dp),
+                    text = product.name.toString(),
+                    fontSize = 17.sp
+                )
+                Text(
+                    modifier = Modifier.padding(17.dp, 7.dp),
+                    text = product.price.toString() + "€ x " + order.listQuantity?.get(
+                        order.listProductId!!.indexOf(
+                            product.id!!
+                        )
+                    ).toString(),
+                    fontSize = 17.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SectionShoppingCard(
+    sectionName: String,
+    products: List<Product>,
+    order: Order
+) {
+    Text(
+        modifier = Modifier.padding(20.dp, 10.dp),
+        text = sectionName,
+        fontSize = 25.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+    for (product in products) {
+        ShoppingCard(
+            product = product,
+            order = order
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SectionMenuCard(
+    sectionName: String, products: List<Product>, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit
+) {
+    var expandedState by remember { mutableStateOf(false) }
+    val rotationState by animateFloatAsState(
+        targetValue = if (expandedState) 180f else 0f
+    )
+
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(30.dp, 10.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = CardDefaults.shape,
+        onClick = {
+            expandedState = !expandedState
+        }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.name.toString(),
-                modifier = Modifier
-                    .padding(4.dp)
-                    .weight(1f)
+                modifier = Modifier.padding(20.dp, 10.dp),
+                text = sectionName,
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
             )
-            if (!user.isRestaurateur) {
-                Text(
-                    text = product.price.toString() + "€",
-                    modifier = Modifier.padding(4.dp),
+            IconButton(modifier = Modifier.rotate(rotationState), onClick = {
+                expandedState = !expandedState
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ExpandMore, contentDescription = "Drop-Down Arrow"
                 )
-                val (count, updateCount) = remember { mutableStateOf(0) }
-                QuantitySelector(
-                    count = count,
-                    decreaseItemCount = {
-                        if (count > 0) updateCount(count - 1)
-                        cartViewModel.reduceCount(product)
-                        cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
-                    },
-                    increaseItemCount = {
-                        updateCount(count + 1)
-                        cartViewModel.increaseCount(product)
-                        Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
-                    })
             }
         }
-        Row {
-            Text(
-                text = product.description.toString(),
-                modifier = Modifier.padding(4.dp),
-            )
-        }
     }
+
+    if (expandedState) {
+        products.forEach { product ->
+            if (product.section == sectionName){
+                ProductCard(
+                    product = product,
+                    restaurantViewModel = restaurantViewModel,
+                    order = order,
+                    user = user,
+                    onAddButtonClicked
+                )
+            }
+        }
+
+    }
+
 }
 
 @Composable
@@ -159,8 +282,12 @@ fun RatingCard(rating: Rating) {
                 fontSize = 20.sp
             )
             Row {
+                var name by remember { mutableStateOf("random user") }
+                LaunchedEffect(Unit) {
+                   // name = UsersViewModel().getUserById(rating.userId.toString()).name.toString()
+                }
                 Text(
-                    text = rating.userName.toString(),
+                    text = name,
                     modifier = Modifier.padding(4.dp),
                     fontSize = 15.sp
                 )
@@ -172,7 +299,6 @@ fun RatingCard(rating: Rating) {
                         valrating = it
                     },
                     onRatingChanged = {
-                        Log.d("TAG", "onRatingChanged: $it")
                     },
                     modifier = Modifier.padding(4.dp),
                     size = 20.dp
@@ -186,7 +312,7 @@ fun RatingCard(rating: Rating) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderCard(
+fun OrderProfileCard(
     orders: Order,
     listProducts: List<Product>,
     restaurant: Restaurant

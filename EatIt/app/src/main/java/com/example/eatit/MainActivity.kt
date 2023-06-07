@@ -33,12 +33,10 @@ import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -53,7 +51,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private lateinit var connectivityManager: ConnectivityManager
-    private var requestingLocationUpdates = mutableStateOf(false)
     private var queue: RequestQueue? = null
     val location = mutableStateOf(LocationDetails(0.toDouble(), 0.toDouble()))
     val warningViewModel by viewModels<WarningViewModel>()
@@ -74,30 +71,22 @@ class MainActivity : ComponentActivity() {
             }
         }
         locationRequest =
-            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
-                setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-            }.build()
+            LocationRequest.Builder(10_000).build()
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
+                val userViewModel by viewModels<UsersViewModel>()
+                userViewModel.setLocation(p0.locations.last())
                 location.value = LocationDetails(
-                    p0.locations.first().latitude,
-                    p0.locations.first().longitude
+                    p0.locations.last().latitude,
+                    p0.locations.last().longitude
                 )
-                stopLocationUpdates()
-                if (isOnline(connectivityManager = connectivityManager)) {
-                    sendRequest(location.value, connectivityManager)
-                } else {
-                    warningViewModel.setConnectivitySnackBarVisibility(true)
-                }
             }
         }
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                if (requestingLocationUpdates.value) {
-                    sendRequest(location.value, connectivityManager)
-                    warningViewModel.setConnectivitySnackBarVisibility(false)
-                }
+                sendRequest(location.value, connectivityManager)
+                warningViewModel.setConnectivitySnackBarVisibility(false)
             }
 
             override fun onLost(network: Network) {
@@ -107,6 +96,7 @@ class MainActivity : ComponentActivity() {
 
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
+        startLocationUpdates()
         setContent {
             EatItTheme(darkTheme = theme=="Dark") {
                 // A surface container using the 'background' color from the theme
@@ -120,30 +110,38 @@ class MainActivity : ComponentActivity() {
                         warningViewModel = warningViewModel,
                         signIn = ::signIn,
                         createAccount = ::createAccount,
-                        startLocationUpdates = ::startLocationUpdates,
                         sharedPref = sharedPref,
                         theme = theme,
-                        onOptionSelected = onThemeChanged
+                        onOptionSelected = onThemeChanged,
+                        startLocationUpdates = ::startSendRequest
                     )
                 }
-                if (requestingLocationUpdates.value) {
-                    connectivityManager.registerDefaultNetworkCallback(networkCallback)
-                }
+                connectivityManager.registerDefaultNetworkCallback(networkCallback)
             }
         }
     }
 
-    fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
+    private fun startSendRequest() {
+        if (isOnline(connectivityManager = connectivityManager)) {
+            sendRequest(location.value, connectivityManager)
+        } else {
+            warningViewModel.setConnectivitySnackBarVisibility(true)
+        }
+    }
+
+    private fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
         val userViewModel by viewModels<UsersViewModel>()
         queue = Volley.newRequestQueue(this)
-        val url = "https://nominatim.openstreetmap.org/reverse?lat=" + location.latitude +
-                "&lon=" + location.longitude + "&format=jsonv2&limit=1"
+        val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                +location.latitude + "," + location.longitude + "&key=AIzaSyAtkgSO0EAakNnErsYTuO1ORfA4QFsnqiw"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
-                userViewModel.setPosition(response.getString("display_name"))
-                connectivityManager.unregisterNetworkCallback(networkCallback)
-                requestingLocationUpdates.value = false
+                val results = response.getJSONArray("results")
+                if (results.length() > 0) {
+                    val address = results.getJSONObject(0).getString("formatted_address")
+                    userViewModel.setPosition(address)
+                }
             },
             { error ->
                 Log.d("MAINACTIVITY-SENDREQUEST", error.toString())
@@ -151,48 +149,22 @@ class MainActivity : ComponentActivity() {
         )
         jsonObjectRequest.tag = TAG
         queue?.add(jsonObjectRequest)
-    }
 
-    override fun onResume() {
-        super.onResume()
-        if (requestingLocationUpdates.value) startLocationUpdates()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopLocationUpdates()
     }
 
     override fun onStop() {
         super.onStop()
         queue?.cancelAll(TAG)
-        if (requestingLocationUpdates.value)
-            (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .unregisterNetworkCallback(networkCallback)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (requestingLocationUpdates.value)
-            (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .registerDefaultNetworkCallback(networkCallback)
     }
 
     private fun startLocationUpdates() {
-        requestingLocationUpdates.value = true
-        val permission = Manifest.permission.ACCESS_COARSE_LOCATION
+        val permission = Manifest.permission.ACCESS_FINE_LOCATION
         when {
             //permission already granted
             ContextCompat.checkSelfPermission(
                 this,
                 permission
             ) == PackageManager.PERMISSION_GRANTED -> {
-                locationRequest =
-                    LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 60000).apply {
-                        setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-                        setWaitForAccurateLocation(true)
-                    }.build()
-
                 val gpsEnabled = checkGPS()
                 if (gpsEnabled) {
                     fusedLocationProviderClient.requestLocationUpdates(
@@ -216,10 +188,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     private fun checkGPS(): Boolean {
@@ -249,7 +217,7 @@ class MainActivity : ComponentActivity() {
         photo: String,
         age: Int,
         address: String,
-        isRestaurateur: Boolean,
+        restaurateur: Boolean,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
@@ -257,7 +225,6 @@ class MainActivity : ComponentActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
                         usersViewModel.addNewUser(
                             User(
                                 auth.currentUser!!.uid,
@@ -266,7 +233,7 @@ class MainActivity : ComponentActivity() {
                                 photo,
                                 age,
                                 address,
-                                isRestaurateur
+                                restaurateur
                             )
                         )
                         signIn(email, password, onNextButtonClicked)
@@ -284,7 +251,6 @@ class MainActivity : ComponentActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "signInWithEmail:success")
                         onNextButtonClicked()
                     } else {
                         task.exception?.let { errorToast("signInWithEmail:failure", it) }
@@ -305,4 +271,5 @@ class MainActivity : ComponentActivity() {
         ).show()
     }
 }
+
 

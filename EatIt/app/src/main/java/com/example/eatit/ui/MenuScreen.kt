@@ -30,10 +30,10 @@ fun MenuScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Column {
-                SectionCard("Primi", listOf("Pollo", "Soya", "Mangime"))
-                SectionCard("Secondi", listOf("Pollo", "Soya", "Mangime"))
-                SectionCard("Terzi", listOf("Pollo", "Soya", "Mangime"))
-                SectionCard("Quarti", listOf("Pollo", "Soya", "Mangime"))
+                SectioCard("Primi", listOf("Pollo", "Soya", "Mangime"))
+                SectioCard("Secondi", listOf("Pollo", "Soya", "Mangime"))
+                SectioCard("Terzi", listOf("Pollo", "Soya", "Mangime"))
+                SectioCard("Quarti", listOf("Pollo", "Soya", "Mangime"))
             }
 
             Button(
@@ -53,7 +53,7 @@ fun MenuScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SectionCard(
+fun SectioCard(
     sectionName: String,
     products: List<String>
 ) {

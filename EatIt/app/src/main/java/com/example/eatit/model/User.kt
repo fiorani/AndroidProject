@@ -5,32 +5,32 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 data class User(
-    var userId: String? = null,
-    var userName: String? = null,
-    var userEmail: String? = null,
+    var id: String? = null,
+    var name: String? = null,
+    var mail: String? = null,
     var photo: String? = null,
     var age: Int = 0,
     var address: String? = null,
-    var isRestaurateur: Boolean = false,
-    var userPosition: String? = null
+    var restaurateur: Boolean = false,
+    var position: String? = null
 ) {
     constructor(
         mail: String,
         photo: String,
         age: Int,
         address: String,
-        isRestaurateur: Boolean
+        restaurateur: Boolean
     ) : this() {
         val user = Firebase.auth.currentUser
-        this.userId = user?.uid
-        this.userName = user?.displayName
-        if (TextUtils.isEmpty(this.userName)) {
-            this.userName = user?.email
+        this.id = user?.uid
+        this.name = user?.displayName
+        if (TextUtils.isEmpty(this.name)) {
+            this.name = user?.email
         }
-        this.userEmail = mail
+        this.mail = mail
         this.photo = photo
         this.age = age
         this.address = address
-        this.isRestaurateur = isRestaurateur
+        this.restaurateur = restaurateur
     }
 }

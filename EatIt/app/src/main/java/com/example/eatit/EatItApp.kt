@@ -14,7 +14,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,7 +92,6 @@ fun TopAppBarFunction(
         navigationIcon = {
             if (canNavigateBack && currentScreen != AppScreen.Home.name
                 && currentScreen != AppScreen.UserProfile.name
-                && currentScreen != AppScreen.Cart.name
                 && currentScreen != AppScreen.Map.name
                 && currentScreen != AppScreen.Settings.name
             ) {
@@ -122,71 +124,62 @@ fun BottomAppBarFunction(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(onClick = onHomeButtonClicked) {
-                    Icon(
-                        Icons.Filled.Home,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
+                    if (currentScreen == AppScreen.Home.name) {
+                        Icon(
+                            Icons.Filled.Home,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
 
-                }
-                if (currentScreen == AppScreen.Home.name) {
-                    Text(
-                        text = "Home",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
+                    } else {
+                        Icon(
+                            Icons.Outlined.Home,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+                    }
                 }
                 IconButton(onClick = onUserProfileButtonClicked) {
-                    Icon(
-                        Icons.Filled.AccountCircle,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
+                    if (currentScreen == AppScreen.UserProfile.name) {
+                        Icon(
+                            Icons.Filled.AccountCircle,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
 
-                }
-                if (currentScreen == AppScreen.UserProfile.name) {
-                    Text(
-                        text = "Profile",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
-                }
-                IconButton(onClick = onCartButtonClicked) {
-                    Icon(
-                        Icons.Filled.ShoppingCart,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-                }
-                if (currentScreen == AppScreen.Cart.name) {
-                    Text(
-                        text = "Cart",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
+                    } else {
+                        Icon(
+                            Icons.Outlined.AccountCircle,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
                 IconButton(onClick = onMapButtonClicked) {
-                    Icon(
-                        Icons.Filled.Map,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-                }
-                if (currentScreen == AppScreen.Map.name) {
-                    Text(
-                        text = "Map",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
+                    if (currentScreen == AppScreen.Map.name) {
+                        Icon(
+                            Icons.Filled.Map,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    } else {
+                        Icon(
+                            Icons.Outlined.Map,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+                    }
                 }
                 IconButton(onClick = onSettingsButtonClicked) {
-                    Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
-                }
-                if (currentScreen == AppScreen.Settings.name) {
-                    Text(
-                        text = "Settings",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
+                    if (currentScreen == AppScreen.Settings.name) {
+                        Icon(
+                            Icons.Filled.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    } else {
+                        Icon(
+                            Icons.Outlined.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
 
             }
@@ -277,8 +270,7 @@ private fun NavigationGraph(
     val cartViewModel = hiltViewModel<CartViewModel>()
     var user: User by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
-        if(Firebase.auth.currentUser != null)
-        {
+        if (Firebase.auth.currentUser != null) {
             user = usersViewModel.getUser()
         }
     }
@@ -300,6 +292,7 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Login.name)
                 },
                 usersViewModel = usersViewModel,
+                cartViewModel = cartViewModel
             )
         }
         composable(route = AppScreen.AddRestaurant.name) {
@@ -328,6 +321,9 @@ private fun NavigationGraph(
                 },
                 cartViewModel = cartViewModel,
                 usersViewModel = usersViewModel,
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Cart.name)
+                }
             )
         }
         composable(route = AppScreen.Settings.name) {
@@ -374,7 +370,7 @@ private fun NavigationGraph(
             })
         }
         composable(route = AppScreen.Cart.name) {
-            CartScreen()
+            CartScreen(cartViewModel = cartViewModel)
         }
     }
 }

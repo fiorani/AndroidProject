@@ -24,6 +24,7 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.RestaurantCard
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -37,17 +38,19 @@ fun HomeScreen(
     onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
     usersViewModel: UsersViewModel,
+    cartViewModel: CartViewModel
 ) {
     if (Firebase.auth.currentUser == null) {
         onLoginClicked()
     }
+    cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user!!
-        usersViewModel.setPosition(user.userPosition.toString())
-        restaurants = if (user.isRestaurateur) {
+        usersViewModel.setPosition(user.position.toString())
+        restaurants = if (user.restaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         } else {
             restaurantsViewModel.getRestaurants()
@@ -55,15 +58,21 @@ fun HomeScreen(
     }
     Scaffold(
         floatingActionButton = {
-            if (user.isRestaurateur) {
+            if (user.restaurateur) {
                 FloatingActionButton(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(25.dp),
                     onClick = onAddButtonClicked
                 ) {
                     Icon(
                         Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_restaurant)
                     )
+                    /*Text(
+                        text = "Modify menù",
+                        modifier = Modifier.padding(20.dp),
+                        fontWeight = Bold,
+                        fontSize = 20.sp
+                    )*/
                 }
             }
         },

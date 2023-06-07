@@ -56,7 +56,7 @@ fun SettingsScreen(
                 .fillMaxSize()
         ) {
             var user: User by remember { mutableStateOf(User()) }
-            val textState = remember { mutableStateOf(user.userName.toString()) }
+            val textState = remember { mutableStateOf(user.name.toString()) }
             var city by rememberSaveable { usersViewModel.userPosition }
             var showDialog = remember { mutableStateOf(false) }
             val focusManager = LocalFocusManager.current
@@ -69,7 +69,7 @@ fun SettingsScreen(
                 user = usersViewModel.getUser()
             }
             LaunchedEffect(user) {
-                textState.value = user.userName.toString()
+                textState.value = user.name.toString()
             }
             Row {
                 Text(
