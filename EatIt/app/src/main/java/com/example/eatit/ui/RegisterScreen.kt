@@ -1,9 +1,12 @@
 package com.example.eatit.ui
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +32,7 @@ fun RegisterScreen(
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
+    startLocationUpdates: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
 
     usersViewModel: UsersViewModel
@@ -223,20 +227,33 @@ fun RegisterScreen(
                         }
                     }
 
-                    var city by rememberSaveable { mutableStateOf("") }
+                    var city by rememberSaveable { usersViewModel.userPosition }
                     LaunchedEffect(Unit) {
                         city = usersViewModel.getPosition()
                     }
-                    OutlinedTextField(
-                        value = city,
-                        onValueChange = { newText ->
-                            city = newText
-                        },
-                        label = {
-                            Text(stringResource(id = R.string.label_city))
-                        },
-                        modifier = Modifier.weight(4f)
-                    )
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                            ){
+                        OutlinedTextField(
+                            value = "",
+                            onValueChange = { newText ->
+                                city = newText
+                            },
+                            label = { Text(stringResource(id = R.string.label_city)) },
+                            modifier = Modifier.width(230.dp)
+                        )
+                        Icon(
+                            Icons.Filled.LocationOn,
+                            contentDescription = "Localized",
+                            Modifier
+                                .clickable(onClick = {
+                                    startLocationUpdates()
+                                }).size(35.dp)
+                        )
+                    }
+
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))

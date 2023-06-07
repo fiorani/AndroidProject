@@ -360,6 +360,7 @@ private fun NavigationGraph(
                 onLoginButtonClicked = {
                     navController.navigate(AppScreen.Login.name)
                 },
+                startLocationUpdates = startLocationUpdates,
                 restaurantsViewModel,
                 usersViewModel = usersViewModel,
             )
