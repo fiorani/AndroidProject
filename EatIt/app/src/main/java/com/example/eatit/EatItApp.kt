@@ -133,61 +133,90 @@ fun BottomAppBarFunction(
 
                 }
                 if (currentScreen == AppScreen.Home.name) {
-                    Icon(
-                        Icons.Filled.Home,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-                }
-                IconButton(onClick = onUserProfileButtonClicked) {
-                    Icon(
-                        Icons.Outlined.AccountCircle,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Filled.Home,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
 
+                    }
+                }else{
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Outlined.Home,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
                 if (currentScreen == AppScreen.UserProfile.name) {
-                    Icon(
-                        Icons.Filled.AccountCircle,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
-                }
-                IconButton(onClick = onCartButtonClicked) {
-                    Icon(
-                        Icons.Outlined.ShoppingCart,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Filled.AccountCircle,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
+                }else{
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Outlined.AccountCircle,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
                 if (currentScreen == AppScreen.Cart.name) {
-                    Icon(
-                        Icons.Filled.ShoppingCart,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-                }
-                IconButton(onClick = onMapButtonClicked) {
-                    Icon(
-                        Icons.Outlined.Map,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Filled.ShoppingCart,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
+                }else{
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Outlined.ShoppingCart,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
                 if (currentScreen == AppScreen.Map.name) {
-                    Icon(
-                        Icons.Filled.Map,
-                        contentDescription = stringResource(id = R.string.settings),
-                    )
-                }
-                IconButton(onClick = onSettingsButtonClicked) {
-                    Icon(
-                        Icons.Outlined.Settings,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Filled.Map,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
+                }else{
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Outlined.Map,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
                 }
                 if (currentScreen == AppScreen.Settings.name) {
-                    Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = stringResource(id = R.string.settings)
-                    )
-                }
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Filled.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
 
+                    }
+                }else{
+                    IconButton(onClick = onHomeButtonClicked) {
+                        Icon(
+                            Icons.Outlined.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
+                        )
+
+                    }
+                }
             }
         }
     )
