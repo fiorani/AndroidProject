@@ -1,7 +1,9 @@
 package com.example.eatit.ui
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,9 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
@@ -42,9 +48,9 @@ fun UserProfileScreen(
     val user: User = usersViewModel.user!!
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
     LaunchedEffect(Unit) {
-        if (user.restaurateur){
+        if (user.restaurateur) {
             orders = cartViewModel.getOrders()
-        }else{
+        } else {
             orders = cartViewModel.getOrders()
         }
     }
@@ -56,7 +62,7 @@ fun UserProfileScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                item{
+                item {
                     Box(modifier = Modifier.fillMaxWidth()) {
                         ImageProfile(user.photo.toString())
                         Column(
@@ -90,6 +96,11 @@ fun UserProfileScreen(
                         startAxis = startAxis(),
                         bottomAxis = bottomAxis(),
                     )
+                    if(!user.restaurateur)
+                    {
+                        ImageCarouselCard()
+                    }
+
                     Text(
                         text = "My orders:",
                         modifier = Modifier.padding(20.dp, 10.dp),
@@ -110,6 +121,60 @@ fun UserProfileScreen(
                         orders[item],
                         products,
                         restaurant,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ImageCarouselCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Achievement",
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.align(Alignment.Start)
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                val imageList = listOf(
+                    R.drawable.medal1,
+                    R.drawable.medal2,
+                    R.drawable.medal3,
+                    R.drawable.medal4,
+                    R.drawable.medal5,
+                    R.drawable.medal6,
+                    R.drawable.medal7,
+                    R.drawable.medal8,
+                    R.drawable.medal9,
+                    R.drawable.medal10,
+                    R.drawable.medal11
+                )
+
+                for (imageResId in imageList) {
+                    Image(
+                        painter = painterResource(imageResId),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(50.dp)
+                            .clip(shape = RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
                     )
                 }
             }
