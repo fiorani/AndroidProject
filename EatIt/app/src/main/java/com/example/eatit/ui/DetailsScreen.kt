@@ -92,7 +92,10 @@ fun DetailsRestaurantScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                FloatingActionButton(shape = RoundedCornerShape(25.dp),onClick = onAddButtonClicked) {
+                FloatingActionButton(
+                    shape = RoundedCornerShape(25.dp),
+                    onClick = onAddButtonClicked
+                ) {
                     Icon(
                         Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_restaurant)
@@ -125,16 +128,20 @@ fun DetailsRestaurantScreen(
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.height(200.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
                 ) {
                     Text(
                         text = restaurant?.name.toString(),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color.White
-                        )
+                    )
                     Spacer(modifier = Modifier.size(15.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
                         val context = LocalContext.current
                         Button(onClick = {
                             val intent = Intent(
@@ -144,7 +151,7 @@ fun DetailsRestaurantScreen(
                             context.startActivity(intent)
                         }) {
                             Text(
-                                text = "GO "+restaurant?.address.toString(),
+                                text = "GO " + restaurant?.address.toString(),
                             )
                             Icon(
                                 Icons.Filled.Map,

@@ -33,6 +33,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     suspend fun getUser(): User {
         return repository.getUser()
     }
+
     suspend fun getUserById(userId: String): User {
         return repository.getUserById(userId)
     }
@@ -65,6 +66,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
             repository.changePsw()
         }
     }
+
     fun setLocation(location: Location) {
         _location.value = location
     }

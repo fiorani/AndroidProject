@@ -1,6 +1,5 @@
 package com.example.eatit.model
 
-import android.text.TextUtils
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         startLocationUpdates()
         setContent {
-            EatItTheme(darkTheme = theme=="Dark") {
+            EatItTheme(darkTheme = theme == "Dark") {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -228,12 +228,12 @@ class MainActivity : ComponentActivity() {
                         usersViewModel.addNewUser(
                             User(
                                 auth.currentUser!!.uid,
-                                name=name,
-                                mail=email,
-                                photo=photo,
-                                age=age,
-                                position=address,
-                                restaurateur=restaurateur
+                                name = name,
+                                mail = email,
+                                photo = photo,
+                                age = age,
+                                position = address,
+                                restaurateur = restaurateur
                             )
                         )
                         signIn(email, password, onNextButtonClicked)

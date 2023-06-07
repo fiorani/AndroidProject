@@ -69,13 +69,14 @@ fun UserProfileScreen(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.Start,
                             modifier = Modifier
-                                .height(200.dp).padding(10.dp)
+                                .height(200.dp)
+                                .padding(10.dp)
                         ) {
                             Text(
                                 text = user.name.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.White
-                                )
+                            )
                             Spacer(modifier = Modifier.size(15.dp))
                             Text(
                                 text = user.position.toString(),
@@ -92,10 +93,9 @@ fun UserProfileScreen(
                         fontWeight = FontWeight.Bold
                     )
 
-                    if(!user.restaurateur)
-                    {
+                    if (!user.restaurateur) {
                         ImageCarouselCard()
-                    }else{
+                    } else {
                         val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
                         Chart(
                             chart = lineChart(),

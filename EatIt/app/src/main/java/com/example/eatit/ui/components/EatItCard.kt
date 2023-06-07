@@ -17,9 +17,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.*
-import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -55,7 +53,9 @@ fun RestaurantCard(
             ImageCard(restaurant.photo.toString())
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -110,7 +110,13 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit) {
+fun ProductCard(
+    product: Product,
+    restaurantViewModel: RestaurantsViewModel,
+    order: Order,
+    user: User,
+    onAddButtonClicked: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -213,7 +219,7 @@ fun SectionShoppingCard(
     )
 
     for (product in products) {
-        if(product.section == sectionName){
+        if (product.section == sectionName) {
             ShoppingCard(
                 product = product,
                 order = order
@@ -225,7 +231,12 @@ fun SectionShoppingCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionMenuCard(
-    sectionName: String, products: List<Product>, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit
+    sectionName: String,
+    products: List<Product>,
+    restaurantViewModel: RestaurantsViewModel,
+    order: Order,
+    user: User,
+    onAddButtonClicked: () -> Unit
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -264,7 +275,7 @@ fun SectionMenuCard(
 
     if (expandedState) {
         products.forEach { product ->
-            if (product.section == sectionName){
+            if (product.section == sectionName) {
                 ProductCard(
                     product = product,
                     restaurantViewModel = restaurantViewModel,
@@ -296,7 +307,7 @@ fun RatingCard(rating: Rating) {
             Row {
                 var name by remember { mutableStateOf("random user") }
                 LaunchedEffect(Unit) {
-                   // name = UsersViewModel().getUserById(rating.userId.toString()).name.toString()
+                    // name = UsersViewModel().getUserById(rating.userId.toString()).name.toString()
                 }
                 Text(
                     text = name,

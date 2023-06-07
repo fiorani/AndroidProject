@@ -18,21 +18,20 @@ package com.example.eatit.model
 
 import android.location.Geocoder
 import android.location.Location
-import android.location.Location.distanceBetween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-class Filter () {
+
+class Filter() {
     @Composable
     fun filterDistance(restaurant: Restaurant, user: User, distance: String): Boolean {
         val positionRestaurant =
             Geocoder(LocalContext.current).getFromLocationName(restaurant.address.toString(), 1)
-        val positionUser = Geocoder(LocalContext.current).getFromLocationName(user.position.toString(), 1)
-        var locationRestaurant:Location = Location("restaurant")
+        val positionUser =
+            Geocoder(LocalContext.current).getFromLocationName(user.position.toString(), 1)
+        var locationRestaurant: Location = Location("restaurant")
         locationRestaurant.latitude = positionRestaurant?.get(0)!!.latitude
         locationRestaurant.longitude = positionRestaurant?.get(0)!!.longitude
-        var locationUser:Location = Location("user")
+        var locationUser: Location = Location("user")
         locationUser.latitude = positionUser?.get(0)!!.latitude
         locationUser.longitude = positionUser?.get(0)!!.longitude
         val distanceBetween = locationRestaurant.distanceTo(locationUser)

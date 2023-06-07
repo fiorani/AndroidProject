@@ -59,7 +59,7 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                if (isUserRegister.value){
+                if (isUserRegister.value) {
                     colorCustomer = MaterialTheme.colorScheme.tertiary
                     colorRestaurant = MaterialTheme.colorScheme.primary
                 } else {
@@ -196,11 +196,11 @@ fun RegisterScreen(
                     LaunchedEffect(Unit) {
                         address = usersViewModel.getPosition()
                     }
-                    Row (
+                    Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
-                            ){
+                    ) {
                         OutlinedTextField(
                             value = address.ifEmpty { "" },
                             onValueChange = { newText -> address = newText },

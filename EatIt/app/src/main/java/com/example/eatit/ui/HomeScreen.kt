@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -89,8 +88,10 @@ fun HomeScreen(
                     restaurants, onItemClicked,
                     restaurantsViewModel
                 )
-                IconButton(onClick = onFilterClicked,
-                modifier = Modifier.align(Alignment.CenterVertically)) {
+                IconButton(
+                    onClick = onFilterClicked,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
                     Icon(
                         Icons.Filled.FilterList,
                         contentDescription = "Filter"

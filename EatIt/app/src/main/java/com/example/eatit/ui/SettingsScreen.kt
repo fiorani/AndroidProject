@@ -9,7 +9,14 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -191,7 +198,7 @@ fun SettingsScreen(
                     usersViewModel.changePsw()
                 },
             ) {
-                Text(text= "Change password")
+                Text(text = "Change password")
             }
             if (showChangedPsw.value) {
                 AlertDialog(
@@ -236,7 +243,7 @@ fun SettingsScreen(
                 fontWeight = Bold,
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Row(){
+            Row() {
                 Text(
                     text = "Dark Theme: ",
                     fontWeight = Bold,

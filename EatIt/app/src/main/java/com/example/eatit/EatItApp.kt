@@ -329,13 +329,15 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.Settings.name) {
-            SettingsScreen(onNextButtonClicked = {
-                navController.navigate(AppScreen.Login.name)
-            }, usersViewModel = usersViewModel,
+            SettingsScreen(
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Login.name)
+                }, usersViewModel = usersViewModel,
                 startLocationUpdates = startLocationUpdates,
                 sharedPref = sharedPref,
                 theme = theme,
-                onThemeChanged = onThemeChanged)
+                onThemeChanged = onThemeChanged
+            )
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(
@@ -376,7 +378,10 @@ private fun NavigationGraph(
             CartScreen(cartViewModel = cartViewModel)
         }
         composable(route = AppScreen.Filter.name) {
-            FilterScreen(usersViewModel = usersViewModel, restaurantsViewModel = restaurantsViewModel)
+            FilterScreen(
+                usersViewModel = usersViewModel,
+                restaurantsViewModel = restaurantsViewModel
+            )
         }
     }
 }
