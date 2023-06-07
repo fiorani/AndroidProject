@@ -114,7 +114,6 @@ fun BottomAppBarFunction(
     onUserProfileButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
     onHomeButtonClicked: () -> Unit,
-    onCartButtonClicked: () -> Unit,
 ) {
 
     BottomAppBar(modifier = modifier,
@@ -220,7 +219,6 @@ fun NavigationApp(
                     onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
                     onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
                     onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
-                    onCartButtonClicked = { navController.navigate(AppScreen.Cart.name) },
                 )
             }
         }
@@ -327,7 +325,7 @@ private fun NavigationGraph(
             )
         }
         composable(route = AppScreen.Settings.name) {
-            SettingsScreen(settingsViewModel, onNextButtonClicked = {
+            SettingsScreen(onNextButtonClicked = {
                 navController.navigate(AppScreen.Login.name)
             }, usersViewModel = usersViewModel,
                 startLocationUpdates = startLocationUpdates,

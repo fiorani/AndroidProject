@@ -29,7 +29,6 @@ import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.utilities.createImageFile
-import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -37,7 +36,6 @@ import java.util.*
 
 @Composable
 fun SettingsScreen(
-    settingsViewModel: SettingsViewModel,
     onNextButtonClicked: () -> Unit,
     usersViewModel: UsersViewModel,
     startLocationUpdates: () -> Unit,
