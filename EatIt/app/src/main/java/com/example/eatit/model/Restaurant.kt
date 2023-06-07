@@ -8,4 +8,5 @@ data class Restaurant(
     var avgRating: Float = 0.0f,
     var id: String? = null,
     var userId: String? = null,
+    var phone: String? = null,
 )

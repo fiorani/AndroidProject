@@ -1,8 +1,11 @@
 package com.example.eatit.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -109,27 +115,55 @@ fun DetailsRestaurantScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize().verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 ImageProfile(restaurant?.photo.toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.height(200.dp)
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.height(200.dp).fillMaxWidth()
                 ) {
                     Text(
                         text = restaurant?.name.toString(),
-                        color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
                         )
                     Spacer(modifier = Modifier.size(15.dp))
-                    Text(
-                        text = restaurant?.address.toString(),
-                        color = MaterialTheme.colorScheme.background,
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,) {
+                        val context = LocalContext.current
+                        Button(onClick = {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant?.address}")
+                            )
+                            context.startActivity(intent)
+                        }) {
+                            Text(
+                                text = "GO "+restaurant?.address.toString(),
+                            )
+                            Icon(
+                                Icons.Filled.Map,
+                                contentDescription = "go"
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(15.dp))
+                        Button(onClick = {
+                            val intent = Intent(Intent.ACTION_DIAL)
+                            intent.data = Uri.parse("tel:${restaurant?.phone}")
+                            context.startActivity(intent)
+                        }) {
+                            Text(
+                                text = "CALL ",
+                            )
+                            Icon(
+                                Icons.Filled.Call,
+                                contentDescription = "call"
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.size(15.dp))
 
                 }
