@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.UsersRepository
+import com.example.eatit.model.Filter
 import com.example.eatit.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,11 +16,13 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     private var _userPosition = mutableStateOf("")
     private var _user: User? = null
     private var _location = mutableStateOf(Location("MyLocationProvider"))
+    private var _filter = Filter()
     val user
         get() = _user
     val userPosition
         get() = _userPosition
-
+    val filter
+        get() = _filter
     val location
         get() = _location
 

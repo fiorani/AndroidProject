@@ -57,8 +57,6 @@ fun EatItSearchBar(
             }
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp, 2.dp)
     ) {
         var searchResults = remember { mutableStateListOf<Restaurant>() }
         searchResults.clear()

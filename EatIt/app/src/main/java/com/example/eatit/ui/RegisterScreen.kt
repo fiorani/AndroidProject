@@ -1,21 +1,22 @@
 package com.example.eatit.ui
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.R
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -29,6 +30,7 @@ fun RegisterScreen(
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
+    startLocationUpdates: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
 
     usersViewModel: UsersViewModel
@@ -108,44 +110,13 @@ fun RegisterScreen(
                         fontSize = 25.sp
                     )
 
-                    if (isUserRegister.value) {
-                        var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                            mutableStateOf(TextFieldValue(""))
-                        }
-                        OutlinedTextField(
-                            value = txtNickname,
-                            onValueChange = { txtNickname = it },
-                            label = { Text("Nickname") }
-                        )
-                    }
-
-                    if (!isUserRegister.value) {
-                        var txtDenomination by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                            mutableStateOf(TextFieldValue(""))
-                        }
-                        OutlinedTextField(
-                            value = txtDenomination,
-                            onValueChange = { txtDenomination = it },
-                            label = { Text("Denomination") }
-                        )
-                    }
-
-                    var txtName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                    var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
                     }
                     OutlinedTextField(
-                        value = txtName,
-                        onValueChange = { txtName = it },
-                        label = { Text("Name") }
-                    )
-
-                    var txtSurname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
-                    OutlinedTextField(
-                        value = txtSurname,
-                        onValueChange = { txtSurname = it },
-                        label = { Text("Surname") }
+                        value = txtNickname,
+                        onValueChange = { txtNickname = it },
+                        label = { Text("Nickname") }
                     )
 
                     var txtPassword by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -166,9 +137,7 @@ fun RegisterScreen(
                             onValueChange = { txtPIVA = it },
                             label = { Text("P.IVA") }
                         )
-                    }
-
-                    if (isUserRegister.value) {
+                    } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
                         var txtBirth by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                             mutableStateOf(TextFieldValue(""))
@@ -223,20 +192,32 @@ fun RegisterScreen(
                         }
                     }
 
-                    var city by rememberSaveable { mutableStateOf("") }
+                    var address by rememberSaveable { usersViewModel.userPosition }
                     LaunchedEffect(Unit) {
-                        city = usersViewModel.getPosition()
+                        address = usersViewModel.getPosition()
                     }
-                    OutlinedTextField(
-                        value = city,
-                        onValueChange = { newText ->
-                            city = newText
-                        },
-                        label = {
-                            Text(stringResource(id = R.string.label_city))
-                        },
-                        modifier = Modifier.weight(4f)
-                    )
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                            ){
+                        OutlinedTextField(
+                            value = address.ifEmpty { "" },
+                            onValueChange = { newText -> address = newText },
+                            label = { Text("Address") },
+                            modifier = Modifier.weight(4f)
+                        )
+                        Icon(
+                            Icons.Filled.LocationOn,
+                            contentDescription = "Localized",
+                            Modifier
+                                .weight(1f)
+                                .clickable(onClick = {
+                                    startLocationUpdates()
+                                })
+                        )
+                    }
+
 
                     var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                         mutableStateOf(TextFieldValue(""))
@@ -266,10 +247,10 @@ fun RegisterScreen(
                                 createAccount(
                                     txtEmail.text,
                                     txtPassword.text,
-                                    txtName.text,
+                                    txtNickname.text,
                                     "",
                                     0,
-                                    city,
+                                    address,
                                     !isUserRegister.value,
                                     onNextButtonClicked
                                 )
@@ -295,7 +276,7 @@ fun RegisterScreen(
                 Column {
                     Text(
                         modifier = Modifier
-                            .padding(10.dp, 0.dp),
+                            .padding(5.dp, 0.dp),
                         text = "Already have an account?",
                         fontSize = 20.sp
                     )
