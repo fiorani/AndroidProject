@@ -6,10 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -58,7 +55,7 @@ fun RestaurantCard(
             ImageCard(restaurant.photo.toString())
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.fillMaxWidth().padding(10.dp)
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -78,7 +75,9 @@ fun RestaurantCard(
                         fontSize = 20.sp
                     )
                 }
-                Column {
+                Column(
+                    horizontalAlignment = Alignment.End,
+                ) {
                     var rating: Float by remember { mutableStateOf(3.2f) }
                     RatingBar(
                         value = restaurant.avgRating.toString().toFloat(),
@@ -92,6 +91,17 @@ fun RestaurantCard(
                         spaceBetween = 1.dp,
                         size = 20.dp
                     )
+                    IconButton(
+                        onClick =
+                        {
+
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "Heart"
+                        )
+                    }
                 }
             }
         }
