@@ -2,6 +2,7 @@ package com.example.eatit.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Paint
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -11,6 +12,9 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -217,11 +221,23 @@ fun AddProductScreen(
                 .fillMaxSize()
         ) {
 
-            LocalContext.current.resources.getStringArray(R.array.categories).forEach { type ->
-                AssistChip(
-                    onClick = { /* Do something! */ },
-                    label = { Text(type) }
-                )
+
+            val data = LocalContext.current.resources.getStringArray(R.array.categories).toList()
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(160.dp),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(data.size) { item ->
+                    AssistChip(
+                        modifier = Modifier.padding(30.dp, 1.dp),
+                        onClick = { /* Do something! */ },
+                        label = { Text(
+                            textAlign = TextAlign.Center,
+                            text = data[item]
+                        ) }
+                    )
+                }
             }
 
             OutlinedTextField(
@@ -322,7 +338,6 @@ fun AddProductScreen(
                     }
                     onNextButtonClicked()
                 },
-                colors = ButtonDefaults.buttonColors(Color.Green),
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Text(text = stringResource(id = R.string.save))
