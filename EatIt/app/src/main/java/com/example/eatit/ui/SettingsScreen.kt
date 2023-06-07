@@ -239,29 +239,24 @@ fun SettingsScreen(
                 fontWeight = Bold,
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(){
                 Text(
-                    text = "change Theme: ",
+                    text = "Theme: ",
                     fontWeight = Bold,
-                    modifier = Modifier.weight(4f)
+                    modifier = Modifier.weight(1f)
                 )
                 Switch(
-                    modifier = Modifier
-                        .semantics { contentDescription = "Demo" }
-                        .weight(1f),
+                    modifier = Modifier.semantics { contentDescription = "Demo" },
                     checked = theme == dark,
                     onCheckedChange = {
-                        onThemeChanged(if (it) light else dark)
+                        val tmp = if (it) dark else light
+                        onThemeChanged(tmp)
                         with(sharedPref.edit()) {
-                            putString("THEME_KEY", if (it) light else dark)
+                            putString("THEME_KEY", tmp)
                             apply()
                             themeChanged.value = true
                         }
-                    },
-                )
+                    })
             }
 
             if (showDialog.value) {
