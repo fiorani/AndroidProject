@@ -103,8 +103,7 @@ fun SettingsScreen(
                     onValueChange = { newText ->
                         city = newText
                     },
-                    label = { Text("Place") },
-                    modifier = Modifier.weight(4f)
+                    label = { Text("Place") }
                 )
                 Icon(
                     Icons.Filled.LocationOn,
