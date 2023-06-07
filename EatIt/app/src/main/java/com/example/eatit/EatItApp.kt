@@ -266,8 +266,7 @@ private fun NavigationGraph(
     val cartViewModel = hiltViewModel<CartViewModel>()
     var user: User by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
-        if(Firebase.auth.currentUser != null)
-        {
+        if (Firebase.auth.currentUser != null) {
             user = usersViewModel.getUser()
         }
     }

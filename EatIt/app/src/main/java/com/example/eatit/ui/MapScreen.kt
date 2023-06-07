@@ -4,18 +4,12 @@ import android.content.ContentValues.TAG
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +41,7 @@ fun MapScreen(
     val context = LocalContext.current
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     val markers = remember { mutableStateListOf<MarkerInfo>() }
-   LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         restaurants = restaurantsViewModel.getRestaurants()
     }
     LaunchedEffect(restaurants) {
@@ -76,9 +70,11 @@ fun MapScreen(
             override fun activate(listener: LocationSource.OnLocationChangedListener) {
                 this.listener = listener
             }
+
             override fun deactivate() {
                 listener = null
             }
+
             fun onLocationChanged(location: Location) {
                 listener?.onLocationChanged(location)
             }
@@ -87,8 +83,16 @@ fun MapScreen(
     LaunchedEffect(usersViewModel.location.value) {
         Log.d(TAG, "Updating blue dot on map...")
         locationSource.onLocationChanged(usersViewModel.location.value)
-        cameraPositionState.animate(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(
-            LatLng(usersViewModel.location.value.latitude, usersViewModel.location.value.longitude), 20f)), 1_000)
+        cameraPositionState.animate(
+            CameraUpdateFactory.newCameraPosition(
+                CameraPosition.fromLatLngZoom(
+                    LatLng(
+                        usersViewModel.location.value.latitude,
+                        usersViewModel.location.value.longitude
+                    ), 20f
+                )
+            ), 1_000
+        )
     }
     var isMapLoaded by remember { mutableStateOf(false) }
     Scaffold { innerPadding ->
@@ -100,18 +104,18 @@ fun MapScreen(
                     isMapLoaded = true
                 },
                 locationSource = locationSource,
-                properties  = MapProperties(isMyLocationEnabled = true)
+                properties = MapProperties(isMyLocationEnabled = true)
             ) {
                 if (!isMapLoaded) {
-                }else{
-                markers.forEach { markerInfo ->
-                    Marker(
-                        state = rememberMarkerState(
-                            position = markerInfo.position
-                        ),
-                        title = markerInfo.title
-                    )
-                }
+                } else {
+                    markers.forEach { markerInfo ->
+                        Marker(
+                            state = rememberMarkerState(
+                                position = markerInfo.position
+                            ),
+                            title = markerInfo.title
+                        )
+                    }
                 }
             }
         }

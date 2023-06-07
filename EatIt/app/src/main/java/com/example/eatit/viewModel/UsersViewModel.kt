@@ -14,7 +14,7 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
     private var _userPosition = mutableStateOf("")
     private var _user: User? = null
-    private var _location=mutableStateOf(Location("MyLocationProvider"))
+    private var _location = mutableStateOf(Location("MyLocationProvider"))
     val user
         get() = _user
     val userPosition
@@ -43,7 +43,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     fun setUser(user: User) {
         _user = user
     }
-    fun setLocation(location: Location){
-        _location.value=location
+
+    fun setLocation(location: Location) {
+        _location.value = location
     }
 }

@@ -145,21 +145,9 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
     override fun onStop() {
         super.onStop()
         queue?.cancelAll(TAG)
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     private fun startLocationUpdates() {
