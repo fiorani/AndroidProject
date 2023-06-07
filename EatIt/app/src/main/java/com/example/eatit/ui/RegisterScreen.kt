@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
@@ -34,18 +35,19 @@ fun RegisterScreen(
 ) {
 
     Scaffold { innerPadding ->
-        BackgroundImage(alpha = 0.2f)
+        BackgroundImage(alpha = 0.15f)
         Column(
             modifier
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val isUserRegister = remember { mutableStateOf(true) }
             var strTitle = "User registration"
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(50.dp, 0.dp),
+                    .padding(65.dp, 10.dp),
                 text = "Do you want to register as a customer or as a restaurant?",
                 fontSize = 20.sp
             )
@@ -87,6 +89,7 @@ fun RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(40.dp, 20.dp, 40.dp, 0.dp),
+                elevation = CardDefaults.cardElevation(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(

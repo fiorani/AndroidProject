@@ -1,22 +1,21 @@
 package com.example.eatit.ui
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,17 +32,19 @@ fun LoginScreen(
     onNextButtonClicked: () -> Unit
 ) {
     Scaffold { innerPadding ->
-        BackgroundImage(0.2f)
+        BackgroundImage(0.15f)
         Column(modifier.padding(innerPadding)) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(40.dp, 130.dp, 40.dp, 40.dp),
+                elevation = CardDefaults.cardElevation(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
                         text = "Login",
-                        fontSize = 32.sp
+                        fontSize = 32.sp,
+                        fontWeight = Bold
                     )
 
                     var txtName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -93,6 +94,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(70.dp, 0.dp),
                 horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
                     Text(
