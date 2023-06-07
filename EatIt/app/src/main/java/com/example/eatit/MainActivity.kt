@@ -228,12 +228,12 @@ class MainActivity : ComponentActivity() {
                         usersViewModel.addNewUser(
                             User(
                                 auth.currentUser!!.uid,
-                                name,
-                                email,
-                                photo,
-                                age,
-                                address,
-                                restaurateur
+                                name=name,
+                                mail=email,
+                                photo=photo,
+                                age=age,
+                                position=address,
+                                restaurateur=restaurateur
                             )
                         )
                         signIn(email, password, onNextButtonClicked)
