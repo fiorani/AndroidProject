@@ -1,5 +1,6 @@
 package com.example.eatit.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.CartRepository
@@ -18,17 +19,12 @@ class CartViewModel @Inject constructor(
         repository.insertNewOrder(order)
     }
 
-    val oderSelected
+    val orderSelected
         get() = _orderLines
 
     fun selectOrder(order: Order) {
         _orderLines = order
     }
-
-    fun reduceCount(product: Product) = _orderLines?.reduceCount(product, _orderLines!!)
-
-    fun increaseCount(product: Product) =
-        _orderLines?.increaseCount(product, _orderLines!!)
 
     suspend fun getOrders(): List<Order> {
         return repository.getOrders()

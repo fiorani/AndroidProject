@@ -23,7 +23,6 @@ import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
-import com.example.eatit.model.User
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.gowtham.ratingbar.RatingBar
@@ -103,7 +102,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -117,18 +116,25 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel) {
             )
             Text(
                 modifier = Modifier.padding(10.dp, 0.dp),
-                text = product.name.toString(),
+                text = product.name.toString() + " - " + product.price.toString() + "€",
                 fontSize = 20.sp
             )
         }
-        val (count, updateCount) = remember { mutableStateOf(0) }
+        var quantity = 0
+        Log.d("product", product.id.toString()  )
+        if(order.listProductId?.contains(product.id.toString()) == true) {
+            quantity = order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)?.toInt()!!
+            Log.d("quantity", quantity.toString()   )
+        }
+
+        val (count, updateCount) = remember { mutableStateOf(quantity) }
         QuantitySelector(count = count, decreaseItemCount = {
             if (count > 0) updateCount(count - 1)
-            cartViewModel.reduceCount(product)
-            cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
+            order.reduceCount(product)
+            //cartViewModel.addNewOrder(cartViewModel.orderSelected!!)
         }, increaseItemCount = {
             updateCount(count + 1)
-            cartViewModel.increaseCount(product)
+            order.increaseCount(product)
         })
 
     }
@@ -136,7 +142,7 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionCard(
-    sectionName: String, products: List<Product>, cartViewModel: CartViewModel
+    sectionName: String, products: List<Product>, cartViewModel: CartViewModel,order: Order
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -178,6 +184,7 @@ fun SectionCard(
             ProductCard(
                 product = product,
                 cartViewModel = cartViewModel,
+                order = order
             )
         }
 

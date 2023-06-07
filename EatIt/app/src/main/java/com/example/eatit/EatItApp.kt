@@ -356,7 +356,7 @@ private fun NavigationGraph(
             })
         }
         composable(route = AppScreen.Cart.name) {
-            CartScreen(cartViewModel)
+            CartScreen(cartViewModel = cartViewModel)
         }
     }
 }

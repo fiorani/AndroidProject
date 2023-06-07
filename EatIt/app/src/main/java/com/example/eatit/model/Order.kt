@@ -15,60 +15,44 @@ data class Order(
     var id: String? = null,
     @ServerTimestamp var timestamp: Date? = null,
 ) {
-    constructor(
-        productId: ArrayList<String>,
-        quantity: ArrayList<String>,
-        prices: ArrayList<String>,
-        price: Double,
-        restaurantId: String?
-    ) : this() {
-        this.userId = Firebase.auth.uid
-        this.restaurantId = restaurantId
-        this.listProductId = productId
-        this.listQuantity = quantity
-        this.totalPrice = price
-        this.listPrice = prices
-    }
-
-    fun reduceCount(product: Product, order: Order): Order {
+    fun reduceCount(product: Product): Order {
         var productIndex = 0
-        if(order.listProductId?.contains(product.id.toString()) == true) {
-            productIndex = order.listProductId?.indexOf(product.id.toString())!!
-            order.listQuantity?.set(
+        if(this.listProductId?.contains(product.id.toString()) == true) {
+            productIndex = this.listProductId?.indexOf(product.id.toString())!!
+            this.listQuantity?.set(
                 productIndex,
-                order.listQuantity?.get(productIndex)?.toInt()?.minus(1).toString()
+                this.listQuantity?.get(productIndex)?.toInt()?.minus(1).toString()
             )
         } else {
-            order.listProductId?.remove(product.id.toString())
-            order.listPrice?.removeAt(productIndex)
-            order.listQuantity?.removeAt(productIndex)
+            this.listProductId?.remove(product.id.toString())
+            this.listPrice?.removeAt(productIndex)
+            this.listQuantity?.removeAt(productIndex)
         }
 
-        return updatePrice(order)
+        return updatePrice()
     }
 
-    fun increaseCount(product: Product, order: Order): Order {
-        if(order.listProductId?.contains(product.id.toString()) == true) {
-            val productIndex = order.listProductId?.indexOf(product.id.toString())!!
-            order.listQuantity?.set(
+    fun increaseCount(product: Product): Order {
+        if(this.listProductId?.contains(product.id.toString()) == true) {
+            val productIndex = this.listProductId?.indexOf(product.id.toString())!!
+            this.listQuantity?.set(
                 productIndex,
-                order.listQuantity?.get(productIndex)?.toInt()?.plus(1).toString()
+                this.listQuantity?.get(productIndex)?.toInt()?.plus(1).toString()
             )
         } else {
-            order.listProductId?.add(product.id.toString())
-            order.listPrice?.add(product.price.toString())
-            order.listQuantity?.add("1")
+            this.listProductId?.add(product.id.toString())
+            this.listPrice?.add(product.price.toString())
+            this.listQuantity?.add("1")
         }
-        return updatePrice(order)
+        return updatePrice()
     }
 
-    private fun updatePrice(order: Order): Order {
-        val orderLines = order
+    private fun updatePrice(): Order {
         var totalPrice = 0.0
-        for (i in orderLines.listQuantity!!.indices) {
-            totalPrice += orderLines.listQuantity!![i].toDouble() * orderLines.listPrice!![i].toDouble()
+        for (i in this.listQuantity!!.indices) {
+            totalPrice += this.listQuantity!![i].toDouble() * this.listPrice!![i].toDouble()
         }
-        orderLines.totalPrice = totalPrice
-        return orderLines
+        this.totalPrice = totalPrice
+        return this
     }
 }

@@ -24,8 +24,8 @@ import com.example.eatit.viewModel.CartViewModel
 @Composable
 fun CartScreen(cartViewModel: CartViewModel) {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val order= cartViewModel.oderSelected!!
-    Log.d("CartScreen", "order: "+cartViewModel.oderSelected.toString())
+    val order= cartViewModel.orderSelected!!
+    Log.d("CartScreen", "order: "+cartViewModel.orderSelected.toString())
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,
@@ -113,23 +113,12 @@ fun CartScreen(cartViewModel: CartViewModel) {
             }
             LocalContext.current.resources.getStringArray(R.array.categories)
                 .forEach { category ->
-                    SectionCard(
+                    SectionSummaryCard(
                         sectionName = category.toString(),
                         products = products,
-                        cartViewModel = cartViewModel,
+                        order = order
                     )
                 }
-            SectionSummaryCard("Dessert", listOf("Asticee Bollyuto", "Funghi & Tartufy"))
-            SectionSummaryCard(
-                "Dolcini",
-                listOf("Astice Bollito", "Funghi & Tartufy", "Astice Bollito", "Funghi & Tartufy")
-            )
-            SectionSummaryCard("Bevande", listOf("Astice Bollito", "Funghi & Tartufy"))
-            SectionSummaryCard(
-                "Antipasti",
-                listOf("Astice Bollito", "Funghi & Tartufy", "Funghi & Tartufy")
-            )
-            Spacer(modifier = Modifier.size(20.dp))
         }
     }
 }
@@ -137,7 +126,8 @@ fun CartScreen(cartViewModel: CartViewModel) {
 @Composable
 fun SectionSummaryCard(
     sectionName: String,
-    products: List<String>
+    products: List<Product>,
+    order: Order
 ) {
     Text(
         modifier = Modifier.padding(20.dp, 10.dp),
@@ -150,7 +140,7 @@ fun SectionSummaryCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp, 0.dp),
+                .padding(15.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -161,26 +151,21 @@ fun SectionSummaryCard(
                 shape = CardDefaults.shape
             ) {
                 Row(
-                    modifier = Modifier.width(285.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         modifier = Modifier.padding(17.dp, 7.dp),
-                        text = product,
+                        text = product.name.toString(),
                         fontSize = 17.sp
                     )
                     Text(
                         modifier = Modifier.padding(17.dp, 7.dp),
-                        text = "€40.01",
+                        text = product.price.toString()+"€ x "+order.listQuantity?.get(order.listProductId!!.indexOf(product.id!!)).toString(),
                         fontSize = 17.sp
                     )
                 }
             }
-            Text(
-                modifier = Modifier.padding(17.dp, 0.dp),
-                text = "x 0",
-                fontSize = 17.sp
-            )
         }
     }
 }

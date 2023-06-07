@@ -68,26 +68,25 @@ fun DetailsRestaurantScreen(
     val restaurant = restaurantsViewModel.restaurantSelected
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
+    var order by remember { mutableStateOf<Order?>(null) }
     val user = usersViewModel.user!!
     LaunchedEffect(Unit) {
         products = restaurantsViewModel.getProducts(restaurant?.id.toString())
         ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
-    cartViewModel.selectOrder(
-        Order(
-            userId = Firebase.auth.currentUser?.uid.toString(),
-            restaurantId = restaurant?.id.toString(),
-            listProductId = ArrayList(
-                listOf()
-            ),
-            listQuantity = ArrayList(
-                listOf()
-            ),
-            listPrice = ArrayList(
-                listOf()
-            ),
-            totalPrice = 0.0,
-        )
+    order =Order(
+        userId = Firebase.auth.currentUser?.uid.toString(),
+        restaurantId = restaurant?.id.toString(),
+        listProductId = ArrayList(
+            listOf()
+        ),
+        listQuantity = ArrayList(
+            listOf()
+        ),
+        listPrice = ArrayList(
+            listOf()
+        ),
+        totalPrice = 0.0,
     )
     Scaffold(
         floatingActionButton = {
@@ -101,7 +100,7 @@ fun DetailsRestaurantScreen(
             }else{
 
                 FloatingActionButton(onClick =
-                {
+                {   cartViewModel.selectOrder(order!!)
                     onNextButtonClicked() } ) {
                     Icon(
                         Icons.Filled.ShoppingCart,
@@ -146,6 +145,7 @@ fun DetailsRestaurantScreen(
                             sectionName = category.toString(),
                             products = products,
                             cartViewModel = cartViewModel,
+                            order = order!!,
                         )
                     }
 
