@@ -31,52 +31,35 @@ data class Order(
     }
 
     fun reduceCount(product: Product, order: Order): Order {
-        val orderLines = order
-        val productIndex = orderLines.listProductId?.indexOf(product.id.toString())
-        if (productIndex != null && productIndex != -1) {
-            val currentQuantity =
-                orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
-            val newQuantity = currentQuantity.minus(1)
-            if (newQuantity == 0) {
-                orderLines.listProductId?.removeAt(productIndex)
-                orderLines.listQuantity?.removeAt(productIndex)
-                orderLines.listPrice?.removeAt(productIndex)
-                return updatePrice(orderLines)
-            }
-            if (newQuantity > 0) {
-                orderLines.listQuantity?.set(
-                    productIndex,
-                    newQuantity.toString()
-                )  // Update the quantity in the list
-                // Save the updated orderLines to the repository or perform any other necessary actions
-            }
+        var productIndex = 0
+        if(order.listProductId?.contains(product.id.toString()) == true) {
+            productIndex = order.listProductId?.indexOf(product.id.toString())!!
+            order.listQuantity?.set(
+                productIndex,
+                order.listQuantity?.get(productIndex)?.toInt()?.minus(1).toString()
+            )
+        } else {
+            order.listProductId?.remove(product.id.toString())
+            order.listPrice?.removeAt(productIndex)
+            order.listQuantity?.removeAt(productIndex)
         }
 
-        return updatePrice(orderLines)
+        return updatePrice(order)
     }
 
     fun increaseCount(product: Product, order: Order): Order {
-        val orderLines = order
-        val productIndex = orderLines.listProductId?.indexOf(product.id.toString())
-
-        if (productIndex != null && productIndex != -1) {
-            // Il prodotto esiste già nell'ordine, incrementa la quantità
-            val currentQuantity =
-                orderLines.listQuantity?.get(productIndex)?.toIntOrNull() ?: return orderLines
-            val newQuantity = currentQuantity.plus(1)
-            orderLines.listQuantity?.set(
+        if(order.listProductId?.contains(product.id.toString()) == true) {
+            val productIndex = order.listProductId?.indexOf(product.id.toString())!!
+            order.listQuantity?.set(
                 productIndex,
-                newQuantity.toString()
-            )  // Aggiorna la quantità nella lista
+                order.listQuantity?.get(productIndex)?.toInt()?.plus(1).toString()
+            )
         } else {
-            // Il prodotto non esiste nell'ordine, aggiungilo
-            orderLines.listProductId?.add(product.id.toString())
-            orderLines.listPrice?.add(product.price.toString())
-            orderLines.listQuantity?.add("1")  // Imposta la quantità a 1 per il nuovo prodotto
+            order.listProductId?.add(product.id.toString())
+            order.listPrice?.add(product.price.toString())
+            order.listQuantity?.add("1")
         }
-
-        // Salva le righe dell'ordine aggiornate nel repository o esegui altre azioni necessarie
-        return updatePrice(orderLines)
+        return updatePrice(order)
     }
 
     private fun updatePrice(order: Order): Order {

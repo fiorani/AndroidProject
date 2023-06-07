@@ -8,12 +8,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -88,7 +90,6 @@ fun RestaurantCard(
                             rating = it
                         },
                         onRatingChanged = {
-                            Log.d("TAG", "onRatingChanged: $it")
                         },
                         modifier = Modifier.padding(1.dp, 4.dp),
                         spaceBetween = 1.dp,
@@ -102,7 +103,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel, user: User) {
+fun ProductCard(product: Product, cartViewModel: CartViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,12 +129,61 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel, user: User) {
         }, increaseItemCount = {
             updateCount(count + 1)
             cartViewModel.increaseCount(product)
-            Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
         })
 
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SectionCard(
+    sectionName: String, products: List<Product>, cartViewModel: CartViewModel
+) {
+    var expandedState by remember { mutableStateOf(false) }
+    val rotationState by animateFloatAsState(
+        targetValue = if (expandedState) 180f else 0f
+    )
 
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(30.dp, 10.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = CardDefaults.shape,
+        onClick = {
+            expandedState = !expandedState
+        }) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(20.dp, 10.dp),
+                text = sectionName,
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold
+            )
+            IconButton(modifier = Modifier.rotate(rotationState), onClick = {
+                expandedState = !expandedState
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ExpandMore, contentDescription = "Drop-Down Arrow"
+                )
+            }
+        }
+    }
+
+    if (expandedState) {
+        products.forEach { product ->
+            ProductCard(
+                product = product,
+                cartViewModel = cartViewModel,
+            )
+        }
+
+    }
+
+}
 @Composable
 fun RatingCard(rating: Rating) {
     EatItCard(onItemClicked = {
@@ -162,7 +212,6 @@ fun RatingCard(rating: Rating) {
                         valrating = it
                     },
                     onRatingChanged = {
-                        Log.d("TAG", "onRatingChanged: $it")
                     },
                     modifier = Modifier.padding(4.dp),
                     size = 20.dp

@@ -50,6 +50,7 @@ import com.example.eatit.model.User
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.QuantitySelector
+import com.example.eatit.ui.components.SectionCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -98,7 +99,10 @@ fun DetailsRestaurantScreen(
                     )
                 }
             }else{
-                FloatingActionButton(onClick = onNextButtonClicked) {
+
+                FloatingActionButton(onClick =
+                {
+                    onNextButtonClicked() } ) {
                     Icon(
                         Icons.Filled.ShoppingCart,
                         contentDescription = stringResource(id = R.string.add_restaurant)
@@ -142,7 +146,6 @@ fun DetailsRestaurantScreen(
                             sectionName = category.toString(),
                             products = products,
                             cartViewModel = cartViewModel,
-                            user = user
                         )
                     }
 
@@ -151,55 +154,3 @@ fun DetailsRestaurantScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SectionCard(
-    sectionName: String, products: List<Product>, cartViewModel: CartViewModel, user: User
-) {
-    var expandedState by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f
-    )
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(30.dp, 10.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
-        elevation = CardDefaults.cardElevation(8.dp),
-        shape = CardDefaults.shape,
-        onClick = {
-            expandedState = !expandedState
-        }) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.padding(20.dp, 10.dp),
-                text = sectionName,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold
-            )
-            IconButton(modifier = Modifier.rotate(rotationState), onClick = {
-                expandedState = !expandedState
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ExpandMore, contentDescription = "Drop-Down Arrow"
-                )
-            }
-        }
-    }
-
-    if (expandedState) {
-        products.forEach { product ->
-            ProductCard(
-                product = product,
-                cartViewModel = cartViewModel,
-                user = user
-            )
-        }
-
-    }
-
-}

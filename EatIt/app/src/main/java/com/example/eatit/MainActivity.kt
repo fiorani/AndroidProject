@@ -80,7 +80,6 @@ class MainActivity : ComponentActivity() {
                     p0.locations.last().latitude,
                     p0.locations.last().longitude
                 )
-                Log.d("MAINACTIVITY-LOCATION", location.value.toString())
             }
         }
         networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -132,7 +131,6 @@ class MainActivity : ComponentActivity() {
                 val results = response.getJSONArray("results")
                 if (results.length() > 0) {
                     val address = results.getJSONObject(0).getString("formatted_address")
-                    Log.d("MAINACTIVITY-SENDREQUEST", address)
                     userViewModel.setPosition(address)
                 }
             },
@@ -218,7 +216,6 @@ class MainActivity : ComponentActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
                         usersViewModel.addNewUser(
                             User(
                                 auth.currentUser!!.uid,
@@ -245,7 +242,6 @@ class MainActivity : ComponentActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "signInWithEmail:success")
                         onNextButtonClicked()
                     } else {
                         task.exception?.let { errorToast("signInWithEmail:failure", it) }
