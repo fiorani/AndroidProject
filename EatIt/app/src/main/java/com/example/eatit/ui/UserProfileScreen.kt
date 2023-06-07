@@ -64,14 +64,12 @@ fun UserProfileScreen(
                 ) {
                     Text(
                         text = user.name.toString(),
-                        color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleLarge,
 
                         )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
                         text = user.position.toString(),
-                        color = MaterialTheme.colorScheme.background,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.size(15.dp))
