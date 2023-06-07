@@ -14,6 +14,11 @@ import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -122,69 +127,64 @@ fun BottomAppBarFunction(
             ) {
                 IconButton(onClick = onHomeButtonClicked) {
                     Icon(
-                        Icons.Filled.Home,
+                        Icons.Outlined.Home,
                         contentDescription = stringResource(id = R.string.settings),
                     )
 
                 }
                 if (currentScreen == AppScreen.Home.name) {
-                    Text(
-                        text = "Home",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
+                    Icon(
+                        Icons.Filled.Home,
+                        contentDescription = stringResource(id = R.string.settings),
                     )
                 }
                 IconButton(onClick = onUserProfileButtonClicked) {
                     Icon(
-                        Icons.Filled.AccountCircle,
+                        Icons.Outlined.AccountCircle,
                         contentDescription = stringResource(id = R.string.settings)
                     )
 
                 }
                 if (currentScreen == AppScreen.UserProfile.name) {
-                    Text(
-                        text = "Profile",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
+                    Icon(
+                        Icons.Filled.AccountCircle,
+                        contentDescription = stringResource(id = R.string.settings)
                     )
                 }
                 IconButton(onClick = onCartButtonClicked) {
+                    Icon(
+                        Icons.Outlined.ShoppingCart,
+                        contentDescription = stringResource(id = R.string.settings),
+                    )
+                }
+                if (currentScreen == AppScreen.Cart.name) {
                     Icon(
                         Icons.Filled.ShoppingCart,
                         contentDescription = stringResource(id = R.string.settings),
                     )
                 }
-                if (currentScreen == AppScreen.Cart.name) {
-                    Text(
-                        text = "Cart",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
+                IconButton(onClick = onMapButtonClicked) {
+                    Icon(
+                        Icons.Outlined.Map,
+                        contentDescription = stringResource(id = R.string.settings),
                     )
                 }
-                IconButton(onClick = onMapButtonClicked) {
+                if (currentScreen == AppScreen.Map.name) {
                     Icon(
                         Icons.Filled.Map,
                         contentDescription = stringResource(id = R.string.settings),
                     )
                 }
-                if (currentScreen == AppScreen.Map.name) {
-                    Text(
-                        text = "Map",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
-                    )
-                }
                 IconButton(onClick = onSettingsButtonClicked) {
                     Icon(
-                        Icons.Filled.Settings,
+                        Icons.Outlined.Settings,
                         contentDescription = stringResource(id = R.string.settings)
                     )
                 }
                 if (currentScreen == AppScreen.Settings.name) {
-                    Text(
-                        text = "Settings",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(CenterVertically)
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
                     )
                 }
 
