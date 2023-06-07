@@ -58,7 +58,6 @@ fun UserProfileScreen(
     Scaffold { innerPadding ->
         BackgroundImage(0.05f)
         Column(modifier.padding(innerPadding)) {
-            val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -90,15 +89,18 @@ fun UserProfileScreen(
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Chart(
-                        chart = lineChart(),
-                        model = chartEntryModel,
-                        startAxis = startAxis(),
-                        bottomAxis = bottomAxis(),
-                    )
+
                     if(!user.restaurateur)
                     {
                         ImageCarouselCard()
+                    }else{
+                        val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
+                        Chart(
+                            chart = lineChart(),
+                            model = chartEntryModel,
+                            startAxis = startAxis(),
+                            bottomAxis = bottomAxis(),
+                        )
                     }
 
                     Text(
