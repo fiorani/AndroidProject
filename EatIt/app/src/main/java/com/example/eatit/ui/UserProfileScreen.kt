@@ -20,7 +20,7 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.ImageProfile
-import com.example.eatit.ui.components.OrderCard
+import com.example.eatit.ui.components.OrderProfileCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -110,7 +110,7 @@ fun UserProfileScreen(
                             orders[item].restaurantId.toString()
                         )
                     }
-                    OrderCard(
+                    OrderProfileCard(
                         orders[item],
                         products,
                         restaurant,

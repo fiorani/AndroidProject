@@ -18,17 +18,12 @@ class CartViewModel @Inject constructor(
         repository.insertNewOrder(order)
     }
 
-    val oderSelected
+    val orderSelected
         get() = _orderLines
 
     fun selectOrder(order: Order) {
         _orderLines = order
     }
-
-    fun reduceCount(product: Product) = _orderLines?.reduceCount(product, _orderLines!!)
-
-    fun increaseCount(product: Product) =
-        _orderLines?.increaseCount(product, _orderLines!!)
 
     suspend fun getOrders(): List<Order> {
         return repository.getOrders()

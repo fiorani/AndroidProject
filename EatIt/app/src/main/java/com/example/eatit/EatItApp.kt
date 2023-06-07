@@ -13,12 +13,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -93,7 +91,6 @@ fun TopAppBarFunction(
         navigationIcon = {
             if (canNavigateBack && currentScreen != AppScreen.Home.name
                 && currentScreen != AppScreen.UserProfile.name
-                && currentScreen != AppScreen.Cart.name
                 && currentScreen != AppScreen.Map.name
                 && currentScreen != AppScreen.Settings.name
             ) {
@@ -152,20 +149,6 @@ fun BottomAppBarFunction(
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }
-                IconButton(onClick = onCartButtonClicked) {
-                    if (currentScreen == AppScreen.Cart.name) {
-                        Icon(
-                            Icons.Filled.ShoppingCart,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.ShoppingCart,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
                     }
                 }
                 IconButton(onClick = onMapButtonClicked) {
@@ -326,6 +309,9 @@ private fun NavigationGraph(
                 },
                 cartViewModel = cartViewModel,
                 usersViewModel = usersViewModel,
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Cart.name)
+                }
             )
         }
         composable(route = AppScreen.Settings.name) {
@@ -368,7 +354,7 @@ private fun NavigationGraph(
             })
         }
         composable(route = AppScreen.Cart.name) {
-            CartScreen()
+            CartScreen(cartViewModel = cartViewModel)
         }
     }
 }

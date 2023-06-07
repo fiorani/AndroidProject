@@ -4,13 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
@@ -31,8 +33,7 @@ import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.ui.components.ImageProfile
-import com.example.eatit.ui.components.ProductCard
-import com.example.eatit.ui.components.RatingCard
+import com.example.eatit.ui.components.SectionMenuCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -45,17 +46,21 @@ fun DetailsRestaurantScreen(
     onAddButtonClicked: () -> Unit,
     cartViewModel: CartViewModel,
     usersViewModel: UsersViewModel,
+    onNextButtonClicked: () -> Unit,
 ) {
     val restaurant = restaurantsViewModel.restaurantSelected
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
+    var order by remember { mutableStateOf<Order?>(null) }
     val user = usersViewModel.user!!
     LaunchedEffect(Unit) {
         products = restaurantsViewModel.getProducts(restaurant?.id.toString())
         ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
-    cartViewModel.selectOrder(
-        Order(
+    if (cartViewModel.orderSelected != null) {
+        order = cartViewModel.orderSelected
+    } else {
+        order = Order(
             userId = Firebase.auth.currentUser?.uid.toString(),
             restaurantId = restaurant?.id.toString(),
             listProductId = ArrayList(
@@ -69,14 +74,26 @@ fun DetailsRestaurantScreen(
             ),
             totalPrice = 0.0,
         )
-    )
-    Scaffold(
+    }
 
+    Scaffold(
         floatingActionButton = {
-            if (user.isRestaurateur) {
+            if (user.restaurateur) {
                 FloatingActionButton(onClick = onAddButtonClicked) {
                     Icon(
                         Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.add_restaurant)
+                    )
+                }
+            } else {
+
+                FloatingActionButton(onClick =
+                {
+                    cartViewModel.selectOrder(order!!)
+                    onNextButtonClicked()
+                }) {
+                    Icon(
+                        Icons.Filled.ShoppingCart,
                         contentDescription = stringResource(id = R.string.add_restaurant)
                     )
                 }
@@ -87,14 +104,14 @@ fun DetailsRestaurantScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValues)
+                .fillMaxSize()
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 ImageProfile(restaurant?.photo.toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .height(200.dp)
+                    modifier = Modifier.height(200.dp)
                 ) {
                     Text(
                         text = restaurant?.name.toString(),
@@ -109,19 +126,21 @@ fun DetailsRestaurantScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.size(15.dp))
-                }
-            }
-            Spacer(modifier = Modifier.size(15.dp))
 
-            LazyColumn {
-                items(products.size) { index ->
-                    ProductCard(products[index], cartViewModel, user)
-                }
-                items(ratings.size) { index ->
-                    RatingCard(ratings[index])
                 }
             }
+            LocalContext.current.resources.getStringArray(R.array.categories)
+                .forEach { category ->
+                    SectionMenuCard(
+                        sectionName = category.toString(),
+                        products = products,
+                        cartViewModel = cartViewModel,
+                        order = order!!,
+                    )
+                }
+
         }
     }
 }
+
 

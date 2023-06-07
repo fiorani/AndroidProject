@@ -7,17 +7,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
+import com.example.eatit.model.Product
 import com.example.eatit.ui.components.BackgroundImage
+import com.example.eatit.ui.components.SectionShoppingCard
+import com.example.eatit.viewModel.CartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen() {
+fun CartScreen(cartViewModel: CartViewModel) {
     val scaffoldState = rememberBottomSheetScaffoldState()
-
+    val order = cartViewModel.orderSelected!!
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,
@@ -40,7 +45,7 @@ fun CartScreen() {
                     )
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = "€200.00",
+                        text = order.totalPrice.toString() + "€",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -99,68 +104,19 @@ fun CartScreen() {
                     textAlign = TextAlign.Center
                 )
             }
-            SectionSummaryCard("Dessert", listOf("Asticee Bollyuto", "Funghi & Tartufy"))
-            SectionSummaryCard(
-                "Dolcini",
-                listOf("Astice Bollito", "Funghi & Tartufy", "Astice Bollito", "Funghi & Tartufy")
-            )
-            SectionSummaryCard("Bevande", listOf("Astice Bollito", "Funghi & Tartufy"))
-            SectionSummaryCard(
-                "Antipasti",
-                listOf("Astice Bollito", "Funghi & Tartufy", "Funghi & Tartufy")
-            )
-            Spacer(modifier = Modifier.size(20.dp))
-        }
-    }
-}
-
-@Composable
-fun SectionSummaryCard(
-    sectionName: String,
-    products: List<String>
-) {
-    Text(
-        modifier = Modifier.padding(20.dp, 10.dp),
-        text = sectionName,
-        fontSize = 25.sp,
-        fontWeight = FontWeight.Bold
-    )
-
-    for (product in products) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp, 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Card(
-                modifier = Modifier.padding(5.dp),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(8.dp),
-                shape = CardDefaults.shape
-            ) {
-                Row(
-                    modifier = Modifier.width(285.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(17.dp, 7.dp),
-                        text = product,
-                        fontSize = 17.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(17.dp, 7.dp),
-                        text = "€40.01",
-                        fontSize = 17.sp
+            var products by remember { mutableStateOf<List<Product>>(emptyList()) }
+            LaunchedEffect(Unit) {
+                products = cartViewModel.getProducts(order)
+            }
+            LocalContext.current.resources.getStringArray(R.array.categories)
+                .forEach { category ->
+                    SectionShoppingCard(
+                        sectionName = category.toString(),
+                        products = products,
+                        order = order
                     )
                 }
-            }
-            Text(
-                modifier = Modifier.padding(17.dp, 0.dp),
-                text = "x 0",
-                fontSize = 17.sp
-            )
         }
     }
 }
+

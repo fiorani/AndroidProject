@@ -11,7 +11,7 @@ data class User(
     var photo: String? = null,
     var age: Int = 0,
     var address: String? = null,
-    var isRestaurateur: Boolean = false,
+    var restaurateur: Boolean = false,
     var userPosition: String? = null
 ) {
     constructor(
@@ -19,7 +19,7 @@ data class User(
         photo: String,
         age: Int,
         address: String,
-        isRestaurateur: Boolean
+        restaurateur: Boolean
     ) : this() {
         val user = Firebase.auth.currentUser
         this.userId = user?.uid
@@ -31,6 +31,6 @@ data class User(
         this.photo = photo
         this.age = age
         this.address = address
-        this.isRestaurateur = isRestaurateur
+        this.restaurateur = restaurateur
     }
 }

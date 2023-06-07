@@ -57,7 +57,11 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         try {
             FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
                 .collection("products").get().await()
-                .documents.mapNotNull { it.toObject(Product::class.java) }
+                .documents.mapNotNull { documentSnapshot ->
+                    val product = documentSnapshot.toObject(Product::class.java)
+                    product?.id = documentSnapshot.id
+                    product
+                }
         } catch (e: Exception) {
             throw e
         }
