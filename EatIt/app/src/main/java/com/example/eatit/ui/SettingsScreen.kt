@@ -241,7 +241,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.size(10.dp))
             Row(){
                 Text(
-                    text = "Theme: ",
+                    text = "Dark Theme: ",
                     fontWeight = Bold,
                     modifier = Modifier.weight(1f)
                 )
