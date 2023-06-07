@@ -15,6 +15,7 @@ class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
     private var _restaurantSelected: Restaurant? = null
+    private var _productSelected: Product? = null
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
@@ -51,5 +52,19 @@ class RestaurantsViewModel @Inject constructor(
         _restaurantSelected = restaurant
     }
 
+    val productSelected
+        get() = _restaurantSelected
+
+    fun selectProduct(product: Product) {
+        _productSelected = product
+    }
+
+    fun setProduct(product: Product, productId: String) {
+        repository.setProduct(product, _restaurantSelected?.id!!, productId)
+    }
+
+    fun resetProduct() {
+        _productSelected = null
+    }
 
 }

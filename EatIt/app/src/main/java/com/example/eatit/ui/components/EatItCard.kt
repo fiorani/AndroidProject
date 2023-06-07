@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material3.*
@@ -18,10 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.eatit.model.Order
-import com.example.eatit.model.Product
-import com.example.eatit.model.Rating
-import com.example.eatit.model.Restaurant
+import com.example.eatit.model.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.gowtham.ratingbar.RatingBar
@@ -101,7 +99,7 @@ fun RestaurantCard(
 }
 
 @Composable
-fun ProductCard(product: Product, cartViewModel: CartViewModel, order: Order) {
+fun ProductCard(product: Product, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,22 +117,37 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel, order: Order) {
                 fontSize = 20.sp
             )
         }
-        var quantity = 0
-        if (order.listProductId?.contains(product.id.toString()) == true) {
-            quantity =
-                order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)
-                    ?.toInt()!!
-        }
+        if (!user.restaurateur) {
+            var quantity = 0
+            if (order.listProductId?.contains(product.id.toString()) == true) {
+                quantity =
+                    order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)
+                        ?.toInt()!!
+            }
 
-        val (count, updateCount) = remember { mutableStateOf(quantity) }
-        QuantitySelector(count = count, decreaseItemCount = {
-            if (count > 0) updateCount(count - 1)
-            order.reduceCount(product)
-            //cartViewModel.addNewOrder(cartViewModel.orderSelected!!)
-        }, increaseItemCount = {
-            updateCount(count + 1)
-            order.increaseCount(product)
-        })
+            val (count, updateCount) = remember { mutableStateOf(quantity) }
+            QuantitySelector(count = count, decreaseItemCount = {
+                if (count > 0) updateCount(count - 1)
+                order.reduceCount(product)
+                //cartViewModel.addNewOrder(cartViewModel.orderSelected!!)
+            }, increaseItemCount = {
+                updateCount(count + 1)
+                order.increaseCount(product)
+            })
+        } else {
+            IconButton(
+                onClick =
+                {
+                    restaurantViewModel.selectProduct(product)
+                    onAddButtonClicked()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit"
+                )
+            }
+        }
 
     }
 }
@@ -202,7 +215,7 @@ fun SectionShoppingCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionMenuCard(
-    sectionName: String, products: List<Product>, cartViewModel: CartViewModel, order: Order
+    sectionName: String, products: List<Product>, restaurantViewModel: RestaurantsViewModel, order: Order, user: User, onAddButtonClicked: ()->Unit
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -241,11 +254,15 @@ fun SectionMenuCard(
 
     if (expandedState) {
         products.forEach { product ->
-            ProductCard(
-                product = product,
-                cartViewModel = cartViewModel,
-                order = order
-            )
+            if (product.section == sectionName){
+                ProductCard(
+                    product = product,
+                    restaurantViewModel = restaurantViewModel,
+                    order = order,
+                    user = user,
+                    onAddButtonClicked
+                )
+            }
         }
 
     }

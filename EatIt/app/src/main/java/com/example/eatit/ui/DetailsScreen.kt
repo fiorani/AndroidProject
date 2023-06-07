@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -48,11 +50,14 @@ fun DetailsRestaurantScreen(
     usersViewModel: UsersViewModel,
     onNextButtonClicked: () -> Unit,
 ) {
+    restaurantsViewModel.resetProduct()
+
     val restaurant = restaurantsViewModel.restaurantSelected
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
     var order by remember { mutableStateOf<Order?>(null) }
     val user = usersViewModel.user!!
+
     LaunchedEffect(Unit) {
         products = restaurantsViewModel.getProducts(restaurant?.id.toString())
         ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
@@ -104,7 +109,7 @@ fun DetailsRestaurantScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize().verticalScroll(rememberScrollState())
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 ImageProfile(restaurant?.photo.toString())
@@ -134,8 +139,10 @@ fun DetailsRestaurantScreen(
                     SectionMenuCard(
                         sectionName = category.toString(),
                         products = products,
-                        cartViewModel = cartViewModel,
+                        restaurantViewModel = restaurantsViewModel,
                         order = order!!,
+                        user = user,
+                        onAddButtonClicked
                     )
                 }
 

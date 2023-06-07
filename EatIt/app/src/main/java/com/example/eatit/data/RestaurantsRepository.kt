@@ -5,7 +5,9 @@ import com.example.eatit.EatItApp
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -90,6 +92,14 @@ class RestaurantsRepository(eatItApp: EatItApp) {
                 throw e
             }
         }
+
+    fun setProduct(product: Product, restaurantId: String, productId: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("products")
+            .document(productId).update("name", product.name, "price", product.price,
+                "description", product.description, "photo", product.photo)
+
+    }
 
 
 }

@@ -9,4 +9,5 @@ data class Restaurant(
     var numRatings: Int = 0,
     var avgRating: Double = 0.toDouble(),
     var id: String? = null,
+    var userId: String? = null,
 )
