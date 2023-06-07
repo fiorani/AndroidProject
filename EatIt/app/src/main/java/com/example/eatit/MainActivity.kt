@@ -104,14 +104,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val (theme, onThemeChanged) = remember { mutableStateOf(theme) }
+                    val (theme1, onThemeChanged) = remember { mutableStateOf(theme) }
                     //startLocationUpdates()
                     NavigationApp(
                         warningViewModel = warningViewModel,
                         signIn = ::signIn,
                         createAccount = ::createAccount,
                         sharedPref = sharedPref,
-                        theme = theme,
+                        theme = theme1,
                         onOptionSelected = onThemeChanged,
                         startLocationUpdates = ::startSendRequest
                     )

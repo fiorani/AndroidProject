@@ -1,6 +1,7 @@
 package com.example.eatit.ui
 
 import android.Manifest
+import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -62,7 +63,7 @@ fun SettingsScreen(
             val focusManager = LocalFocusManager.current
             var changedThing = remember { mutableStateOf("") }
             var showChangedPsw = remember { mutableStateOf(false) }
-
+            var themeChanged = remember { mutableStateOf(false) }
             val light = LocalContext.current.getString(R.string.light_theme)
             val dark = LocalContext.current.getString(R.string.dark_theme)
             LaunchedEffect(Unit) {
@@ -210,16 +211,22 @@ fun SettingsScreen(
                     with(sharedPref.edit()) {
                         putString("THEME_KEY", tmp)
                         apply()
+                        themeChanged.value = true
                     }
                 }
             ) {
                 Text(
-                    text = "Switch to ${theme?.lowercase()} mode"
+                    text = "Switch to ${(if (theme == dark) light else dark).lowercase()} mode"
                 )
             }
 
             if (showDialog.value) {
                 showAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
+            }
+
+            if (themeChanged.value) {
+                themeChanged.value = false
+                (LocalContext.current as? Activity)?.recreate()
             }
 
             Spacer(modifier = Modifier.size(15.dp))
