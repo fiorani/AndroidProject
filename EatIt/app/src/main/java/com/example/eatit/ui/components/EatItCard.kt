@@ -121,10 +121,8 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
             )
         }
         var quantity = 0
-        Log.d("product", product.id.toString()  )
         if(order.listProductId?.contains(product.id.toString()) == true) {
             quantity = order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)?.toInt()!!
-            Log.d("quantity", quantity.toString()   )
         }
 
         val (count, updateCount) = remember { mutableStateOf(quantity) }

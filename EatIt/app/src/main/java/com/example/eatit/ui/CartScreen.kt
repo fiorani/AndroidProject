@@ -25,7 +25,6 @@ import com.example.eatit.viewModel.CartViewModel
 fun CartScreen(cartViewModel: CartViewModel) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val order= cartViewModel.orderSelected!!
-    Log.d("CartScreen", "order: "+cartViewModel.orderSelected.toString())
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,

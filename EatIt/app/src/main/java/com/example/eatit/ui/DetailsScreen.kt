@@ -74,20 +74,25 @@ fun DetailsRestaurantScreen(
         products = restaurantsViewModel.getProducts(restaurant?.id.toString())
         ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
     }
-    order =Order(
-        userId = Firebase.auth.currentUser?.uid.toString(),
-        restaurantId = restaurant?.id.toString(),
-        listProductId = ArrayList(
-            listOf()
-        ),
-        listQuantity = ArrayList(
-            listOf()
-        ),
-        listPrice = ArrayList(
-            listOf()
-        ),
-        totalPrice = 0.0,
-    )
+    if(cartViewModel.orderSelected != null){
+        order = cartViewModel.orderSelected
+    }else{
+        order =Order(
+            userId = Firebase.auth.currentUser?.uid.toString(),
+            restaurantId = restaurant?.id.toString(),
+            listProductId = ArrayList(
+                listOf()
+            ),
+            listQuantity = ArrayList(
+                listOf()
+            ),
+            listPrice = ArrayList(
+                listOf()
+            ),
+            totalPrice = 0.0,
+        )
+    }
+
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
