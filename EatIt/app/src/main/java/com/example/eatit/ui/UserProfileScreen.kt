@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -73,12 +74,13 @@ fun UserProfileScreen(
                             Text(
                                 text = user.name.toString(),
                                 style = MaterialTheme.typography.titleLarge,
-
+                                color = Color.White
                                 )
                             Spacer(modifier = Modifier.size(15.dp))
                             Text(
                                 text = user.position.toString(),
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White
                             )
                             Spacer(modifier = Modifier.size(15.dp))
                         }
