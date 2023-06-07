@@ -60,6 +60,7 @@ sealed class AppScreen(var name: String) {
     object Login : AppScreen("Login")
     object Register : AppScreen("Register")
     object Cart : AppScreen("Cart")
+    object Filter : AppScreen("Filter")
 }
 
 
@@ -290,7 +291,10 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Login.name)
                 },
                 usersViewModel = usersViewModel,
-                cartViewModel = cartViewModel
+                cartViewModel = cartViewModel,
+                onFilterClicked = {
+                    navController.navigate(AppScreen.Filter.name)
+                },
             )
         }
         composable(route = AppScreen.AddRestaurant.name) {
@@ -369,6 +373,9 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.Cart.name) {
             CartScreen(cartViewModel = cartViewModel)
+        }
+        composable(route = AppScreen.Filter.name) {
+            FilterScreen(usersViewModel = usersViewModel, restaurantsViewModel = restaurantsViewModel)
         }
     }
 }
