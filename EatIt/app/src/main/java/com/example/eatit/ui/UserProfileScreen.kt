@@ -69,7 +69,7 @@ fun UserProfileScreen(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.Start,
                             modifier = Modifier
-                                .height(200.dp)
+                                .height(200.dp).padding(10.dp)
                         ) {
                             Text(
                                 text = user.name.toString(),

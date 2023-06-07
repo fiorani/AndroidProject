@@ -66,7 +66,7 @@ fun HomeScreen(
         floatingActionButton = {
             if (user.restaurateur) {
                 FloatingActionButton(
-                    shape = RoundedCornerShape(25.dp),
+                    shape = RoundedCornerShape(20.dp),
                     onClick = onAddButtonClicked
                 ) {
                     Icon(

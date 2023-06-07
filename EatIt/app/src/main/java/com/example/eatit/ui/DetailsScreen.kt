@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -91,7 +92,7 @@ fun DetailsRestaurantScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                FloatingActionButton(onClick = onAddButtonClicked) {
+                FloatingActionButton(shape = RoundedCornerShape(25.dp),onClick = onAddButtonClicked) {
                     Icon(
                         Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_restaurant)

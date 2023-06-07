@@ -9,13 +9,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -169,6 +163,7 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             Button(
+                modifier = Modifier.width(10.dp),
                 onClick = {
                     val permissionCheckResult =
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -190,12 +185,13 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             Button(
+                modifier = Modifier.width(10.dp),
                 onClick = {
                     showChangedPsw.value = true
                     usersViewModel.changePsw()
                 },
             ) {
-                Text("Change password")
+                Text(text= "Change password")
             }
             if (showChangedPsw.value) {
                 AlertDialog(
