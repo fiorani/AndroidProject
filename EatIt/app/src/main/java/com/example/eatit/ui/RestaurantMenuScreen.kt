@@ -121,7 +121,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
                         cont2 = 0
                     },
                 ) {
-                    DishEdit(
+                    DishsEdit(
                         isSurfaceOpen,
                         onConfirm = {
                             isSurfaceOpen.value =
@@ -139,7 +139,7 @@ fun RestaurantMenuScreen(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DishEdit(
+fun DishsEdit(
     isSurfaceOpen: MutableState<Boolean>,
     onConfirm: () -> Unit
 ) {

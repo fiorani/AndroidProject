@@ -5,5 +5,6 @@ data class Product(
     var description: String? = null,
     var price: String? = null,
     var photo: String? = null,
-    var id: String? = null
+    var id: String? = null,
+    var section: String? = null
 )
