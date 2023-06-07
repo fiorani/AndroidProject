@@ -199,7 +199,7 @@ fun NavigationApp(
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
-    sendRequest: () -> Unit,
+    startLocationUpdates: () -> Unit,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
@@ -233,7 +233,7 @@ fun NavigationApp(
             Modifier,
             signIn,
             createAccount,
-            sendRequest
+            startLocationUpdates
         )
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)

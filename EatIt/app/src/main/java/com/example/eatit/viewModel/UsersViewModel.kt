@@ -1,5 +1,6 @@
 package com.example.eatit.viewModel
 
+import android.location.Location
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +14,14 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
     private var _userPosition = mutableStateOf("")
     private var _user: User? = null
+    private var _location=mutableStateOf(Location("MyLocationProvider"))
     val user
         get() = _user
     val userPosition
         get() = _userPosition
+
+    val location
+        get() = _location
 
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
@@ -37,5 +42,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
 
     fun setUser(user: User) {
         _user = user
+    }
+    fun setLocation(location: Location){
+        _location.value=location
     }
 }
