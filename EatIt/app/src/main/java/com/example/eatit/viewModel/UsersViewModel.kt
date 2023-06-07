@@ -30,6 +30,9 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     suspend fun getUser(): User {
         return repository.getUser()
     }
+    suspend fun getUserById(userId: String): User {
+        return repository.getUserById(userId)
+    }
 
     suspend fun getPosition(): String {
         return repository.getPosition()

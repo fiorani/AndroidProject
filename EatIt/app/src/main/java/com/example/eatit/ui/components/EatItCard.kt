@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.eatit.model.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -72,7 +73,7 @@ fun RestaurantCard(
                         fontWeight = Bold
                     )
                     Text(
-                        text = restaurant.city.toString(),
+                        text = restaurant.address.toString(),
                         modifier = Modifier.padding(4.dp),
                         fontSize = 20.sp
                     )
@@ -281,8 +282,12 @@ fun RatingCard(rating: Rating) {
                 fontSize = 20.sp
             )
             Row {
+                var name by remember { mutableStateOf("random user") }
+                LaunchedEffect(Unit) {
+                   // name = UsersViewModel().getUserById(rating.userId.toString()).name.toString()
+                }
                 Text(
-                    text = rating.userName.toString(),
+                    text = name,
                     modifier = Modifier.padding(4.dp),
                     fontSize = 15.sp
                 )

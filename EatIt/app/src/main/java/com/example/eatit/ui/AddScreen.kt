@@ -61,11 +61,9 @@ fun AddRestaurantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var city by rememberSaveable { usersViewModel.userPosition }
-    var category by rememberSaveable { mutableStateOf("") }
     var photo by rememberSaveable { mutableStateOf("") }
-    var price = 0
     var numRatings = 0
-    var avgRating = 0.toDouble()
+    var avgRating = 0.0f
     LaunchedEffect(Unit) {
         city = usersViewModel.getPosition()
     }
@@ -105,15 +103,6 @@ fun AddRestaurantScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            OutlinedTextField(
-                value = category,
-                onValueChange = { category = it },
-                label = { Text(stringResource(id = R.string.label_category)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -188,10 +177,8 @@ fun AddRestaurantScreen(
                     restaurantsViewModel.addNewRestaurant(
                         Restaurant(
                             name = name,
-                            city = city,
-                            category = category,
+                            address  = city,
                             photo = photo,
-                            price = price,
                             numRatings = numRatings,
                             avgRating = avgRating,
                             userId = Firebase.auth.uid
@@ -321,7 +308,6 @@ fun AddProductScreen(
                             Product(
                                 name = name,
                                 description = description,
-                                price = price,
                                 photo = photoURI
                             ))
                     } else {
@@ -329,7 +315,6 @@ fun AddProductScreen(
                             Product(
                                 name = name,
                                 description = description,
-                                price = price,
                                 photo = photoURI,
                                 section = ""
                             )

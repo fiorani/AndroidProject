@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,10 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.eatit.R
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
@@ -53,7 +49,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user!!
-        usersViewModel.setPosition(user.userPosition.toString())
+        usersViewModel.setPosition(user.position.toString())
         restaurants = if (user.restaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         } else {
