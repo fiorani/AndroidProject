@@ -3,6 +3,7 @@ package com.example.eatit.data
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -18,17 +19,47 @@ class UsersRepository(eatItApp: EatItApp) {
 
     fun setPosition(position: String) {
         FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString()).get()
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
                 it.documents.firstOrNull()?.reference?.update("userPosition", position)
             }
+    }
+
+    fun setName(name: String) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
+                it.documents.firstOrNull()?.reference?.update("userName", name)
+            }
+    }
+
+    fun setPhoto(photo: String) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
+                it.documents.firstOrNull()?.reference?.update("photo", photo)
+            }
+    }
+
+    suspend fun changePsw() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(
+            withContext(Dispatchers.IO) {
+                try {
+                    FirebaseFirestore.getInstance().collection("users")
+                        .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get().await()
+                        .documents.firstOrNull()?.get("userEmail").toString()
+                } catch (e: Exception) {
+                    throw e
+                }
+            }
+        )
     }
 
     suspend fun getPosition(): String =
         withContext(Dispatchers.IO) {
             try {
                 FirebaseFirestore.getInstance().collection("users")
-                    .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString()).get().await()
+                    .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get().await()
                     .documents.firstOrNull()?.get("userPosition").toString()
             } catch (e: Exception) {
                 throw e
@@ -40,7 +71,7 @@ class UsersRepository(eatItApp: EatItApp) {
         withContext(Dispatchers.IO) {
             try {
                 FirebaseFirestore.getInstance().collection("users")
-                    .whereEqualTo("userId", Firebase.auth.currentUser?.uid.toString())
+                    .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString())
                     .get().await().documents.firstOrNull()?.toObject(User::class.java)!!
             } catch (e: Exception) {
                 throw e

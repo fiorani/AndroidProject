@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
@@ -104,19 +105,25 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         setContent {
-            EatItTheme {
+            EatItTheme(darkTheme = theme=="Dark") {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val (theme, onThemeChanged) = remember { mutableStateOf(theme) }
                     //startLocationUpdates()
                     NavigationApp(
                         warningViewModel = warningViewModel,
                         signIn = ::signIn,
                         createAccount = ::createAccount,
                         startLocationUpdates = ::startLocationUpdates,
+                        sharedPref = sharedPref,
+                        theme = theme,
+                        onOptionSelected = onThemeChanged
                     )
                 }
                 if (requestingLocationUpdates.value) {
