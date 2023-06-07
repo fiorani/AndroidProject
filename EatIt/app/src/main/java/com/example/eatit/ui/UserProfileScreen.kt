@@ -1,10 +1,9 @@
 package com.example.eatit.ui
 
 import android.media.Image
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,9 +27,9 @@ import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import java.util.*
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -103,18 +102,19 @@ fun UserProfileScreen(
                 }
             }*/
 
-            ImageCarouselCard()
-
-            }
-            Text(
-                text = "My orders:",
-                modifier = Modifier.padding(20.dp, 10.dp),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                item {
+                    ImageCarouselCard()
+
+                    Text(
+                        text = "My orders:",
+                        modifier = Modifier.padding(20.dp, 10.dp),
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 items(orders.size) { item ->
                     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
                     var restaurant by remember { mutableStateOf(Restaurant()) }
@@ -132,7 +132,7 @@ fun UserProfileScreen(
                 }
             }
         }
-
+    }
 }
 
 @Composable
@@ -148,7 +148,7 @@ fun ImageCarouselCard() {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Carousel Card",
+                text = "Achievement",
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.align(Alignment.Start)
             )
@@ -160,10 +160,17 @@ fun ImageCarouselCard() {
                     .horizontalScroll(rememberScrollState())
             ) {
                 val imageList = listOf(
-                    R.drawable.image1,
-                    R.drawable.image2,
-                    R.drawable.image3,
-                    R.drawable.image4
+                    R.drawable.medal1,
+                    R.drawable.medal2,
+                    R.drawable.medal3,
+                    R.drawable.medal4,
+                    R.drawable.medal5,
+                    R.drawable.medal6,
+                    R.drawable.medal7,
+                    R.drawable.medal8,
+                    R.drawable.medal9,
+                    R.drawable.medal10,
+                    R.drawable.medal11
                 )
 
                 for (imageResId in imageList) {
@@ -172,7 +179,7 @@ fun ImageCarouselCard() {
                         contentDescription = null,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .size(120.dp)
+                            .size(50.dp)
                             .clip(shape = RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Crop
                     )
