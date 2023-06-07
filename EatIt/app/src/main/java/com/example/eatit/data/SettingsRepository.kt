@@ -21,7 +21,7 @@ class SettingsRepository(private val context: Context) {
     //object declaration inside a class
     companion object {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings_preferences")
-        private val USERNAME = stringPreferencesKey("username")
+        private val USERNAME = stringPreferencesKey("name")
     }
 
     val preferenceFlow: Flow<String> = context.dataStore.data

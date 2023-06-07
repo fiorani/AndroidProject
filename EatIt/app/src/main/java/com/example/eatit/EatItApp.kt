@@ -1,6 +1,7 @@
 package com.example.eatit
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -193,6 +194,10 @@ fun NavigationApp(
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
+    theme: String?,
+    sharedPref: SharedPreferences,
+
+    onOptionSelected: (String?) -> Unit
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
@@ -226,7 +231,10 @@ fun NavigationApp(
             Modifier,
             signIn,
             createAccount,
-            startLocationUpdates
+            startLocationUpdates,
+            sharedPref,
+            theme,
+            onOptionSelected
         )
         if (warningViewModel.showPermissionSnackBar.value) {
             PermissionSnackBarComposable(snackbarHostState, context, warningViewModel)
@@ -252,6 +260,9 @@ private fun NavigationGraph(
     signIn: KFunction3<String, String, () -> Unit, Unit>,
     createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
+    sharedPref: SharedPreferences,
+    theme: String?,
+    onThemeChanged: (String?) -> Unit
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
@@ -318,7 +329,11 @@ private fun NavigationGraph(
         composable(route = AppScreen.Settings.name) {
             SettingsScreen(settingsViewModel, onNextButtonClicked = {
                 navController.navigate(AppScreen.Login.name)
-            }, usersViewModel = usersViewModel, startLocationUpdates = startLocationUpdates)
+            }, usersViewModel = usersViewModel,
+                startLocationUpdates = startLocationUpdates,
+                sharedPref = sharedPref,
+                theme = theme,
+                onThemeChanged = onThemeChanged)
         }
         composable(route = AppScreen.Map.name) {
             MapScreen(

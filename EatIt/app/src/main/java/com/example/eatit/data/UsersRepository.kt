@@ -3,6 +3,7 @@ package com.example.eatit.data
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -22,6 +23,36 @@ class UsersRepository(eatItApp: EatItApp) {
             .addOnSuccessListener {
                 it.documents.firstOrNull()?.reference?.update("position", position)
             }
+    }
+
+    fun setName(name: String) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
+                it.documents.firstOrNull()?.reference?.update("name", name)
+            }
+    }
+
+    fun setPhoto(photo: String) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
+                it.documents.firstOrNull()?.reference?.update("photo", photo)
+            }
+    }
+
+    suspend fun changePsw() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(
+            withContext(Dispatchers.IO) {
+                try {
+                    FirebaseFirestore.getInstance().collection("users")
+                        .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get().await()
+                        .documents.firstOrNull()?.get("userEmail").toString()
+                } catch (e: Exception) {
+                    throw e
+                }
+            }
+        )
     }
 
     suspend fun getPosition(): String =

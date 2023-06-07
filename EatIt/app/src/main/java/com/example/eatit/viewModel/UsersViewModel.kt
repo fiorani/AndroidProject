@@ -43,10 +43,25 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         repository.setPosition(position)
     }
 
+    fun setName(name: String) {
+        _user?.name = name
+        repository.setName(name)
+    }
+
+    fun setPhoto(photo: String) {
+        _user?.photo = photo
+        repository.setPhoto(photo)
+    }
+
     fun setUser(user: User) {
         _user = user
     }
 
+    fun changePsw() {
+        viewModelScope.launch {
+            repository.changePsw()
+        }
+    }
     fun setLocation(location: Location) {
         _location.value = location
     }
