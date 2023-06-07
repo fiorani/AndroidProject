@@ -1,5 +1,6 @@
 package com.example.eatit.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eatit.data.RestaurantsRepository
@@ -53,14 +54,14 @@ class RestaurantsViewModel @Inject constructor(
     }
 
     val productSelected
-        get() = _restaurantSelected
+        get() = _productSelected
 
     fun selectProduct(product: Product) {
         _productSelected = product
     }
 
-    fun setProduct(product: Product, productId: String) {
-        repository.setProduct(product, _restaurantSelected?.id!!, productId)
+    fun setProduct(product: Product) {
+        repository.setProduct(product, _restaurantSelected?.id!!, _productSelected?.id!!)
     }
 
     fun resetProduct() {

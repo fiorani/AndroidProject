@@ -323,8 +323,7 @@ fun AddProductScreen(
                                 description = description,
                                 price = price,
                                 photo = photoURI
-                            ),
-                            restaurantsViewModel.productSelected?.id!!)
+                            ))
                     } else {
                         restaurantsViewModel.addNewProduct(
                             Product(
