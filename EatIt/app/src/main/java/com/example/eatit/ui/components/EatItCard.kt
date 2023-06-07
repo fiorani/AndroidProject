@@ -193,7 +193,7 @@ fun ShoppingCard(product: Product, order: Order) {
 fun SectionShoppingCard(
     sectionName: String,
     products: List<Product>,
-    order: Order
+    order: Order,
 ) {
     Text(
         modifier = Modifier.padding(20.dp, 10.dp),
@@ -203,10 +203,12 @@ fun SectionShoppingCard(
     )
 
     for (product in products) {
-        ShoppingCard(
-            product = product,
-            order = order
-        )
+        if(product.section == sectionName){
+            ShoppingCard(
+                product = product,
+                order = order
+            )
+        }
     }
 }
 

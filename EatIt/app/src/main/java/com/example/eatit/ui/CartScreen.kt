@@ -113,7 +113,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                     SectionShoppingCard(
                         sectionName = category.toString(),
                         products = products,
-                        order = order
+                        order = order,
                     )
                 }
         }
