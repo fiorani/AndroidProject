@@ -57,20 +57,12 @@
 
     <!-- Types of food I could think of in 5 minutes -->
     <string-array name="categories">
-        <item>@string/value_any_category</item>
-
-        <item>Brunch</item>
-        <item>Burgers</item>
-        <item>Coffee</item>
-        <item>Deli</item>
-        <item>Dim Sum</item>
-        <item>Indian</item>
-        <item>Italian</item>
-        <item>Mediterranean</item>
-        <item>Mexican</item>
-        <item>Pizza</item>
-        <item>Ramen</item>
-        <item>Sushi</item>
+        <item>Antipasti</item>
+        <item>Primi</item>
+        <item>Secondi</item>
+        <item>Contorni</item>
+        <item>Dolci</item>
+        <item>Bevande</item>
     </string-array>
 
     <!-- 50 most populous cities in the US -->

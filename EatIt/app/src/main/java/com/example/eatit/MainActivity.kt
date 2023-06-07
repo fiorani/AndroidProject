@@ -210,7 +210,7 @@ class MainActivity : ComponentActivity() {
         photo: String,
         age: Int,
         address: String,
-        isRestaurateur: Boolean,
+        restaurateur: Boolean,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
@@ -227,7 +227,7 @@ class MainActivity : ComponentActivity() {
                                 photo,
                                 age,
                                 address,
-                                isRestaurateur
+                                restaurateur
                             )
                         )
                         signIn(email, password, onNextButtonClicked)

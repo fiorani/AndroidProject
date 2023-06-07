@@ -93,7 +93,6 @@ fun TopAppBarFunction(
         navigationIcon = {
             if (canNavigateBack && currentScreen != AppScreen.Home.name
                 && currentScreen != AppScreen.UserProfile.name
-                && currentScreen != AppScreen.Cart.name
                 && currentScreen != AppScreen.Map.name
                 && currentScreen != AppScreen.Settings.name
             ) {
@@ -152,20 +151,6 @@ fun BottomAppBarFunction(
                             contentDescription = stringResource(id = R.string.settings),
                         )
 
-                    }
-                }
-                IconButton(onClick = onCartButtonClicked) {
-                    if (currentScreen == AppScreen.Cart.name) {
-                        Icon(
-                            Icons.Filled.ShoppingCart,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.ShoppingCart,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
                     }
                 }
                 IconButton(onClick = onMapButtonClicked) {
@@ -326,6 +311,9 @@ private fun NavigationGraph(
                 },
                 cartViewModel = cartViewModel,
                 usersViewModel = usersViewModel,
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Cart.name)
+                }
             )
         }
         composable(route = AppScreen.Settings.name) {

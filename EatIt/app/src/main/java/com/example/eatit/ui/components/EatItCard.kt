@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -102,44 +103,34 @@ fun RestaurantCard(
 
 @Composable
 fun ProductCard(product: Product, cartViewModel: CartViewModel, user: User) {
-    EatItCard(onItemClicked = {
-    }) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = product.name.toString(),
-                modifier = Modifier
-                    .padding(4.dp)
-                    .weight(1f)
-            )
-            if (!user.isRestaurateur) {
-                Text(
-                    text = product.price.toString() + "€",
-                    modifier = Modifier.padding(4.dp),
-                )
-                val (count, updateCount) = remember { mutableStateOf(0) }
-                QuantitySelector(
-                    count = count,
-                    decreaseItemCount = {
-                        if (count > 0) updateCount(count - 1)
-                        cartViewModel.reduceCount(product)
-                        cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
-                    },
-                    increaseItemCount = {
-                        updateCount(count + 1)
-                        cartViewModel.increaseCount(product)
-                        Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
-                    })
-            }
-        }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp, 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Row {
+            Icon(
+                imageVector = Icons.Default.Fastfood, contentDescription = "Agriculture"
+            )
             Text(
-                text = product.description.toString(),
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier.padding(10.dp, 0.dp),
+                text = product.name.toString(),
+                fontSize = 20.sp
             )
         }
+        val (count, updateCount) = remember { mutableStateOf(0) }
+        QuantitySelector(count = count, decreaseItemCount = {
+            if (count > 0) updateCount(count - 1)
+            cartViewModel.reduceCount(product)
+            cartViewModel.addNewOrder(cartViewModel.oderSelected!!)
+        }, increaseItemCount = {
+            updateCount(count + 1)
+            cartViewModel.increaseCount(product)
+            Log.d("TAG", "ProductCard: ${cartViewModel.oderSelected}")
+        })
+
     }
 }
 
