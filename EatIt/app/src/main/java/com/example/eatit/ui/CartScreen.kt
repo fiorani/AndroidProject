@@ -1,6 +1,5 @@
 package com.example.eatit.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,10 +13,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
-import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.ui.components.BackgroundImage
-import com.example.eatit.ui.components.SectionCard
+import com.example.eatit.ui.components.SectionShoppingCard
 import com.example.eatit.viewModel.CartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +45,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                     )
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = "€200.00",
+                        text = order.totalPrice.toString() + "€",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -112,7 +110,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
             }
             LocalContext.current.resources.getStringArray(R.array.categories)
                 .forEach { category ->
-                    SectionSummaryCard(
+                    SectionShoppingCard(
                         sectionName = category.toString(),
                         products = products,
                         order = order
@@ -122,49 +120,3 @@ fun CartScreen(cartViewModel: CartViewModel) {
     }
 }
 
-@Composable
-fun SectionSummaryCard(
-    sectionName: String,
-    products: List<Product>,
-    order: Order
-) {
-    Text(
-        modifier = Modifier.padding(20.dp, 10.dp),
-        text = sectionName,
-        fontSize = 25.sp,
-        fontWeight = FontWeight.Bold
-    )
-
-    for (product in products) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Card(
-                modifier = Modifier.padding(5.dp),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(8.dp),
-                shape = CardDefaults.shape
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(17.dp, 7.dp),
-                        text = product.name.toString(),
-                        fontSize = 17.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(17.dp, 7.dp),
-                        text = product.price.toString()+"€ x "+order.listQuantity?.get(order.listProductId!!.indexOf(product.id!!)).toString(),
-                        fontSize = 17.sp
-                    )
-                }
-            }
-        }
-    }
-}

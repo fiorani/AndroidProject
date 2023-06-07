@@ -50,7 +50,7 @@ import com.example.eatit.model.User
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.ProductCard
 import com.example.eatit.ui.components.QuantitySelector
-import com.example.eatit.ui.components.SectionCard
+import com.example.eatit.ui.components.SectionMenuCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -146,7 +146,7 @@ fun DetailsRestaurantScreen(
             }
                 LocalContext.current.resources.getStringArray(R.array.categories)
                     .forEach { category ->
-                        SectionCard(
+                        SectionMenuCard(
                             sectionName = category.toString(),
                             products = products,
                             cartViewModel = cartViewModel,

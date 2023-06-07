@@ -1,6 +1,5 @@
 package com.example.eatit.ui.components
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -139,7 +138,65 @@ fun ProductCard(product: Product, cartViewModel: CartViewModel,order: Order) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SectionCard(
+fun ShoppingCard(product: Product,order: Order){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Card(
+            modifier = Modifier.padding(5.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
+            elevation = CardDefaults.cardElevation(8.dp),
+            shape = CardDefaults.shape
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier.padding(17.dp, 7.dp),
+                    text = product.name.toString(),
+                    fontSize = 17.sp
+                )
+                Text(
+                    modifier = Modifier.padding(17.dp, 7.dp),
+                    text = product.price.toString() + "€ x " + order.listQuantity?.get(
+                        order.listProductId!!.indexOf(
+                            product.id!!
+                        )
+                    ).toString(),
+                    fontSize = 17.sp
+                )
+            }
+        }
+    }
+}
+@Composable
+fun SectionShoppingCard(
+    sectionName: String,
+    products: List<Product>,
+    order: Order
+) {
+    Text(
+        modifier = Modifier.padding(20.dp, 10.dp),
+        text = sectionName,
+        fontSize = 25.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+    for (product in products) {
+        ShoppingCard(
+            product = product,
+            order = order
+        )
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SectionMenuCard(
     sectionName: String, products: List<Product>, cartViewModel: CartViewModel,order: Order
 ) {
     var expandedState by remember { mutableStateOf(false) }
@@ -230,7 +287,7 @@ fun RatingCard(rating: Rating) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderCard(
+fun OrderProfileCard(
     orders: Order,
     listProducts: List<Product>,
     restaurant: Restaurant
