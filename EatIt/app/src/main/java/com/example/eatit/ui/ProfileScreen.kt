@@ -40,7 +40,7 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserProfileScreen(
+fun ProfileScreen(
     modifier: Modifier = Modifier,
     usersViewModel: UsersViewModel,
     restaurantsViewModel: RestaurantsViewModel,

@@ -92,7 +92,9 @@ fun DetailsRestaurantScreen(
                 EatitFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
             } else {
                 EatitFloatingButton(
-                    function = { onNextButtonClicked() },
+                    function = {
+                        cartViewModel.selectOrder(order!!)
+                        onNextButtonClicked() },
                     icon = Icons.Filled.ShoppingCart
                 )
             }

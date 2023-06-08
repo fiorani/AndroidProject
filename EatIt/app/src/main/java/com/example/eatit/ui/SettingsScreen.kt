@@ -16,13 +16,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -51,6 +48,7 @@ import androidx.core.content.FileProvider
 import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
+import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -135,14 +133,12 @@ fun SettingsScreen(
                     label = { Text("Name") },
                     modifier = Modifier.weight(4f)
                 )
-                Button(onClick = {
+                EatItButton(text = "save", function = {
                     showDialog.value = true
                     focusManager.clearFocus()
                     usersViewModel.setName(name.value)
                     changedThing.value = "username"
-                }, modifier = Modifier.weight(1f)) {
-                    Text("save")
-                }
+                })
             }
             Spacer(modifier = Modifier.size(10.dp))
             Row(
@@ -169,37 +165,20 @@ fun SettingsScreen(
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                modifier = Modifier.width(300.dp),
-                onClick = {
-                    val permissionCheckResult =
-                        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                        cameraLauncher.launch(uri)
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-            ) {
-                Icon(
-                    Icons.Filled.PhotoCamera,
-                    contentDescription = "Camera icon",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Change Profile Picture")
-            }
+            EatItButton(text = "Change Profile Picture", function = {
+                val permissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                    cameraLauncher.launch(uri)
+                } else {
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }, icon = Icons.Filled.PhotoCamera)
             Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                modifier = Modifier.width(300.dp),
-                onClick = {
-                    showChangedPsw.value = true
-                    usersViewModel.changePsw()
-                },
-            ) {
-                Text(text = "Change password")
-            }
+            EatItButton(text = "Change password", function = {
+                showChangedPsw.value = true
+                usersViewModel.changePsw()
+            })
             if (showChangedPsw.value) {
                 AlertDialog(
                     onDismissRequest = {
@@ -225,17 +204,10 @@ fun SettingsScreen(
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                modifier = Modifier.width(300.dp),
-                onClick = {
-                    Firebase.auth.signOut()
-                    onNextButtonClicked()
-                }
-            ) {
-                Text(
-                    text = "Logout",
-                )
-            }
+            EatItButton(text = "Logout", function = {
+                Firebase.auth.signOut()
+                onNextButtonClicked()
+            })
             Spacer(modifier = Modifier.size(10.dp))
             Text(
                 text = "Settings App:",

@@ -55,7 +55,7 @@ sealed class AppScreen(var name: String) {
     object AddProduct : AppScreen("AddProduct")
     object Details : AppScreen("Details")
     object Settings : AppScreen("Settings")
-    object UserProfile : AppScreen("UserProfile")
+    object Profile : AppScreen("Profile")
     object Map : AppScreen("Map")
     object Login : AppScreen("Login")
     object Register : AppScreen("Register")
@@ -92,7 +92,7 @@ fun TopAppBarFunction(
         modifier = modifier,
         navigationIcon = {
             if (canNavigateBack && currentScreen != AppScreen.Home.name
-                && currentScreen != AppScreen.UserProfile.name
+                && currentScreen != AppScreen.Profile.name
                 && currentScreen != AppScreen.Map.name
                 && currentScreen != AppScreen.Settings.name
                 && currentScreen != AppScreen.Login.name
@@ -140,7 +140,7 @@ fun BottomAppBarFunction(
                     }
                 }
                 IconButton(onClick = onUserProfileButtonClicked) {
-                    if (currentScreen == AppScreen.UserProfile.name) {
+                    if (currentScreen == AppScreen.Profile.name) {
                         Icon(
                             Icons.Filled.AccountCircle,
                             contentDescription = stringResource(id = R.string.settings),
@@ -219,7 +219,7 @@ fun NavigationApp(
                 BottomAppBarFunction(
                     onSettingsButtonClicked = { navController.navigate(AppScreen.Settings.name) },
                     currentScreen = currentScreen,
-                    onUserProfileButtonClicked = { navController.navigate(AppScreen.UserProfile.name) },
+                    onUserProfileButtonClicked = { navController.navigate(AppScreen.Profile.name) },
                     onMapButtonClicked = { navController.navigate(AppScreen.Map.name) },
                     onHomeButtonClicked = { navController.navigate(AppScreen.Home.name) },
                 )
@@ -347,8 +347,8 @@ private fun NavigationGraph(
                 usersViewModel = usersViewModel,
             )
         }
-        composable(route = AppScreen.UserProfile.name) {
-            UserProfileScreen(
+        composable(route = AppScreen.Profile.name) {
+            ProfileScreen(
                 usersViewModel = usersViewModel,
                 restaurantsViewModel = restaurantsViewModel,
                 cartViewModel = cartViewModel
