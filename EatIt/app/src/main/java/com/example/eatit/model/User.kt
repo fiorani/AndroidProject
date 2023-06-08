@@ -11,6 +11,7 @@ data class User(
     var age: Int = 0,
     var restaurateur: Boolean = false,
     var position: String = "",
+    var phone: String = "",
     var favouriteRestaurants: ArrayList<String> = ArrayList(mutableListOf()),
 ) {
     constructor(

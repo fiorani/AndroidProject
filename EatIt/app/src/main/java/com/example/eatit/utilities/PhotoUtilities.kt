@@ -9,25 +9,25 @@ import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore
+import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
+import com.example.eatit.viewModel.UsersViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri): String {
-    val bitmap = getBitmap(capturedImageUri, contentResolver)
 
+suspend fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri, usersViewModel: UsersViewModel): String {
+    val bitmap = getBitmap(capturedImageUri, contentResolver)
     val values = ContentValues()
     values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
     values.put(MediaStore.Images.Media.DISPLAY_NAME, "IMG_${SystemClock.uptimeMillis()}")
-
-    val imageUri =
-        contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-
+    val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
     val outputStream = imageUri?.let { contentResolver.openOutputStream(it) }
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
     outputStream?.close()
-
+    usersViewModel.setPhoto(usersViewModel.uploadPhoto(imageUri!!).toString())
     return imageUri.toString()
 }
 

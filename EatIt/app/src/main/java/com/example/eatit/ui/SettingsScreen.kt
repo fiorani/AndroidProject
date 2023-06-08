@@ -45,11 +45,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.utilities.createImageFile
+import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -87,7 +90,6 @@ fun SettingsScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
             if (isSuccess) {
                 capturedImageUri = uri
-                usersViewModel.setPhoto(if (capturedImageUri.path == null) "" else capturedImageUri.path!!)
                 showDialog.value = true
                 changedThing.value = "profile photo"
             }

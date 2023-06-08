@@ -1,6 +1,7 @@
 package com.example.eatit.viewModel
 
 import android.location.Location
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -71,5 +72,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
 
     fun setLocation(location: Location) {
         _location.value = location
+    }
+    suspend fun uploadPhoto(uri: Uri): Uri {
+        return repository.uploadPhoto(uri)
     }
 }

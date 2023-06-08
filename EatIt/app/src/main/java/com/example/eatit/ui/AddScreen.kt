@@ -156,7 +156,9 @@ fun AddRestaurantScreen(
                         .build(), contentDescription = "image taken"
                 )
 
-                photo = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+                LaunchedEffect(Unit) {
+                    saveImage(context.applicationContext.contentResolver, capturedImageUri,usersViewModel)
+                }
             }
 
             Button(
@@ -337,7 +339,7 @@ fun AddProductScreen(
                         .build(), contentDescription = "image taken"
                 )
 
-                photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+                //photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
             }
         }
     }
