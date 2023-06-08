@@ -13,25 +13,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(private val repository: UsersRepository) : ViewModel() {
-    private var _position = mutableStateOf("")
-    private var _user: User? = null
+    private var _user: User = User()
     private var _location = mutableStateOf(Location("MyLocationProvider"))
+    private var _position = mutableStateOf("")
     private var _filter = Filter()
     val user
         get() = _user
-    val position
-        get() = _position
     val filter
         get() = _filter
     val location
         get() = _location
-
+    val position
+        get() = _position
     fun addNewUser(user: User) = viewModelScope.launch {
         repository.insertNewUser(user)
     }
 
     suspend fun getUser(): User {
-        return repository.getUser()
+        val user = repository.getUser()
+        _position = mutableStateOf(user.position)
+        return user
     }
 
     suspend fun getUserById(userId: String): User {
@@ -43,17 +44,18 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     }
 
     fun setPosition(position: String) {
+        _user.position = position
         _position.value = position
         repository.setPosition(position)
     }
 
     fun setName(name: String) {
-        _user?.name = name
+        _user.name = name
         repository.setName(name)
     }
 
     fun setPhoto(photo: String) {
-        _user?.photo = photo
+        _user.photo = photo
         repository.setPhoto(photo)
     }
 

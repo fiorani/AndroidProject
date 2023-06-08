@@ -65,7 +65,7 @@ fun SettingsScreen(
     onThemeChanged: (String?) -> Unit
 ) {
     var user: User = usersViewModel.user!!
-    val name = remember { mutableStateOf(user.name.toString()) }
+    val name = remember { mutableStateOf(user.name) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -100,13 +100,6 @@ fun SettingsScreen(
         } else {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
-    }
-    LaunchedEffect(Unit) {
-        user = usersViewModel.getUser()
-    }
-    LaunchedEffect(user) {
-        name.value = user.name.toString()
-        address = user.position.toString()
     }
     Scaffold { paddingValues ->
         BackgroundImage(alpha = 0.1f)

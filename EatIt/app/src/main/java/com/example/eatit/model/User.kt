@@ -4,13 +4,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 data class User(
-    var id: String? = null,
-    var name: String? = null,
-    var mail: String? = null,
-    var photo: String? = null,
+    var id: String = "",
+    var name: String = "",
+    var mail: String = "",
+    var photo: String = "",
     var age: Int = 0,
     var restaurateur: Boolean = false,
-    var position: String? = null
+    var position: String = ""
 ) {
     constructor(
         name: String,
@@ -21,7 +21,9 @@ data class User(
         restaurateur: Boolean
     ) : this() {
         val user = Firebase.auth.currentUser
-        this.id = user?.uid
+        if (user != null) {
+            this.id = user.uid
+        }
         this.name = name
         this.mail = mail
         this.photo = photo

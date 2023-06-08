@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +49,7 @@ fun RestaurantCard(
         onItemClicked()
     }) {
         Column {
-            ImageCard(restaurant.photo.toString())
+            ImageCard(restaurant.photo)
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -62,7 +61,7 @@ fun RestaurantCard(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = restaurant.name.toString(),
+                        text = restaurant.name,
                         modifier = Modifier
                             .padding(4.dp)
                             .width(200.dp),
@@ -70,7 +69,7 @@ fun RestaurantCard(
                         fontWeight = Bold
                     )
                     Text(
-                        text = restaurant.address.toString(),
+                        text = restaurant.address,
                         modifier = Modifier.padding(4.dp),
                         fontSize = 20.sp
                     )
@@ -130,16 +129,15 @@ fun ProductCard(
             )
             Text(
                 modifier = Modifier.padding(10.dp, 0.dp),
-                text = product.name.toString() + " - " + product.price.toString() + "€",
+                text = product.name + " - " + product.price.toString() + "€",
                 fontSize = 20.sp
             )
         }
         if (!user.restaurateur) {
             var quantity = 0
-            if (order.listProductId?.contains(product.id.toString()) == true) {
+            if (order.listProductId.contains(product.id)) {
                 quantity =
-                    order.listQuantity?.get(order.listProductId?.indexOf(product.id.toString())!!)
-                        ?.toInt()!!
+                    order.listQuantity[order.listProductId.indexOf(product.id)]
             }
             val (count, updateCount) = remember { mutableStateOf(quantity) }
             QuantitySelector(count = count, decreaseItemCount = {
@@ -166,7 +164,6 @@ fun ProductCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingCard(product: Product, order: Order) {
     Row(
@@ -188,14 +185,14 @@ fun ShoppingCard(product: Product, order: Order) {
             ) {
                 Text(
                     modifier = Modifier.padding(17.dp, 7.dp),
-                    text = product.name.toString(),
+                    text = product.name,
                     fontSize = 17.sp
                 )
                 Text(
                     modifier = Modifier.padding(17.dp, 7.dp),
-                    text = product.price.toString() + "€ x " + order.listQuantity?.get(
-                        order.listProductId!!.indexOf(
-                            product.id!!
+                    text = product.price.toString() + "€ x " + order.listQuantity.get(
+                        order.listProductId.indexOf(
+                            product.id
                         )
                     ).toString(),
                     fontSize = 17.sp
@@ -366,7 +363,7 @@ fun OrderProfileCard(
                 .padding(10.dp, 0.dp)
         ) {
             Text(
-                text = restaurant.name.toString(),
+                text = restaurant.name,
                 modifier = Modifier.padding(10.dp),
                 fontWeight = Bold,
                 fontSize = 32.sp
@@ -433,14 +430,14 @@ fun OrderProfileCard(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = product.name.toString(),
+                                text = product.name,
                                 modifier = Modifier
                                     .padding(10.dp, 1.dp)
                                     .weight(1f),
                                 fontSize = 16.sp
                             )
                             Text(
-                                text = "€" + orders.listPrice?.get(index) + "  × " + orders.listQuantity?.get(
+                                text = "€" + orders.listPrice.get(index) + "  × " + orders.listQuantity.get(
                                     index
                                 ),
                                 modifier = Modifier.padding(10.dp, 1.dp),

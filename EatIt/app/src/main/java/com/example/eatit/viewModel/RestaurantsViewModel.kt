@@ -14,15 +14,15 @@ import javax.inject.Inject
 class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
-    private var _restaurantSelected: Restaurant? = null
-    private var _productSelected: Product? = null
+    private var _restaurantSelected: Restaurant = Restaurant()
+    private var _productSelected: Product= Product()
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
     }
 
     fun addNewProduct(product: Product) = viewModelScope.launch {
-        repository.insertNewProduct(_restaurantSelected?.id, product)
+        repository.insertNewProduct(_restaurantSelected.id, product)
     }
 
     suspend fun getRestaurants(): List<Restaurant> {
@@ -60,11 +60,11 @@ class RestaurantsViewModel @Inject constructor(
     }
 
     fun setProduct(product: Product) {
-        repository.setProduct(product, _restaurantSelected?.id!!, _productSelected?.id!!)
+        repository.setProduct(product, _restaurantSelected.id, _productSelected.id)
     }
 
     fun resetProduct() {
-        _productSelected = null
+        _productSelected = Product()
     }
 
 }

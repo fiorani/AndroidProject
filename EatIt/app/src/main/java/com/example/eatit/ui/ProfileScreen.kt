@@ -46,7 +46,7 @@ fun ProfileScreen(
     restaurantsViewModel: RestaurantsViewModel,
     cartViewModel: CartViewModel
 ) {
-    val user: User = usersViewModel.user!!
+    val user: User = usersViewModel.user
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
     LaunchedEffect(Unit) {
         if (user.restaurateur) {

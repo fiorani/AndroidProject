@@ -48,10 +48,9 @@ fun HomeScreen(
     var user by remember { mutableStateOf(User()) }
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
-        user = usersViewModel.user!!
+        user = usersViewModel.user
     }
     LaunchedEffect(user) {
-        usersViewModel.setPosition(user.position.toString())
         restaurants = if (user.restaurateur) {
             restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         } else {

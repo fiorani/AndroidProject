@@ -36,7 +36,7 @@ class CartRepository(eatItApp: EatItApp) {
                 .collection("products").get().await()
                 .documents
             for (documentSnapshot in querySnapshot) {
-                if (order.listProductId?.contains(documentSnapshot.id) == true) {
+                if (order.listProductId.contains(documentSnapshot.id)) {
                     val product = documentSnapshot.toObject(Product::class.java)
                     product?.id = documentSnapshot.id
                     product?.let { products.add(it) }

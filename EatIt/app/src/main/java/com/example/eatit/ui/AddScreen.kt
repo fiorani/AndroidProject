@@ -168,7 +168,7 @@ fun AddRestaurantScreen(
                             photo = photo,
                             numRatings = numRatings,
                             avgRating = avgRating,
-                            userId = Firebase.auth.uid
+                            userId = Firebase.auth.uid!!
                         )
                     )
                     onNextButtonClicked()
@@ -304,7 +304,7 @@ fun AddProductScreen(
 
             Button(
                 onClick = {
-                    if (restaurantsViewModel.productSelected != null) {
+                    if (restaurantsViewModel.productSelected.id=="") {
                         restaurantsViewModel.setProduct(
                             Product(
                                 name = name,

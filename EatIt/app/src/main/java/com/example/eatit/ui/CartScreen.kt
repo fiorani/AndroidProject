@@ -22,7 +22,7 @@ import com.example.eatit.viewModel.CartViewModel
 @Composable
 fun CartScreen(cartViewModel: CartViewModel) {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val order = cartViewModel.orderSelected!!
+    val order = cartViewModel.orderSelected
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,
@@ -65,7 +65,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 )
                 Button(
                     modifier = Modifier.padding(20.dp),
-                    onClick = { cartViewModel.addNewOrder(cartViewModel.orderSelected!!) }
+                    onClick = { cartViewModel.addNewOrder(cartViewModel.orderSelected) }
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 10.dp),

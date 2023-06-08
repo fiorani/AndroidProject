@@ -61,18 +61,18 @@ fun DetailsRestaurantScreen(
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
     var order by remember { mutableStateOf<Order?>(null) }
-    val user = usersViewModel.user!!
+    val user = usersViewModel.user
 
     LaunchedEffect(Unit) {
-        products = restaurantsViewModel.getProducts(restaurant?.id.toString())
-        ratings = restaurantsViewModel.getRatings(restaurant?.id.toString())
+        products = restaurantsViewModel.getProducts(restaurant.id)
+        ratings = restaurantsViewModel.getRatings(restaurant.id)
     }
-    if (cartViewModel.orderSelected != null) {
+    if (cartViewModel.orderSelected.id !="") {
         order = cartViewModel.orderSelected
     } else {
         order = Order(
             userId = Firebase.auth.currentUser?.uid.toString(),
-            restaurantId = restaurant?.id.toString(),
+            restaurantId = restaurant.id.toString(),
             listProductId = ArrayList(
                 listOf()
             ),
@@ -108,7 +108,7 @@ fun DetailsRestaurantScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                ImageProfile(restaurant?.photo.toString())
+                ImageProfile(restaurant.photo.toString())
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,7 +117,7 @@ fun DetailsRestaurantScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = restaurant?.name.toString(),
+                        text = restaurant.name.toString(),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color.White
                     )
@@ -127,17 +127,17 @@ fun DetailsRestaurantScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         val context = LocalContext.current
-                        EatItButton(text = "GO " + restaurant?.address.toString(), function = {
+                        EatItButton(text = "GO " + restaurant.address.toString(), function = {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant?.address}")
+                                Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant.address}")
                             )
                             context.startActivity(intent)
                         }, icon = Icons.Filled.Map)
                         Spacer(modifier = Modifier.size(15.dp))
                         EatItButton(text = "call", function = {
                             val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:${restaurant?.phone}")
+                            intent.data = Uri.parse("tel:${restaurant.phone}")
                             context.startActivity(intent)
                         }, icon = Icons.Filled.Call)
                     }
