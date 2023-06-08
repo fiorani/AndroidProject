@@ -22,9 +22,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,11 +34,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.eatit.model.User
 import com.example.eatit.ui.*
+import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
-import com.example.eatit.viewModel.SettingsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
 import com.google.firebase.auth.ktx.auth
@@ -98,12 +95,7 @@ fun TopAppBarFunction(
                 && currentScreen != AppScreen.Login.name
                 && currentScreen != AppScreen.Register.name
             ) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back button"
-                    )
-                }
+                EatItIconButton(icon = Icons.Filled.ArrowBack, function = navigateUp)
             }
         }
     )
@@ -125,65 +117,26 @@ fun BottomAppBarFunction(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                IconButton(onClick = onHomeButtonClicked) {
-                    if (currentScreen == AppScreen.Home.name) {
-                        Icon(
-                            Icons.Filled.Home,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.Home,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-                    }
+                if (currentScreen == AppScreen.Home.name) {
+                    EatItIconButton(function = {onHomeButtonClicked()},icon=Icons.Filled.Home)
+                } else {
+                    EatItIconButton(function = {onHomeButtonClicked()},icon=Icons.Outlined.Home)
                 }
-                IconButton(onClick = onUserProfileButtonClicked) {
-                    if (currentScreen == AppScreen.Profile.name) {
-                        Icon(
-                            Icons.Filled.AccountCircle,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.AccountCircle,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    }
+                if (currentScreen == AppScreen.Profile.name) {
+                    EatItIconButton(function = {onUserProfileButtonClicked()},icon=Icons.Filled.AccountCircle)
+                } else {
+                    EatItIconButton(function = {onUserProfileButtonClicked()},icon=Icons.Outlined.AccountCircle)
                 }
-                IconButton(onClick = onMapButtonClicked) {
-                    if (currentScreen == AppScreen.Map.name) {
-                        Icon(
-                            Icons.Filled.Map,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.Map,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-                    }
+                if (currentScreen == AppScreen.Map.name) {
+                    EatItIconButton(function = {onMapButtonClicked()},icon=Icons.Filled.Map)
+                } else {
+                    EatItIconButton(function = {onMapButtonClicked()},icon=Icons.Outlined.Map)
                 }
-                IconButton(onClick = onSettingsButtonClicked) {
-                    if (currentScreen == AppScreen.Settings.name) {
-                        Icon(
-                            Icons.Filled.Settings,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    } else {
-                        Icon(
-                            Icons.Outlined.Settings,
-                            contentDescription = stringResource(id = R.string.settings),
-                        )
-
-                    }
+                if (currentScreen == AppScreen.Settings.name) {
+                    EatItIconButton(function = {onSettingsButtonClicked()},icon=Icons.Filled.Settings)
+                } else {
+                    EatItIconButton(function = {onSettingsButtonClicked()},icon=Icons.Outlined.Settings)
                 }
-
             }
         }
     )
@@ -267,14 +220,7 @@ private fun NavigationGraph(
 ) {
     val restaurantsViewModel = hiltViewModel<RestaurantsViewModel>()
     val usersViewModel = hiltViewModel<UsersViewModel>()
-    val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val cartViewModel = hiltViewModel<CartViewModel>()
-    var user: User by remember { mutableStateOf(User()) }
-    LaunchedEffect(Unit) {
-        if (Firebase.auth.currentUser != null) {
-            user = usersViewModel.getUser()
-        }
-    }
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,

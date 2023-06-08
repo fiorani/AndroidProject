@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.eatit.EatItApp
 
 @Composable
 fun EatItButton(text:String,function: () -> Unit,icon: ImageVector? = null ){
@@ -47,9 +46,11 @@ fun EatitFloatingButton(function: () -> Unit,icon: ImageVector ){
     }
 }
 @Composable
-fun EatItIconButton(function: () -> Unit,icon: ImageVector ){
+fun EatItIconButton(function: (() -> Unit)? =null, icon: ImageVector ){
     IconButton(onClick = {
-        function()
+        if (function != null) {
+            function()
+        }
     }) {
         Icon(
             icon,
