@@ -163,9 +163,6 @@ fun RegisterScreen(
                     }
 
                     var address by rememberSaveable { usersViewModel.position }
-                    LaunchedEffect(Unit) {
-                        address = usersViewModel.getPosition()
-                    }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
@@ -174,7 +171,7 @@ fun RegisterScreen(
                     ) {
                         OutlinedTextField(
                             modifier = Modifier.weight(4f),
-                            value = address.ifEmpty { "" },
+                            value = address,
                             onValueChange = { newText -> address = newText },
                             label = { Text("Address") },
                         )

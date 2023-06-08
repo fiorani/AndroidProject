@@ -60,7 +60,7 @@ fun DetailsRestaurantScreen(
     val restaurant = restaurantsViewModel.restaurantSelected
     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
-    var order by remember { mutableStateOf<Order?>(null) }
+    var order by remember { mutableStateOf<Order?>(Order()) }
     val user = usersViewModel.user
 
     LaunchedEffect(Unit) {
