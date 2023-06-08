@@ -149,15 +149,8 @@ fun AddRestaurantScreen(
 
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(capturedImageUri)
-                        .crossfade(true)
-                        .build(), contentDescription = "image taken"
-                )
-
                 LaunchedEffect(Unit) {
-                    saveImage(context.applicationContext.contentResolver, capturedImageUri,usersViewModel)
+                    restaurantsViewModel.setPhoto(restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
                 }
             }
 
@@ -332,14 +325,9 @@ fun AddProductScreen(
             }
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(capturedImageUri)
-                        .crossfade(true)
-                        .build(), contentDescription = "image taken"
-                )
-
-                //photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+                LaunchedEffect(Unit) {
+                    restaurantsViewModel.setPhotoProduct(restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
+                }
             }
         }
     }

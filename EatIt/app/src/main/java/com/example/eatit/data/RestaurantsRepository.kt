@@ -1,11 +1,15 @@
 package com.example.eatit.data
 
+import android.net.Uri
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -100,6 +104,21 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             )
 
     }
+    fun setPhoto(restaurantId: String,photo: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).update("photo", photo)
+    }
 
+    fun setPhotoProduct(restaurantId: String,productId: String,photo: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("products")
+            .document("productId").update("photo", photo)
+    }
+
+    suspend fun uploadPhoto(uri: Uri): Uri = withContext(Dispatchers.IO) {
+        try {
+            Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri).await().storage.downloadUrl.await()
+        } catch (e: Exception) {
+            throw e
+        }
+    }
 
 }

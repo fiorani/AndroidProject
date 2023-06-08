@@ -18,7 +18,7 @@ import java.util.Date
 import java.util.Locale
 
 
-suspend fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri, usersViewModel: UsersViewModel): String {
+suspend fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri): Uri? {
     val bitmap = getBitmap(capturedImageUri, contentResolver)
     val values = ContentValues()
     values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -27,8 +27,7 @@ suspend fun saveImage(contentResolver: ContentResolver, capturedImageUri: Uri, u
     val outputStream = imageUri?.let { contentResolver.openOutputStream(it) }
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
     outputStream?.close()
-    usersViewModel.setPhoto(usersViewModel.uploadPhoto(imageUri!!).toString())
-    return imageUri.toString()
+    return imageUri
 }
 
 fun Context.createImageFile(): File {

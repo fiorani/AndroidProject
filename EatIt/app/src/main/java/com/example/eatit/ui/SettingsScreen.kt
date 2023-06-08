@@ -170,6 +170,11 @@ fun SettingsScreen(
                     permissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }, icon = Icons.Filled.PhotoCamera)
+            if (capturedImageUri.path?.isNotEmpty() == true) {
+                LaunchedEffect(Unit) {
+                    usersViewModel.setPhoto(usersViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
+                }
+            }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = "Change password", function = {
                 showChangedPsw.value = true
