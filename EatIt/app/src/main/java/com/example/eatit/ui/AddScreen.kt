@@ -303,12 +303,13 @@ fun AddProductScreen(
             }
             Button(
                 onClick = {
-                    if (restaurantsViewModel.productSelected.id=="") {
+                    if (restaurantsViewModel.productSelected.id!="") {
                         restaurantsViewModel.setProduct(
                             Product(
                                 name = name,
                                 description = description,
-                                photo = photoURI
+                                photo = photoURI,
+                                price=price.toFloat(),
                             )
                         )
                     } else {
@@ -317,6 +318,7 @@ fun AddProductScreen(
                                 name = name,
                                 description = description,
                                 photo = photoURI,
+                                price=price.toFloat(),
                                 section = ""
                             )
                         )

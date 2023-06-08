@@ -127,7 +127,7 @@ fun DetailsRestaurantScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         val context = LocalContext.current
-                        EatItButton(text = "GO " + restaurant.address.toString(), function = {
+                        EatItButton(text = "GO ", function = {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant.address}")
