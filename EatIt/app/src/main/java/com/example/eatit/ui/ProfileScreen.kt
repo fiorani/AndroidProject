@@ -50,7 +50,7 @@ fun ProfileScreen(
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
     LaunchedEffect(Unit) {
         if (user.restaurateur) {
-            orders = cartViewModel.getOrders()
+            orders = cartViewModel.getOrdersRestaurateur()
         } else {
             orders = cartViewModel.getOrders()
         }

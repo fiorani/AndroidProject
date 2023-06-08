@@ -29,6 +29,10 @@ class CartViewModel @Inject constructor(
         return repository.getOrders()
     }
 
+    suspend fun getOrdersRestaurateur(): List<Order> {
+        return repository.getOrdersRestaurateur()
+    }
+
     suspend fun getProducts(order: Order): List<Product> {
         return repository.getProducts(order)
     }
