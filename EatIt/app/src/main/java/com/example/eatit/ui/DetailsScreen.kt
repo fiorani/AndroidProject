@@ -13,16 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,12 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
+import com.example.eatit.ui.components.EatItButton
+import com.example.eatit.ui.components.EatitFloatingButton
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.SectionMenuCard
 import com.example.eatit.viewModel.CartViewModel
@@ -92,27 +89,12 @@ fun DetailsRestaurantScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                FloatingActionButton(
-                    shape = RoundedCornerShape(25.dp),
-                    onClick = onAddButtonClicked
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = stringResource(id = R.string.add_restaurant)
-                    )
-                }
+                EatitFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
             } else {
-
-                FloatingActionButton(onClick =
-                {
-                    cartViewModel.selectOrder(order!!)
-                    onNextButtonClicked()
-                }) {
-                    Icon(
-                        Icons.Filled.ShoppingCart,
-                        contentDescription = stringResource(id = R.string.add_restaurant)
-                    )
-                }
+                EatitFloatingButton(
+                    function = { onNextButtonClicked() },
+                    icon = Icons.Filled.ShoppingCart
+                )
             }
         },
     ) { paddingValues ->
@@ -143,38 +125,21 @@ fun DetailsRestaurantScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         val context = LocalContext.current
-                        Button(onClick = {
+                        EatItButton(text = "GO " + restaurant?.address.toString(), function = {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant?.address}")
                             )
                             context.startActivity(intent)
-                        }) {
-                            Text(
-                                text = "GO " + restaurant?.address.toString(),
-                            )
-                            Icon(
-                                Icons.Filled.Map,
-                                contentDescription = "go"
-                            )
-                        }
+                        }, icon = Icons.Filled.Map)
                         Spacer(modifier = Modifier.size(15.dp))
-                        Button(onClick = {
+                        EatItButton(text = "call", function = {
                             val intent = Intent(Intent.ACTION_DIAL)
                             intent.data = Uri.parse("tel:${restaurant?.phone}")
                             context.startActivity(intent)
-                        }) {
-                            Text(
-                                text = "CALL ",
-                            )
-                            Icon(
-                                Icons.Filled.Call,
-                                contentDescription = "call"
-                            )
-                        }
+                        }, icon = Icons.Filled.Call)
                     }
                     Spacer(modifier = Modifier.size(15.dp))
-
                 }
             }
             LocalContext.current.resources.getStringArray(R.array.categories)

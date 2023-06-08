@@ -21,7 +21,7 @@ import android.location.Location
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-class Filter() {
+class Filter {
     @Composable
     fun filterDistance(restaurant: Restaurant, user: User, distance: String): Boolean {
         val positionRestaurant =
@@ -30,10 +30,10 @@ class Filter() {
             Geocoder(LocalContext.current).getFromLocationName(user.position.toString(), 1)
         var locationRestaurant: Location = Location("restaurant")
         locationRestaurant.latitude = positionRestaurant?.get(0)!!.latitude
-        locationRestaurant.longitude = positionRestaurant?.get(0)!!.longitude
+        locationRestaurant.longitude = positionRestaurant.get(0)!!.longitude
         var locationUser: Location = Location("user")
         locationUser.latitude = positionUser?.get(0)!!.latitude
-        locationUser.longitude = positionUser?.get(0)!!.longitude
+        locationUser.longitude = positionUser.get(0)!!.longitude
         val distanceBetween = locationRestaurant.distanceTo(locationUser)
         return distanceBetween <= distance.toFloat()
     }

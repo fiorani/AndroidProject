@@ -215,7 +215,7 @@ fun SectionShoppingCard(
         modifier = Modifier.padding(20.dp, 10.dp),
         text = sectionName,
         fontSize = 25.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = Bold
     )
 
     for (product in products) {
@@ -261,7 +261,7 @@ fun SectionMenuCard(
                 modifier = Modifier.padding(20.dp, 10.dp),
                 text = sectionName,
                 fontSize = 25.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = Bold
             )
             IconButton(modifier = Modifier.rotate(rotationState), onClick = {
                 expandedState = !expandedState

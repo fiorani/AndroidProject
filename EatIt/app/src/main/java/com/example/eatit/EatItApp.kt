@@ -95,6 +95,8 @@ fun TopAppBarFunction(
                 && currentScreen != AppScreen.UserProfile.name
                 && currentScreen != AppScreen.Map.name
                 && currentScreen != AppScreen.Settings.name
+                && currentScreen != AppScreen.Login.name
+                && currentScreen != AppScreen.Register.name
             ) {
                 IconButton(onClick = navigateUp) {
                     Icon(

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
+import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import java.util.*
@@ -35,76 +35,46 @@ fun RegisterScreen(
 
     usersViewModel: UsersViewModel
 ) {
-    var colorCustomer = MaterialTheme.colorScheme.tertiary
-    var colorRestaurant = MaterialTheme.colorScheme.primary
-
     Scaffold { innerPadding ->
         BackgroundImage(alpha = 0.15f)
         Column(
             modifier
                 .padding(innerPadding)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             val isUserRegister = remember { mutableStateOf(true) }
             var strTitle = "User registration"
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(65.dp, 20.dp, 65.dp, 0.dp),
+                    .padding(40.dp, 20.dp),
                 text = "Do you want to register as a customer or as a restaurant?",
                 fontSize = 20.sp
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                if (isUserRegister.value) {
-                    colorCustomer = MaterialTheme.colorScheme.tertiary
-                    colorRestaurant = MaterialTheme.colorScheme.primary
-                } else {
-                    colorRestaurant = MaterialTheme.colorScheme.tertiary
-                    colorCustomer = MaterialTheme.colorScheme.primary
-                }
-                Button(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = {
-                        isUserRegister.value = true
-                        strTitle = "User registration"
-                    },
-                    colors = ButtonDefaults.buttonColors(colorCustomer),
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                ) {
-                    Text(
-                        text = "Customer",
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp
-                    )
-                }
-                Button(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = {
-                        isUserRegister.value = false
-                        strTitle = "Restaurant registration"
-                    },
-                    colors = ButtonDefaults.buttonColors(colorRestaurant),
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                ) {
-                    Text(
-                        text = "Restaurant",
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp
-                    )
-                }
+                EatItButton(text = "Customer", function = {
+                    isUserRegister.value = true
+                    strTitle = "User registration"
+                })
+                EatItButton(text = "Restaurant", function = {
+                    isUserRegister.value = false
+                    strTitle = "Restaurant registration"
+                })
             }
-
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(40.dp, 20.dp, 40.dp, 0.dp),
+                modifier = Modifier.padding(40.dp, 10.dp),
                 elevation = CardDefaults.cardElevation(8.dp)
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(
+                    modifier = Modifier.padding(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Text(
                         text = strTitle,
                         fontSize = 25.sp
@@ -198,14 +168,15 @@ fun RegisterScreen(
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
+
                     ) {
                         OutlinedTextField(
+                            modifier = Modifier.weight(4f),
                             value = address.ifEmpty { "" },
                             onValueChange = { newText -> address = newText },
                             label = { Text("Address") },
-                            modifier = Modifier.weight(4f)
                         )
                         Icon(
                             Icons.Filled.LocationOn,
@@ -236,68 +207,30 @@ fun RegisterScreen(
                         onValueChange = { txtEmail = it },
                         label = { Text("Email") }
                     )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Button(
-                            modifier = Modifier.padding(10.dp),
-                            onClick = {
-                                createAccount(
-                                    txtEmail.text,
-                                    txtPassword.text,
-                                    txtNickname.text,
-                                    "",
-                                    0,
-                                    address,
-                                    !isUserRegister.value,
-                                    onNextButtonClicked
-                                )
-                            },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Text(
-                                text = "Register",
-                                textAlign = TextAlign.Center,
-                                fontSize = 25.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(70.dp, 40.dp),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Column {
-                    Text(
-                        modifier = Modifier
-                            .padding(5.dp, 0.dp),
-                        text = "Already have an account?",
-                        fontSize = 20.sp
-                    )
-
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(60.dp, 5.dp),
-                        onClick = {
-                            onLoginButtonClicked()
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Text(
-                            text = "Login",
-                            textAlign = TextAlign.Center,
-                            fontSize = 25.sp
+                    Spacer(modifier = Modifier.size(10.dp))
+                    EatItButton(text = "Register", function = {
+                        createAccount(
+                            txtEmail.text,
+                            txtPassword.text,
+                            txtNickname.text,
+                            "",
+                            0,
+                            address,
+                            !isUserRegister.value,
+                            onNextButtonClicked
                         )
-                    }
+                    })
+
                 }
             }
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(
+                modifier = Modifier
+                    .padding(5.dp, 0.dp),
+                text = "Already have an account?",
+                fontSize = 20.sp
+            )
+            EatItButton(text = "Login", function = { onLoginButtonClicked() })
         }
     }
 }

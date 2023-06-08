@@ -2,11 +2,13 @@ package com.example.eatit.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AppRegistration
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -21,10 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
+import com.example.eatit.ui.components.EatItButton
 import kotlin.reflect.KFunction3
 
 
@@ -37,14 +39,18 @@ fun LoginScreen(
 ) {
     Scaffold { innerPadding ->
         BackgroundImage(0.15f)
-        Column(modifier.padding(innerPadding)) {
+        Column(
+            modifier.padding(innerPadding).fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(40.dp, 130.dp, 40.dp, 40.dp),
-                elevation = CardDefaults.cardElevation(8.dp)
+                elevation = CardDefaults.cardElevation(8.dp),
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(
+                    modifier= Modifier.padding(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Text(
                         text = "Login",
                         fontSize = 32.sp,
@@ -70,59 +76,25 @@ fun LoginScreen(
                         onValueChange = { txtPassword = it },
                         label = { Text("Password") }
                     )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Button(
-                            modifier = Modifier.padding(10.dp),
-                            onClick = {
-                                signIn(txtName.text, txtPassword.text, onNextButtonClicked)
-                            },
-                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                        ) {
-                            Text(
-                                text = "Login",
-                                textAlign = TextAlign.Center,
-                                fontSize = 25.sp
-                            )
-                        }
-                    }
-                }
-
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(70.dp, 0.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Don't have an account yet?",
-                        fontSize = 20.sp
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    EatItButton(
+                        text = "Login",
+                        function = { signIn(txtName.text, txtPassword.text, onNextButtonClicked) },
+                        icon = Icons.Default.Login
                     )
-
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(55.dp, 5.dp),
-                        onClick = {
-                            onRegisterClicked()
-                        },
-                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding
-                    ) {
-                        Text(
-                            text = "Register",
-                            textAlign = TextAlign.Center,
-                            fontSize = 25.sp
-                        )
-                    }
                 }
             }
+            Spacer(modifier = Modifier.padding(10.dp))
+            Text(
+                text = "Don't have an account yet?",
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier.padding(10.dp))
+            EatItButton(
+                text = "Register",
+                function = { onRegisterClicked() },
+                icon = Icons.Default.AppRegistration
+            )
         }
     }
 }

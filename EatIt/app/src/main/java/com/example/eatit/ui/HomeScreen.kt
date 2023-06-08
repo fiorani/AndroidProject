@@ -5,13 +5,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.example.eatit.R
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
+import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.ui.components.EatItSearchBar
+import com.example.eatit.ui.components.EatitFloatingButton
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -64,41 +59,17 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                FloatingActionButton(
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = onAddButtonClicked
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = stringResource(id = R.string.add_restaurant)
-                    )
-                    /*Text(
-                        text = "Modify menù",
-                        modifier = Modifier.padding(20.dp),
-                        fontWeight = Bold,
-                        fontSize = 20.sp
-                    )*/
-                }
+                EatitFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
             }
         },
     ) { innerPadding ->
         Column(modifier.padding(innerPadding)) {
-            Row(modifier.fillMaxWidth()) {
-                EatItSearchBar(
-                    restaurants, onItemClicked,
-                    restaurantsViewModel
-                )
-                IconButton(
-                    onClick = onFilterClicked,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                ) {
-                    Icon(
-                        Icons.Filled.FilterList,
-                        contentDescription = "Filter"
-                    )
-                }
+            Row(modifier=modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                EatItSearchBar(restaurants, onItemClicked, restaurantsViewModel)
+                EatItIconButton(function = { onFilterClicked()}, icon = Icons.Filled.FilterList)
             }
-
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(restaurants.size) { index ->
                     RestaurantCard(
