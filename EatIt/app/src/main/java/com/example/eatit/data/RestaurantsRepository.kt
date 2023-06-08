@@ -104,14 +104,6 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             )
 
     }
-    fun setPhoto(restaurantId: String,photo: String) {
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).update("photo", photo)
-    }
-
-    fun setPhotoProduct(restaurantId: String,productId: String,photo: String) {
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).collection("products")
-            .document("productId").update("photo", photo)
-    }
 
     suspend fun uploadPhoto(uri: Uri): Uri = withContext(Dispatchers.IO) {
         try {

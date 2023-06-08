@@ -68,14 +68,6 @@ class RestaurantsViewModel @Inject constructor(
         _productSelected = Product()
     }
 
-    fun setPhoto(photo: String) {
-        _restaurantSelected.photo = photo
-        repository.setPhoto(restaurantSelected.id!!,photo)
-    }
-    fun setPhotoProduct(photo: String) {
-        _restaurantSelected.photo = photo
-        repository.setPhotoProduct(restaurantSelected.id!!,photo,productSelected.id!!)
-    }
     suspend fun uploadPhoto(uri: Uri): Uri {
         return repository.uploadPhoto(uri)
     }
