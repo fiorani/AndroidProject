@@ -47,14 +47,14 @@ fun MapScreen(
     LaunchedEffect(restaurants) {
         for (restaurant in restaurants) {
             val position = withContext(Dispatchers.IO) {
-                Geocoder(context).getFromLocationName(restaurant.address.toString(), 1)
+                Geocoder(context).getFromLocationName(restaurant.address, 1)
             }
             if (position != null && position.size > 0) {
                 val latitude = position[0].latitude
                 val longitude = position[0].longitude
                 markers.add(
                     MarkerInfo(
-                        restaurant.name.toString(),
+                        restaurant.name,
                         LatLng(latitude, longitude)
                     )
                 )
