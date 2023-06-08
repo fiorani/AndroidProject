@@ -77,6 +77,7 @@ class MainActivity : ComponentActivity() {
                 super.onLocationResult(p0)
                 val userViewModel by viewModels<UsersViewModel>()
                 userViewModel.setLocation(p0.locations.last())
+                Log.d("MAINACTIVITY", p0.locations.last().toString())
                 location.value = LocationDetails(
                     p0.locations.last().latitude,
                     p0.locations.last().longitude
@@ -130,6 +131,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun sendRequest(location: LocationDetails, connectivityManager: ConnectivityManager) {
+        Log.d("MAINACTIVITY-SENDREQUEST", location.toString())
         val userViewModel by viewModels<UsersViewModel>()
         queue = Volley.newRequestQueue(this)
         val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +

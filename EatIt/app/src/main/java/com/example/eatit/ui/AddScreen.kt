@@ -47,7 +47,7 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var city by rememberSaveable { usersViewModel.userPosition }
+    var city by rememberSaveable { usersViewModel.position }
     var photo by rememberSaveable { mutableStateOf("") }
     var numRatings = 0
     var avgRating = 0.0f

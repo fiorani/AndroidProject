@@ -64,9 +64,9 @@ fun SettingsScreen(
     theme: String?,
     onThemeChanged: (String?) -> Unit
 ) {
-    var user: User by remember { mutableStateOf(User()) }
+    var user: User = usersViewModel.user!!
     val name = remember { mutableStateOf(user.name.toString()) }
-    var address by rememberSaveable { usersViewModel.userPosition }
+    var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val changedThing = remember { mutableStateOf("") }
@@ -106,6 +106,7 @@ fun SettingsScreen(
     }
     LaunchedEffect(user) {
         name.value = user.name.toString()
+        address = user.position.toString()
     }
     Scaffold { paddingValues ->
         BackgroundImage(alpha = 0.1f)

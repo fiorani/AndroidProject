@@ -162,7 +162,7 @@ fun RegisterScreen(
                         }
                     }
 
-                    var address by rememberSaveable { usersViewModel.userPosition }
+                    var address by rememberSaveable { usersViewModel.position }
                     LaunchedEffect(Unit) {
                         address = usersViewModel.getPosition()
                     }

@@ -1,5 +1,6 @@
 package com.example.eatit.data
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.User
