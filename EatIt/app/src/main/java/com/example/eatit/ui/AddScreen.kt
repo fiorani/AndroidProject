@@ -150,7 +150,7 @@ fun AddRestaurantScreen(
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 LaunchedEffect(Unit) {
-                    restaurantsViewModel.setPhoto(restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
+                    photo=restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString()
                 }
             }
 
@@ -296,7 +296,11 @@ fun AddProductScreen(
             }
 
             Spacer(modifier = Modifier.size(15.dp))
-
+            if (capturedImageUri.path?.isNotEmpty() == true) {
+                LaunchedEffect(Unit) {
+                   photoURI= restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString()
+                }
+            }
             Button(
                 onClick = {
                     if (restaurantsViewModel.productSelected.id=="") {
@@ -324,11 +328,7 @@ fun AddProductScreen(
                 Text(text = stringResource(id = R.string.save))
             }
 
-            if (capturedImageUri.path?.isNotEmpty() == true) {
-                LaunchedEffect(Unit) {
-                    restaurantsViewModel.setPhotoProduct(restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
-                }
-            }
+
         }
     }
 }
