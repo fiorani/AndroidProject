@@ -22,10 +22,6 @@ fun QuantitySelector(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = "Qty",
-            fontSize = 20.sp
-        )
         IconButton(
             onClick = decreaseItemCount
         ) {

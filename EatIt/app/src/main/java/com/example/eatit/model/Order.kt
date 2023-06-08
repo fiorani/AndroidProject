@@ -11,6 +11,7 @@ data class Order(
     var listPrice: ArrayList<Float> = ArrayList(mutableListOf()),
     var totalPrice: Float = 0.0f,
     var id: String? = "",
+    var status: String = "attesa pagamento",
     @ServerTimestamp var timestamp: Date = Date(),
 ) {
     fun reduceCount(product: Product): Order {

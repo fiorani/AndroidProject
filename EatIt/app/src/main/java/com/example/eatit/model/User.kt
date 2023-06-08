@@ -10,7 +10,8 @@ data class User(
     var photo: String = "",
     var age: Int = 0,
     var restaurateur: Boolean = false,
-    var position: String = ""
+    var position: String = "",
+    var favouriteRestaurants: ArrayList<String> = ArrayList(mutableListOf()),
 ) {
     constructor(
         name: String,

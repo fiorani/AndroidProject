@@ -7,6 +7,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -90,17 +92,12 @@ fun RestaurantCard(
                         spaceBetween = 1.dp,
                         size = 20.dp
                     )
-                    IconButton(
-                        onClick =
-                        {
-
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
-                            contentDescription = "Heart"
-                        )
+                    if(true){
+                        EatItIconButton(icon = Icons.Filled.Favorite, function = {})
+                    }else{
+                        EatItIconButton(icon = Icons.Outlined.Favorite, function = {})
                     }
+
                 }
             }
         }
@@ -400,6 +397,25 @@ fun OrderProfileCard(
                 )
                 Text(
                     text = "€" + String.format("%.${2}f", orders.totalPrice),
+                    modifier = Modifier.padding(10.dp, 2.dp),
+                    fontWeight = Bold,
+                    fontSize = 20.sp
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Status:",
+                    modifier = Modifier
+                        .padding(10.dp, 1.dp)
+                        .weight(1f),
+                    fontWeight = Bold,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = orders.status,
                     modifier = Modifier.padding(10.dp, 2.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp

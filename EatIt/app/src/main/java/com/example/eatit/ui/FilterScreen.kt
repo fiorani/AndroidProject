@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -35,7 +37,7 @@ fun FilterScreen(
         }
         Column(Modifier.selectableGroup()) {
             Text(
-                text = "Filter Distance",
+                text = "Filtra per distanza",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp)
             )
@@ -64,7 +66,34 @@ fun FilterScreen(
                 }
             }
         }
-
+        Text(
+            text = "Filtra per preferiti",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+        )
+        val (checkedState, onStateChange) = remember { mutableStateOf(false) }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .toggleable(
+                    value = checkedState,
+                    onValueChange = { onStateChange(!checkedState) },
+                    role = Role.Checkbox
+                )
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = checkedState,
+                onCheckedChange = null // null recommended for accessibility with screenreaders
+            )
+            Text(
+                text = "solo i preferiti",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
         val sort = listOf<String>("Predefinito", "Distanza", "Alfabetico")
         val (selectedOption, onOptionSelected) = remember { mutableStateOf(sort[0]) }
         Column(Modifier.selectableGroup()) {
@@ -98,6 +127,7 @@ fun FilterScreen(
                 }
             }
         }
+
     }
 
 }
