@@ -60,7 +60,7 @@ class RestaurantsViewModel @Inject constructor(
     }
 
     fun setProduct(product: Product) {
-        repository.setProduct(product, _restaurantSelected.id, _productSelected.id)
+        repository.setProduct(product, _restaurantSelected.id!!, _productSelected.id!!)
     }
 
     fun resetProduct() {

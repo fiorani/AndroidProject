@@ -64,8 +64,8 @@ fun DetailsRestaurantScreen(
     val user = usersViewModel.user
 
     LaunchedEffect(Unit) {
-        products = restaurantsViewModel.getProducts(restaurant.id)
-        ratings = restaurantsViewModel.getRatings(restaurant.id)
+        products = restaurantsViewModel.getProducts(restaurant.id!!)
+        ratings = restaurantsViewModel.getRatings(restaurant.id!!)
     }
     if (cartViewModel.orderSelected.id !="") {
         order = cartViewModel.orderSelected

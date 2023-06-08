@@ -10,7 +10,7 @@ data class Order(
     var listQuantity: ArrayList<Int> = ArrayList(mutableListOf()),
     var listPrice: ArrayList<Float> = ArrayList(mutableListOf()),
     var totalPrice: Float = 0.0f,
-    var id: String = "",
+    var id: String? = "",
     @ServerTimestamp var timestamp: Date = Date(),
 ) {
     fun reduceCount(product: Product): Order {
@@ -38,7 +38,7 @@ data class Order(
                 this.listQuantity.get(productIndex).plus(1)
             )
         } else {
-            this.listProductId.add(product.id)
+            this.listProductId.add(product.id!!)
             this.listPrice.add(product.price)
             this.listQuantity.add(1)
         }
