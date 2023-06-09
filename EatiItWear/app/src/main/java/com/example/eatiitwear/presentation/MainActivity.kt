@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -110,51 +111,22 @@ fun WearApp() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
                                 text = restaurant.name,
                             )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "Order date:",
-                                )
-                                val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
-                                Text(
-                                    text = dateFormat.format(orders[index].timestamp).toString(),
-                                    modifier = Modifier.padding(10.dp, 1.dp),
-                                    fontSize = 18.sp
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "Order total:",
-                                    modifier = Modifier
-                                        .weight(1f),
-                                )
-                                Text(
-                                    text = "€" + String.format("%.${2}f", orders[index].totalPrice),
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "Status:",
-                                    modifier = Modifier
-                                        .weight(1f),
-                                )
-                                Text(
-                                    text = orders[index].status,
-                                )
-                            }
+                            val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+                            Text(
+                                text = "Order date:"+dateFormat.format(orders[index].timestamp).toString(),
+                            )
+                            Text(
+                                text = "Order total: €" + String.format("%.${2}f", orders[index].totalPrice),
+                            )
+                            Text(
+                                text = "Status: "+orders[index].status,
+                            )
                         }
                     }
                 }
