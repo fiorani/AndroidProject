@@ -116,12 +116,14 @@ fun SettingsScreen(
                 text = "Settings Profile:",
                 fontSize = 30.sp,
                 fontWeight = Bold,
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(10.dp))
             OutlinedTextField(
                 value = name.value,
                 onValueChange = { newText -> name.value = newText },
                 label = { Text("Name") },
+                modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Save,
@@ -141,6 +143,7 @@ fun SettingsScreen(
                 value = address,
                 onValueChange = { newText -> address = newText },
                 label = { Text("Address") },
+                modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
@@ -218,13 +221,15 @@ fun SettingsScreen(
                 fontWeight = Bold,
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+            modifier=Modifier.fillMaxWidth()) {
                 Text(
                     text = "Dark Theme: ",
                     fontWeight = Bold,
+                    modifier = Modifier.weight(4f)
                 )
                 Switch(
-                    modifier = Modifier.semantics { contentDescription = "Demo" },
+                    modifier = Modifier.semantics { contentDescription = "Demo" }.weight(1f),
                     checked = theme == dark,
                     onCheckedChange = {
                         val tmp = if (it) dark else light
