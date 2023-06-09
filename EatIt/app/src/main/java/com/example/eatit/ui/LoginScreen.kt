@@ -65,11 +65,11 @@ fun LoginScreen(
                         fontWeight = Bold
                     )
 
-                    var name by rememberSaveable { mutableStateOf("") }
+                    var mail by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        label = { Text("Name") }
+                        value = mail,
+                        onValueChange = { mail = it },
+                        label = { Text("Email") }
                     )
 
                     var password by rememberSaveable { mutableStateOf("") }
@@ -94,7 +94,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
                     EatItButton(
                         text = "Login",
-                        function = { signIn(name, password, onNextButtonClicked) },
+                        function = { signIn(mail, password, onNextButtonClicked) },
                         icon = Icons.Default.Login
                     )
                 }

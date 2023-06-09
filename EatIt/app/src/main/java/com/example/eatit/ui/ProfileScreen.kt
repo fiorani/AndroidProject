@@ -49,10 +49,10 @@ fun ProfileScreen(
     val user: User = usersViewModel.user
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
     LaunchedEffect(Unit) {
-        if (user.restaurateur) {
-            orders = cartViewModel.getOrdersRestaurateur()
+        orders = if (user.restaurateur) {
+            cartViewModel.getOrdersRestaurateur()
         } else {
-            orders = cartViewModel.getOrders()
+            cartViewModel.getOrders()
         }
     }
 
@@ -95,6 +95,12 @@ fun ProfileScreen(
 
                     if (!user.restaurateur) {
                         ImageCarouselCard()
+                        Text(
+                            text = "My orders:",
+                            modifier = Modifier.padding(20.dp, 10.dp),
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     } else {
                         val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
                         Chart(
@@ -103,14 +109,13 @@ fun ProfileScreen(
                             startAxis = startAxis(),
                             bottomAxis = bottomAxis(),
                         )
+                        Text(
+                            text = "Orders:",
+                            modifier = Modifier.padding(20.dp, 10.dp),
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
-
-                    Text(
-                        text = "My orders:",
-                        modifier = Modifier.padding(20.dp, 10.dp),
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
                 }
                 items(orders.size) { item ->
                     var products by remember { mutableStateOf<List<Product>>(emptyList()) }
@@ -118,7 +123,7 @@ fun ProfileScreen(
                     LaunchedEffect(Unit) {
                         products = cartViewModel.getProducts(orders[item])
                         restaurant = restaurantsViewModel.getRestaurant(
-                            orders[item].restaurantId.toString()
+                            orders[item].restaurantId
                         )
                     }
                     OrderProfileCard(

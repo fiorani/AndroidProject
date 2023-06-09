@@ -4,16 +4,22 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
@@ -89,13 +95,24 @@ fun RegisterScreen(
                         label = { Text("Nickname") }
                     )
 
-                    var txtPassword by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
+                    var password by rememberSaveable { mutableStateOf("") }
+                    var passwordHidden by rememberSaveable { mutableStateOf(true) }
                     OutlinedTextField(
-                        value = txtPassword,
-                        onValueChange = { txtPassword = it },
-                        label = { Text("Password") }
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("Password") },
+                        visualTransformation =
+                        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordHidden = !passwordHidden }) {
+                                val visibilityIcon =
+                                    if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                val description =
+                                    if (passwordHidden) "Show password" else "Hide password"
+                                Icon(imageVector = visibilityIcon, contentDescription = description)
+                            }
+                        }
                     )
 
                     if (!isUserRegister.value) {
@@ -208,7 +225,7 @@ fun RegisterScreen(
                     EatItButton(text = "Register", function = {
                         createAccount(
                             txtEmail.text,
-                            txtPassword.text,
+                            password,
                             txtNickname.text,
                             "",
                             0,
