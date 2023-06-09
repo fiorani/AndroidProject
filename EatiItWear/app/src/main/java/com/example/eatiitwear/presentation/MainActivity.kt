@@ -108,7 +108,7 @@ fun WearApp() {
                     }
                     Card(
                         onClick = {},
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().padding(5.dp)
                     ) {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
