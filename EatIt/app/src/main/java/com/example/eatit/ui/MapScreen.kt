@@ -4,9 +4,15 @@ import android.content.ContentValues.TAG
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import androidx.compose.foundation.layout.Column
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,8 +60,7 @@ fun MapScreen(
                 val longitude = position[0].longitude
                 markers.add(
                     MarkerInfo(
-                        restaurant.name,
-                        LatLng(latitude, longitude)
+                        restaurant.name, LatLng(latitude, longitude)
                     )
                 )
             }
@@ -96,9 +101,13 @@ fun MapScreen(
     }
     var isMapLoaded by remember { mutableStateOf(false) }
     Scaffold { innerPadding ->
-        Column(modifier.padding(innerPadding)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             GoogleMap(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.matchParentSize(),
                 cameraPositionState = cameraPositionState,
                 onMapLoaded = {
                     isMapLoaded = true
@@ -106,24 +115,34 @@ fun MapScreen(
                 locationSource = locationSource,
                 properties = MapProperties(isMyLocationEnabled = true)
             ) {
-                if (!isMapLoaded) {
-                } else {
-                    markers.forEach { markerInfo ->
-                        Marker(
-                            state = rememberMarkerState(
-                                position = markerInfo.position
-                            ),
-                            title = markerInfo.title
-                        )
-                    }
+                markers.forEach { markerInfo ->
+                    Marker(
+                        state = rememberMarkerState(
+                            position = markerInfo.position
+                        ), title = markerInfo.title
+                    )
                 }
             }
+            if (!isMapLoaded) {
+                AnimatedVisibility(
+                    modifier = Modifier.matchParentSize(),
+                    visible = !isMapLoaded,
+                    enter = EnterTransition.None,
+                    exit = fadeOut()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .background(color = androidx.compose.ui.graphics.Color.White)
+                            .wrapContentSize()
+                    )
+                }
+            }
+
         }
     }
 }
 
 data class MarkerInfo(
-    val title: String,
-    val position: LatLng
+    val title: String, val position: LatLng
 )
 

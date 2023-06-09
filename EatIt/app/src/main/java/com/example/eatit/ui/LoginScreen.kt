@@ -4,13 +4,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,7 +26,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
@@ -40,7 +46,9 @@ fun LoginScreen(
     Scaffold { innerPadding ->
         BackgroundImage(0.15f)
         Column(
-            modifier.padding(innerPadding).fillMaxSize(),
+            modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -48,7 +56,7 @@ fun LoginScreen(
                 elevation = CardDefaults.cardElevation(8.dp),
             ) {
                 Column(
-                    modifier= Modifier.padding(10.dp),
+                    modifier = Modifier.padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -57,29 +65,36 @@ fun LoginScreen(
                         fontWeight = Bold
                     )
 
-                    var txtName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
-
+                    var name by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
-                        value = txtName,
-                        onValueChange = { txtName = it },
+                        value = name,
+                        onValueChange = { name = it },
                         label = { Text("Name") }
                     )
 
-                    var txtPassword by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
-
+                    var password by rememberSaveable { mutableStateOf("") }
+                    var passwordHidden by rememberSaveable { mutableStateOf(true) }
                     OutlinedTextField(
-                        value = txtPassword,
-                        onValueChange = { txtPassword = it },
-                        label = { Text("Password") }
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("Password") },
+                        visualTransformation =
+                        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordHidden = !passwordHidden }) {
+                                val visibilityIcon =
+                                    if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                val description =
+                                    if (passwordHidden) "Show password" else "Hide password"
+                                Icon(imageVector = visibilityIcon, contentDescription = description)
+                            }
+                        }
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     EatItButton(
                         text = "Login",
-                        function = { signIn(txtName.text, txtPassword.text, onNextButtonClicked) },
+                        function = { signIn(name, password, onNextButtonClicked) },
                         icon = Icons.Default.Login
                     )
                 }
