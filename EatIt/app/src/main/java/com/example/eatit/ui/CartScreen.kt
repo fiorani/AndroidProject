@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,9 +21,10 @@ import com.example.eatit.viewModel.CartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(cartViewModel: CartViewModel) {
+fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val order = cartViewModel.orderSelected
+    val showToast = remember { mutableStateOf(false) }
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,
@@ -39,7 +41,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = "Totale:",
+                        text = "Total:",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -53,7 +55,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 Divider(modifier = Modifier.padding(20.dp, 20.dp, 20.dp, 0.dp))
                 Text(
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
-                    text = "Orario di ritiro:",
+                    text = "Delivery time:",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -65,15 +67,20 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 )
                 Button(
                     modifier = Modifier.padding(20.dp),
-                    onClick = { cartViewModel.addNewOrder(cartViewModel.orderSelected) }
+                    onClick = {
+                        cartViewModel.addNewOrder(cartViewModel.orderSelected)
+                        onNextButtonClicked()
+                        showToast.value = true
+                    }
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 10.dp),
-                        text = "PAGA",
+                        text = "PAY",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
+
             }
         }
     ) { paddingValues ->
@@ -98,7 +105,7 @@ fun CartScreen(cartViewModel: CartViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp, 5.dp),
-                    text = "Riepilogo ordine",
+                    text = "Order summary",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -118,5 +125,6 @@ fun CartScreen(cartViewModel: CartViewModel) {
                 }
         }
     }
+    if (showToast.value) Toast.makeText(LocalContext.current, "Your order has been received",Toast.LENGTH_SHORT).show()
 }
 

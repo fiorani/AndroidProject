@@ -323,7 +323,12 @@ private fun NavigationGraph(
             })
         }
         composable(route = AppScreen.Cart.name) {
-            CartScreen(cartViewModel = cartViewModel)
+            CartScreen(
+                cartViewModel = cartViewModel,
+                onNextButtonClicked = {
+                    navController.navigate(AppScreen.Home.name)
+                }
+            )
         }
         composable(route = AppScreen.Filter.name) {
             FilterScreen(
