@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -45,8 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
@@ -67,7 +66,7 @@ fun SettingsScreen(
     theme: String?,
     onThemeChanged: (String?) -> Unit
 ) {
-    var user: User = usersViewModel.user!!
+    var user: User = usersViewModel.user
     val name = remember { mutableStateOf(user.name) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
@@ -123,13 +122,18 @@ fun SettingsScreen(
                 value = name.value,
                 onValueChange = { newText -> name.value = newText },
                 label = { Text("Name") },
-                trailingIcon={
-                    EatItButton(text = "save", function = {
-                        showDialog.value = true
-                        focusManager.clearFocus()
-                        usersViewModel.setName(name.value)
-                        changedThing.value = "username"
-                    })
+                trailingIcon = {
+                    Icon(
+                        Icons.Filled.Save,
+                        contentDescription = "Save",
+                        Modifier
+                            .clickable(onClick = {
+                                showDialog.value = true
+                                focusManager.clearFocus()
+                                usersViewModel.setName(name.value)
+                                changedThing.value = "username"
+                            })
+                    )
                 }
             )
             Spacer(modifier = Modifier.size(10.dp))
@@ -137,7 +141,7 @@ fun SettingsScreen(
                 value = address,
                 onValueChange = { newText -> address = newText },
                 label = { Text("Address") },
-                trailingIcon={
+                trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
                         contentDescription = "Localized",
@@ -163,7 +167,14 @@ fun SettingsScreen(
             }, icon = Icons.Filled.PhotoCamera)
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 LaunchedEffect(Unit) {
-                    usersViewModel.setPhoto(usersViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString())
+                    usersViewModel.setPhoto(
+                        usersViewModel.uploadPhoto(
+                            saveImage(
+                                context.applicationContext.contentResolver,
+                                capturedImageUri
+                            )!!
+                        ).toString()
+                    )
                 }
             }
             Spacer(modifier = Modifier.size(10.dp))
