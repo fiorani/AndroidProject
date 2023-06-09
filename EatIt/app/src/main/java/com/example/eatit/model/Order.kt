@@ -11,21 +11,19 @@ data class Order(
     var listPrice: ArrayList<Float> = ArrayList(mutableListOf()),
     var totalPrice: Float = 0.0f,
     var id: String? = "",
-    var status: String = "out for delivery",
+    var status: String = "in progress",
     @ServerTimestamp var timestamp: Date = Date(),
 ) {
 
-    fun changeStateToDelivered() { //in teoria non ci deve essere modo per tornare allo stato precedente
-        this.status = "delivered"
+    fun changeState() { //in teoria non ci deve essere modo per tornare allo stato precedente
+        if (this.status == "in progress") this.status = "sent"
+        else                              this.status = "delivered"
     }
     fun reduceCount(product: Product): Order {
         var productIndex = 0
         if (this.listProductId.contains(product.id)) {
             productIndex = this.listProductId.indexOf(product.id)
-            this.listQuantity.set(
-                productIndex,
-                this.listQuantity.get(productIndex).minus(1)
-            )
+            this.listQuantity[productIndex] = this.listQuantity[productIndex].minus(1)
         } else {
             this.listProductId.remove(product.id)
             this.listPrice.removeAt(productIndex)
@@ -38,10 +36,7 @@ data class Order(
     fun increaseCount(product: Product): Order {
         if (this.listProductId.contains(product.id)) {
             val productIndex = this.listProductId.indexOf(product.id)
-            this.listQuantity.set(
-                productIndex,
-                this.listQuantity.get(productIndex).plus(1)
-            )
+            this.listQuantity[productIndex] = this.listQuantity[productIndex].plus(1)
         } else {
             this.listProductId.add(product.id!!)
             this.listPrice.add(product.price)

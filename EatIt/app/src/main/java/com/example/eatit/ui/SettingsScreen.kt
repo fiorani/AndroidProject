@@ -66,7 +66,7 @@ fun SettingsScreen(
     theme: String?,
     onThemeChanged: (String?) -> Unit
 ) {
-    var user: User = usersViewModel.user
+    val user: User = usersViewModel.user
     val name = remember { mutableStateOf(user.name) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }

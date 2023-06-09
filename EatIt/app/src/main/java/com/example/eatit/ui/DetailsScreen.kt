@@ -38,7 +38,7 @@ import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.ui.components.EatItButton
-import com.example.eatit.ui.components.EatitFloatingButton
+import com.example.eatit.ui.components.EatItFloatingButton
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.SectionMenuCard
 import com.example.eatit.viewModel.CartViewModel
@@ -89,9 +89,9 @@ fun DetailsRestaurantScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                EatitFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
+                EatItFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
             } else {
-                EatitFloatingButton(
+                EatItFloatingButton(
                     function = {
                         cartViewModel.selectOrder(order!!)
                         onNextButtonClicked() },

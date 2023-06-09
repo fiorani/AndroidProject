@@ -32,7 +32,7 @@ fun EatItButton(text:String,function: () -> Unit,icon: ImageVector? = null ){
 }
 
 @Composable
-fun EatitFloatingButton(function: () -> Unit,icon: ImageVector ){
+fun EatItFloatingButton(function: () -> Unit, icon: ImageVector ){
     FloatingActionButton(
         shape = RoundedCornerShape(20.dp),
         onClick = {
@@ -62,13 +62,13 @@ fun EatItIconButton(function: (() -> Unit)? =null, icon: ImageVector ){
 @Preview
 @Composable
 fun EatItButtonPreview(){
-    Column() {
+    Column {
         EatItButton(
             text = "Add",
             function = {},
             icon = Icons.Default.Add
         )
-        EatitFloatingButton(
+        EatItFloatingButton(
             function = {},
             icon = Icons.Default.Add
         )

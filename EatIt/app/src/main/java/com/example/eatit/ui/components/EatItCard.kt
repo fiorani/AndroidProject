@@ -1,6 +1,6 @@
 package com.example.eatit.ui.components
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -8,9 +8,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -201,11 +198,9 @@ fun ShoppingCard(product: Product, order: Order) {
                 )
                 Text(
                     modifier = Modifier.padding(17.dp, 7.dp),
-                    text = product.price.toString() + "€ x " + order.listQuantity.get(
-                        order.listProductId.indexOf(
-                            product.id
-                        )
-                    ).toString(),
+                    text = product.price.toString() + "€ x " + order.listQuantity[
+                            order.listProductId.indexOf(product.id)
+                    ].toString(),
                     fontSize = 17.sp
                 )
             }
@@ -313,7 +308,7 @@ fun RatingCard(rating: Rating) {
                 fontSize = 20.sp
             )
             Row {
-                var name by remember { mutableStateOf("random user") }
+                val name by remember { mutableStateOf("random user") }
                 LaunchedEffect(Unit) {
                     // name = UsersViewModel().getUserById(rating.userId.toString()).name.toString()
                 }
@@ -346,12 +341,14 @@ fun RatingCard(rating: Rating) {
 fun OrderProfileCard(
     orders: Order,
     listProducts: List<Product>,
-    restaurant: Restaurant
+    restaurant: Restaurant,
+    user: User
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
+    val statusText = remember { mutableStateOf(orders.status) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -373,12 +370,29 @@ fun OrderProfileCard(
                 .fillMaxWidth()
                 .padding(10.dp, 0.dp)
         ) {
-            Text(
-                text = restaurant.name,
-                modifier = Modifier.padding(10.dp),
-                fontWeight = Bold,
-                fontSize = 32.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = restaurant.name,
+                    modifier = Modifier.padding(10.dp).weight(1f),
+                    fontWeight = Bold,
+                    fontSize = 32.sp
+                )
+                if (user.restaurateur) {
+                    Column {
+                        Spacer(modifier = Modifier.height(7.dp))
+                        EatItButton(
+                            text = statusText.value,
+                            function = {
+                                       orders.changeState() //ancora non funziona, non so perchè non aggiorna l'ordine
+                            },
+                            icon = Icons.Default.CheckCircleOutline
+                        )
+                    }
+                }
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -416,24 +430,26 @@ fun OrderProfileCard(
                     fontSize = 20.sp
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Status:",
-                    modifier = Modifier
-                        .padding(10.dp, 1.dp)
-                        .weight(1f),
-                    fontWeight = Bold,
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = orders.status,
-                    modifier = Modifier.padding(10.dp, 2.dp),
-                    fontWeight = Bold,
-                    fontSize = 20.sp
-                )
+            if (!user.restaurateur) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Status:",
+                        modifier = Modifier
+                            .padding(10.dp, 1.dp)
+                            .weight(1f),
+                        fontWeight = Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = orders.status,
+                        modifier = Modifier.padding(10.dp, 2.dp),
+                        fontWeight = Bold,
+                        fontSize = 20.sp
+                    )
+                }
             }
 
 
@@ -467,9 +483,7 @@ fun OrderProfileCard(
                                 fontSize = 16.sp
                             )
                             Text(
-                                text = "€" + orders.listPrice.get(index) + "  × " + orders.listQuantity.get(
-                                    index
-                                ),
+                                text = "€" + orders.listPrice[index] + "  × " + orders.listQuantity[index],
                                 modifier = Modifier.padding(10.dp, 1.dp),
                                 fontSize = 16.sp
                             )

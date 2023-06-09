@@ -21,7 +21,7 @@ import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.ui.components.EatItSearchBar
-import com.example.eatit.ui.components.EatitFloatingButton
+import com.example.eatit.ui.components.EatItFloatingButton
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -60,7 +60,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                EatitFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
+                EatItFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
             }
         },
     ) { innerPadding ->
