@@ -25,11 +25,12 @@ class Repo {
             throw e
         }
     }
+
     suspend fun getProducts(order: Order): List<Product> = withContext(Dispatchers.IO) {
         try {
             val products = mutableListOf<Product>()
             val querySnapshot = FirebaseFirestore.getInstance().collection("restaurants")
-                .document(order.restaurantId.toString())
+                .document(order.restaurantId)
                 .collection("products").get().await()
                 .documents
             for (documentSnapshot in querySnapshot) {
@@ -44,10 +45,11 @@ class Repo {
             throw e
         }
     }
+
     suspend fun getRestaurant(restaurantId: String): Restaurant =
         withContext(Dispatchers.IO) {
             try {
-                var restaurant =
+                val restaurant =
                     FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
                         .get().await().toObject(Restaurant::class.java)!!
                 restaurant.id = restaurantId

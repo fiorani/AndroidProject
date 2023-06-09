@@ -27,7 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,8 +55,8 @@ class MainActivity : ComponentActivity() {
     }
 
     fun signIn() {
-        var email = "user@mail.it"
-        var password = "testpass"
+        val email = "user@mail.it"
+        val password = "testpass"
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -90,7 +89,7 @@ fun WearApp() {
                 .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.Center
         ) {
-            var repo = Repo()
+            val repo = Repo()
             var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
             LaunchedEffect(Unit) {
                 orders = repo.getOrders()
