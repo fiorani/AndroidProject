@@ -119,47 +119,38 @@ fun SettingsScreen(
                 fontWeight = Bold,
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = name.value,
-                    onValueChange = { newText -> name.value = newText },
-                    label = { Text("Name") },
-                    modifier = Modifier.weight(4f)
-                )
-                EatItButton(text = "save", function = {
-                    showDialog.value = true
-                    focusManager.clearFocus()
-                    usersViewModel.setName(name.value)
-                    changedThing.value = "username"
-                })
-            }
+            OutlinedTextField(
+                value = name.value,
+                onValueChange = { newText -> name.value = newText },
+                label = { Text("Name") },
+                trailingIcon={
+                    EatItButton(text = "save", function = {
+                        showDialog.value = true
+                        focusManager.clearFocus()
+                        usersViewModel.setName(name.value)
+                        changedThing.value = "username"
+                    })
+                }
+            )
             Spacer(modifier = Modifier.size(10.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = address,
-                    onValueChange = { newText -> address = newText },
-                    label = { Text("Address") },
-                    modifier = Modifier.weight(4f)
-                )
-                Icon(
-                    Icons.Filled.LocationOn,
-                    contentDescription = "Localized",
-                    Modifier
-                        .weight(1f)
-                        .clickable(onClick = {
-                            showDialog.value = true
-                            focusManager.clearFocus()
-                            startLocationUpdates()
-                            changedThing.value = "position"
-                        })
-                )
-            }
+            OutlinedTextField(
+                value = address,
+                onValueChange = { newText -> address = newText },
+                label = { Text("Address") },
+                trailingIcon={
+                    Icon(
+                        Icons.Filled.LocationOn,
+                        contentDescription = "Localized",
+                        Modifier
+                            .clickable(onClick = {
+                                showDialog.value = true
+                                focusManager.clearFocus()
+                                startLocationUpdates()
+                                changedThing.value = "position"
+                            })
+                    )
+                }
+            )
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = "Change Profile Picture", function = {
                 val permissionCheckResult =
