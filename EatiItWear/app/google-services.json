@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "877830785124",
+    "project_id": "database-19948",
+    "storage_bucket": "database-19948.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877830785124:android:0997815c735f44c92fb771",
+        "android_client_info": {
+          "package_name": "com.example.eatiitwear"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3e-tXgLG9rGFZbpxjPrktM7xQuCI64aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877830785124:android:437bd18b799bf6fc2fb771",
+        "android_client_info": {
+          "package_name": "com.example.eatit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3e-tXgLG9rGFZbpxjPrktM7xQuCI64aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877830785124:android:dfa4bf6e74fd89da2fb771",
+        "android_client_info": {
+          "package_name": "com.google.firebase.example.fireeats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3e-tXgLG9rGFZbpxjPrktM7xQuCI64aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
