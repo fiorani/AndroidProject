@@ -11,6 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.patrykandpatrick.vico.core.extension.setFieldValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -37,7 +38,13 @@ class UsersRepository(eatItApp: EatItApp) {
                 it.documents.firstOrNull()?.reference?.update("name", name)
             }
     }
-
+    fun setRestaurants(restaurants: ArrayList<String> ) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
+            .addOnSuccessListener {
+                it.documents.firstOrNull()?.reference?.update("favouriteRestaurants", restaurants)
+            }
+    }
     fun setPhoto(photo: String) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
@@ -68,34 +75,12 @@ class UsersRepository(eatItApp: EatItApp) {
         )
     }
 
-    suspend fun getPosition(): String =
-        withContext(Dispatchers.IO) {
-            try {
-                FirebaseFirestore.getInstance().collection("users")
-                    .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get().await()
-                    .documents.firstOrNull()?.get("position").toString()
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
 
     suspend fun getUser(): User =
         withContext(Dispatchers.IO) {
             try {
                 FirebaseFirestore.getInstance().collection("users")
                     .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString())
-                    .get().await().documents.firstOrNull()?.toObject(User::class.java)!!
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
-    suspend fun getUserById(userId: String): User =
-        withContext(Dispatchers.IO) {
-            try {
-                FirebaseFirestore.getInstance().collection("users")
-                    .whereEqualTo("id", userId)
                     .get().await().documents.firstOrNull()?.toObject(User::class.java)!!
             } catch (e: Exception) {
                 throw e

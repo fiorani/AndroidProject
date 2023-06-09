@@ -68,7 +68,7 @@ fun HomeScreen(
             Row(modifier=modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                EatItSearchBar(restaurants, onItemClicked, restaurantsViewModel)
+                EatItSearchBar(restaurants, onItemClicked, restaurantsViewModel,user,usersViewModel)
                 EatItIconButton(function = { onFilterClicked()}, icon = Icons.Filled.FilterList)
             }
             LazyColumn(Modifier.fillMaxWidth()) {
@@ -76,7 +76,9 @@ fun HomeScreen(
                     RestaurantCard(
                         restaurants[index],
                         onItemClicked,
-                        restaurantsViewModel
+                        restaurantsViewModel,
+                        user,
+                        usersViewModel
                     )
                 }
             }

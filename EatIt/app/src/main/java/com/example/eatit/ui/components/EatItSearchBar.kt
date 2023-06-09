@@ -19,7 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import com.example.eatit.model.Restaurant
+import com.example.eatit.model.User
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +29,9 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 fun EatItSearchBar(
     restaurants: List<Restaurant>,
     onItemClicked: () -> Unit,
-    restaurantsViewModel: RestaurantsViewModel
+    restaurantsViewModel: RestaurantsViewModel,
+    user: User,
+    usersViewModel: UsersViewModel
 ) {
     var active by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
@@ -68,7 +72,9 @@ fun EatItSearchBar(
                 RestaurantCard(
                     searchResults[index],
                     onItemClicked,
-                    restaurantsViewModel
+                    restaurantsViewModel,
+                    user,
+                    usersViewModel
                 )
             }
         }

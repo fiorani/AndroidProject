@@ -51,10 +51,6 @@ fun AddRestaurantScreen(
     var photo by rememberSaveable { mutableStateOf("") }
     var numRatings = 0
     var avgRating = 0.0f
-    LaunchedEffect(Unit) {
-        city = usersViewModel.getPosition()
-    }
-
     Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

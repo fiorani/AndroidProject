@@ -20,7 +20,8 @@ data class User(
         photo: String,
         age: Int,
         position: String,
-        restaurateur: Boolean
+        restaurateur: Boolean,
+        favouriteRestaurants: ArrayList<String>
     ) : this() {
         val user = Firebase.auth.currentUser
         if (user != null) {
@@ -32,5 +33,6 @@ data class User(
         this.age = age
         this.restaurateur = restaurateur
         this.position = position
+        this.favouriteRestaurants = favouriteRestaurants
     }
 }

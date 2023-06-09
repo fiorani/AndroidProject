@@ -229,13 +229,15 @@ class MainActivity : ComponentActivity() {
                     if (task.isSuccessful) {
                         usersViewModel.addNewUser(
                             User(
-                                auth.currentUser!!.uid,
                                 name = name,
                                 mail = email,
                                 photo = photo,
                                 age = age,
                                 position = address,
-                                restaurateur = restaurateur
+                                restaurateur = restaurateur,
+                                favouriteRestaurants = ArrayList(
+                                    listOf()
+                                )
                             )
                         )
                         signIn(email, password, onNextButtonClicked)

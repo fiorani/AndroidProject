@@ -1,5 +1,6 @@
 package com.example.eatit.ui.components
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.*
 import com.example.eatit.viewModel.RestaurantsViewModel
+import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.text.SimpleDateFormat
@@ -44,7 +47,9 @@ private fun EatItCard(onItemClicked: () -> Unit, function: @Composable () -> Uni
 fun RestaurantCard(
     restaurant: Restaurant,
     onItemClicked: () -> Unit,
-    restaurantsViewModel: RestaurantsViewModel
+    restaurantsViewModel: RestaurantsViewModel,
+    user: User,
+    usersViewModel: UsersViewModel
 ) {
     EatItCard(onItemClicked = {
         restaurantsViewModel.selectRestaurant(restaurant)
@@ -92,10 +97,16 @@ fun RestaurantCard(
                         spaceBetween = 1.dp,
                         size = 20.dp
                     )
-                    if(true){
-                        EatItIconButton(icon = Icons.Filled.Favorite, function = {})
+                    if(user.favouriteRestaurants.contains(restaurant.id)){
+                        EatItIconButton(icon = Icons.Filled.Favorite, function = {
+                            user.favouriteRestaurants.remove(restaurant.id)
+                            usersViewModel.setRestaurants(user.favouriteRestaurants)
+                        })
                     }else{
-                        EatItIconButton(icon = Icons.Outlined.Favorite, function = {})
+                        EatItIconButton(icon = Icons.Default.FavoriteBorder, function = {
+                            user.favouriteRestaurants.add(restaurant.id!!)
+                            usersViewModel.setRestaurants(user.favouriteRestaurants)
+                        })
                     }
 
                 }

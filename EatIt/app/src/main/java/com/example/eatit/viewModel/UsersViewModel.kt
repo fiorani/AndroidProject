@@ -36,14 +36,6 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         return user
     }
 
-    suspend fun getUserById(userId: String): User {
-        return repository.getUserById(userId)
-    }
-
-    suspend fun getPosition(): String {
-        return repository.getPosition()
-    }
-
     fun setPosition(position: String) {
         _user.position = position
         _position.value = position
@@ -75,5 +67,10 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     }
     suspend fun uploadPhoto(uri: Uri): Uri {
         return repository.uploadPhoto(uri)
+    }
+
+    fun setRestaurants(restaurants: ArrayList<String> ) {
+        _user.favouriteRestaurants = restaurants
+        repository.setRestaurants(restaurants)
     }
 }
