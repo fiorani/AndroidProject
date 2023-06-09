@@ -207,11 +207,10 @@ fun SettingsScreen(
                 fontWeight = Bold,
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Dark Theme: ",
                     fontWeight = Bold,
-                    modifier = Modifier.weight(1f)
                 )
                 Switch(
                     modifier = Modifier.semantics { contentDescription = "Demo" },
