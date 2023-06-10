@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -24,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -31,7 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.model.User
-import com.example.eatit.service.BackgroundService
+import com.example.eatit.service.OrderService
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
@@ -43,15 +43,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.ktx.messaging
-import com.google.firebase.messaging.ktx.remoteMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.tasks.await
-import java.util.concurrent.atomic.AtomicInteger
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -109,6 +103,8 @@ class MainActivity : ComponentActivity() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         startLocationUpdates()
+        val intent = Intent(this, OrderService::class.java)
+        startService(intent)
         setContent {
             EatItTheme(darkTheme = theme == "Dark") {
                 // A surface container using the 'background' color from the theme
@@ -116,6 +112,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     val (theme1, onThemeChanged) = remember { mutableStateOf(theme) }
                     //startLocationUpdates()
                     NavigationApp(
