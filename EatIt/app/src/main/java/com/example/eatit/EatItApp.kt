@@ -263,9 +263,9 @@ private fun NavigationGraph(
         composable(route = AppScreen.Details.name) {
             DetailsRestaurantScreen(
                 restaurantsViewModel = restaurantsViewModel,
-                onAddButtonClicked = {
+                /*onAddButtonClicked = {
                     navController.navigate(AppScreen.AddProduct.name)
-                },
+                },*/
                 cartViewModel = cartViewModel,
                 usersViewModel = usersViewModel,
                 onNextButtonClicked = {

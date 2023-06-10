@@ -19,9 +19,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,10 +45,11 @@ import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
-    onAddButtonClicked: () -> Unit,
+    //onAddButtonClicked: () -> Unit,
     cartViewModel: CartViewModel,
     usersViewModel: UsersViewModel,
     onNextButtonClicked: () -> Unit,
@@ -63,11 +62,13 @@ fun DetailsRestaurantScreen(
     var order by remember { mutableStateOf<Order?>(Order()) }
     val user = usersViewModel.user
 
+    val isAdding = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         products = restaurantsViewModel.getProducts(restaurant.id!!)
         ratings = restaurantsViewModel.getRatings(restaurant.id!!)
     }
-    if (cartViewModel.orderSelected.id !="") {
+    if (cartViewModel.orderSelected.id != "") {
         order = cartViewModel.orderSelected
     } else {
         order = Order(
@@ -89,7 +90,7 @@ fun DetailsRestaurantScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                EatItFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
+                EatItFloatingButton(function = { isAdding.value = true }, icon = Icons.Filled.Add)
             } else {
                 EatItFloatingButton(
                     function = {
@@ -100,6 +101,12 @@ fun DetailsRestaurantScreen(
             }
         },
     ) { paddingValues ->
+        if (isAdding.value) {
+            restaurantsViewModel.productSelected.id = ""
+            AlertDialog(onDismissRequest = { isAdding.value = false }) {
+                AddProductScreen(onNextButtonClicked = { isAdding.value = false }, restaurantsViewModel = restaurantsViewModel)
+            }
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -108,7 +115,7 @@ fun DetailsRestaurantScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
-                ImageProfile(restaurant.photo.toString())
+                ImageProfile(restaurant.photo)
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,7 +124,7 @@ fun DetailsRestaurantScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = restaurant.name.toString(),
+                        text = restaurant.name,
                         style = MaterialTheme.typography.titleLarge,
                         color = Color.White
                     )
@@ -152,10 +159,10 @@ fun DetailsRestaurantScreen(
                         restaurantViewModel = restaurantsViewModel,
                         order = order!!,
                         user = user,
-                        onAddButtonClicked = onAddButtonClicked
+                        //onAddButtonClicked = onAddButtonClicked
                     )
                 }
-
+            Spacer(modifier = Modifier.size(80.dp))
         }
     }
 }
