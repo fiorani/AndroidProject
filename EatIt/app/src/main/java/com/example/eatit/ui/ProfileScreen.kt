@@ -1,6 +1,7 @@
 package com.example.eatit.ui
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,6 +58,7 @@ fun ProfileScreen(
         } else {
             cartViewModel.getOrders()
         }
+        Log.d("ORDERS", orders.toString())
     }
 
     Scaffold { innerPadding ->

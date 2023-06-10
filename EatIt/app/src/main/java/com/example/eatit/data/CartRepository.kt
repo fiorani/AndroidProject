@@ -49,8 +49,9 @@ class CartRepository(eatItApp: EatItApp) {
                         order?.id = documentSnapshot.id
                         order
                     }
+            }else{
+                emptyList<Order>()
             }
-            emptyList<Order>()
         } catch (e: Exception) {
             throw e
         }
