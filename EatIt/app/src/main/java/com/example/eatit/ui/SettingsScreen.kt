@@ -46,10 +46,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
 import com.example.eatit.R
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
+import com.example.eatit.ui.components.ImageCard
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.UsersViewModel
@@ -179,6 +181,7 @@ fun SettingsScreen(
                         ).toString()
                     )
                 }
+                //ImageCard(photo = capturedImageUri.path!!)
             }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = "Change password", function = {
@@ -229,7 +232,9 @@ fun SettingsScreen(
                     modifier = Modifier.weight(4f)
                 )
                 Switch(
-                    modifier = Modifier.semantics { contentDescription = "Demo" }.weight(1f),
+                    modifier = Modifier
+                        .semantics { contentDescription = "Demo" }
+                        .weight(1f),
                     checked = theme == dark,
                     onCheckedChange = {
                         val tmp = if (it) dark else light
