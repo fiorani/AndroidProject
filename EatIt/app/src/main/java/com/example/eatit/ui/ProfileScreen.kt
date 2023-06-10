@@ -20,8 +20,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
@@ -39,6 +41,7 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
 
@@ -150,8 +153,13 @@ fun ProfileScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageCarouselCard(badgesList: List<Int>) {
+fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
+    val showBadgeDesc = remember { mutableStateOf(false) }
+    var badgeTitle = ""
+    var badgeDesc = ""
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,32 +177,79 @@ fun ImageCarouselCard(badgesList: List<Int>) {
                     .padding(top = 8.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
-                for (imageResId in badgesList) {
+                for (badge in badgesList) {
                     Image(
-                        painter = painterResource(imageResId),
+                        painter = painterResource(badge.first),
                         contentDescription = null,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .size(80.dp)
-                            .clip(shape = RoundedCornerShape(8.dp)),
+                            .clip(shape = RoundedCornerShape(8.dp))
+                            .clickable {
+                                showBadgeDesc.value = true
+                                badgeTitle = badge.second
+                                badgeDesc = badge.third
+                                       },
                         contentScale = ContentScale.Crop
                     )
                 }
             }
         }
+
+        if (showBadgeDesc.value) {
+            AlertDialog(onDismissRequest = { showBadgeDesc.value = false }) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ){
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(20.dp, 40.dp, 20.dp, 10.dp),
+                        text = badgeTitle,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = Bold
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(20.dp, 0.dp, 20.dp, 10.dp),
+                        text = badgeDesc,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(
+                            modifier = Modifier.padding(10.dp),
+                            onClick = { showBadgeDesc.value = false }
+                        ) {
+                            Text(
+                                text = "Close",
+                                fontSize = 20.sp,
+                                fontStyle = Italic
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
 
-fun getBadges(orderNum: Int) : List<Int> {
-    val result = mutableListOf<Int>(R.drawable.badge_login)
-    val badgeMap = mapOf<Int, Int>(
-        Pair(1, R.drawable.badge1),
-        Pair(10, R.drawable.badge10),
-        Pair(20, R.drawable.badge20),
-        Pair(30, R.drawable.badge30),
-        Pair(40, R.drawable.badge40),
-        Pair(50, R.drawable.badge50),
-        Pair(60, R.drawable.badge_max)
+fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
+    val result = mutableListOf<Triple<Int, String, String>>(
+        Triple(R.drawable.badge_login, "First login!", "Login for the first time.")
+    )
+    val badgeMap = mapOf<Int, Triple<Int, String, String>>(
+        Pair(1, Triple(R.drawable.badge1, "First Order!", "Congratulations! You have made your first order.")),
+        Pair(10, Triple(R.drawable.badge1, "10 Orders", "You have made 10 orders!")),
+        Pair(20, Triple(R.drawable.badge1, "20 Orders", "You have made 20 orders!")),
+        Pair(30, Triple(R.drawable.badge1, "30 Orders", "You have made 30 orders!")),
+        Pair(40, Triple(R.drawable.badge1, "40 Orders", "You have made 40 orders!")),
+        Pair(50, Triple(R.drawable.badge1, "50 Orders", "You have made 50 orders!")),
+        Pair(60, Triple(R.drawable.badge1, "EatIt Master", "Amazing! You have made a lot of orders!"))
     )
 
     badgeMap.forEach(){level ->
