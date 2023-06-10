@@ -186,7 +186,7 @@ fun ImageCarouselCard(badgesList: List<Int>) {
 }
 
 fun getBadges(orderNum: Int) : List<Int> {
-    val result = mutableListOf<Int>()
+    val result = mutableListOf<Int>(R.drawable.badge_login)
     val badgeMap = mapOf<Int, Int>(
         Pair(1, R.drawable.badge1),
         Pair(10, R.drawable.badge10),
