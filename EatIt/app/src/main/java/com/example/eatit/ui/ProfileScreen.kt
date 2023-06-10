@@ -243,7 +243,7 @@ fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
         Triple(R.drawable.badge_login, "First login!", "Login for the first time.")
     )
     val badgeMap = mapOf<Int, Triple<Int, String, String>>(
-        Pair(1, Triple(R.drawable.badge1, "First Order!", "Make your first order.")),
+        Pair(1, Triple(R.drawable.badge1, "First Order!", "Congratulations! You have made your first order.")),
         Pair(10, Triple(R.drawable.badge1, "10 Orders", "You have made 10 orders!")),
         Pair(20, Triple(R.drawable.badge1, "20 Orders", "You have made 20 orders!")),
         Pair(30, Triple(R.drawable.badge1, "30 Orders", "You have made 30 orders!")),
