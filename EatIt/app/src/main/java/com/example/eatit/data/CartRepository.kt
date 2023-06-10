@@ -40,14 +40,17 @@ class CartRepository(eatItApp: EatItApp) {
                 .mapNotNull { documentSnapshot ->
                     documentSnapshot.id
                 }
-            FirebaseFirestore.getInstance().collection("orders")
-                .whereIn("restaurantId", restaurants)
-                .orderBy("timestamp",Query.Direction.DESCENDING).get().await()
-                .documents.mapNotNull { documentSnapshot ->
-                    val order = documentSnapshot.toObject(Order::class.java)
-                    order?.id = documentSnapshot.id
-                    order
-                }
+            if(restaurants.isNotEmpty()){
+                FirebaseFirestore.getInstance().collection("orders")
+                    .whereIn("restaurantId", restaurants)
+                    .orderBy("timestamp",Query.Direction.DESCENDING).get().await()
+                    .documents.mapNotNull { documentSnapshot ->
+                        val order = documentSnapshot.toObject(Order::class.java)
+                        order?.id = documentSnapshot.id
+                        order
+                    }
+            }
+            emptyList<Order>()
         } catch (e: Exception) {
             throw e
         }
