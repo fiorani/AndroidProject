@@ -92,10 +92,10 @@ fun RegisterScreen(
                         fontWeight = Bold
                     )
 
-                    var txtNickname by rememberSaveable { mutableStateOf("") }
+                    var name by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
-                        value = txtNickname,
-                        onValueChange = { txtNickname = it },
+                        value = name,
+                        onValueChange = { name = it },
                         label = { Text("Nickname") }
                     )
 
@@ -120,19 +120,19 @@ fun RegisterScreen(
                     )
 
                     if (!isUserRegister.value) {
-                        var txtPIVA by rememberSaveable { mutableStateOf("") }
+                        var piva by rememberSaveable { mutableStateOf("") }
                         OutlinedTextField(
-                            value = txtPIVA,
-                            onValueChange = { txtPIVA = it },
+                            value = piva,
+                            onValueChange = { piva = it },
                             label = { Text("P.IVA") }
                         )
                     } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
-                        var txtBirth  by rememberSaveable { mutableStateOf("") }
+                        var birth  by rememberSaveable { mutableStateOf("") }
                         val openDialog = remember { mutableStateOf(false) }
 
                         OutlinedTextField(
-                            value = txtBirth,
+                            value = birth,
                             onValueChange = {//from the second time on you select the text field
                                 openDialog.value = true
                             },
@@ -156,7 +156,7 @@ fun RegisterScreen(
                                     TextButton(
                                         onClick = {
                                             openDialog.value = false
-                                            txtBirth =
+                                            birth =
                                                 TextFieldValue(getDate(datePickerState.selectedDateMillis)).toString()
                                         },
                                         enabled = confirmEnabled.value
@@ -204,30 +204,30 @@ fun RegisterScreen(
                     }
 
 
-                    var txtPhone  by rememberSaveable { mutableStateOf("") }
+                    var phone  by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
-                        value = txtPhone,
-                        onValueChange = { txtPhone = it },
+                        value = phone,
+                        onValueChange = { phone = it },
                         label = { Text("Phone number") }
                     )
 
-                    var txtEmail by rememberSaveable { mutableStateOf("") }
+                    var email by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
-                        value = txtEmail,
-                        onValueChange = { txtEmail = it },
+                        value = email,
+                        onValueChange = { email = it },
                         label = { Text("Email") }
                     )
                     Spacer(modifier = Modifier.size(10.dp))
                     EatItButton(text = "Register", function = {
                         createAccount(
-                            txtEmail,
+                            email,
                             password,
-                            txtNickname,
+                            name,
                             "",
                             0,
                             !isUserRegister.value,
                             address,
-                            txtPhone,
+                            phone,
                             onNextButtonClicked
                         )
                     })
