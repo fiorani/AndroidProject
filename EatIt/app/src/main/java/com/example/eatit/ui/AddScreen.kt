@@ -8,11 +8,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,12 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.eatit.R
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
@@ -49,8 +54,8 @@ fun AddRestaurantScreen(
     var name by rememberSaveable { mutableStateOf("") }
     var city by rememberSaveable { usersViewModel.position }
     var photo by rememberSaveable { mutableStateOf("") }
-    var numRatings = 0
-    var avgRating = 0.0f
+    val numRatings = 0
+    val avgRating = 0.0f
     Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -174,7 +179,6 @@ fun AddRestaurantScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(
     onNextButtonClicked: () -> Unit,
@@ -197,25 +201,47 @@ fun AddProductScreen(
 
 
             val data = LocalContext.current.resources.getStringArray(R.array.categories).toList()
-
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(160.dp),
-                contentPadding = PaddingValues(8.dp)
+            val selectedSection = remember { mutableStateOf(data.firstOrNull() ?: "") }
+            val rows = data.chunked(3)
+            Row {
+                Text(
+                    text = "Choose a section:",
+                    modifier = Modifier.padding(10.dp, 5.dp).weight(1f),
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center
             ) {
-                items(data.size) { item ->
-                    AssistChip(
-                        modifier = Modifier.padding(30.dp, 1.dp),
-                        onClick = { /* Do something! */ },
-                        label = {
-                            Text(
-                                textAlign = TextAlign.Center,
-                                text = data[item]
+                rows.forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                            row.forEach { option ->
+                            RadioButton(
+                                selected = selectedSection.value == option,
+                                onClick = { selectedSection.value = option }
+                            )
+                            ClickableText(
+                                modifier = Modifier.padding(start = 8.dp),
+                                text = buildAnnotatedString { append(option) },
+                                onClick = { selectedSection.value = option }
                             )
                         }
-                    )
+                    }
                 }
             }
-
+            Row {
+                Text(
+                    text = "Build your dish:",
+                    modifier = Modifier.padding(10.dp, 5.dp).weight(1f),
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -234,13 +260,32 @@ fun AddProductScreen(
 
             Spacer(modifier = Modifier.size(15.dp))
 
+            val decimalOnlyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
-            OutlinedTextField(
-                value = price,
-                onValueChange = { price = it },
-                label = { Text(stringResource(id = R.string.restaurant_price)) },
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row (modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically) {
+                Spacer(modifier = Modifier.weight(1f))
+                OutlinedTextField(
+                    value = price,
+                    onValueChange = { newValue ->
+                        if (newValue.matches(decimalOnlyRegex)) {
+                            // Aggiorna il valore solo se il testo inserito corrisponde al formato desiderato
+                            price = newValue
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    visualTransformation = VisualTransformation.None,
+                    label = { Text(stringResource(id = R.string.restaurant_price)) },
+                    modifier = Modifier.width(100.dp).padding(horizontal = 10.dp)
+                )
+                Text(
+                    text = "€",
+                    fontSize = 32.sp
+                )
+            }
             Spacer(modifier = Modifier.size(15.dp))
             val context = LocalContext.current
             val file = context.createImageFile()
@@ -306,6 +351,7 @@ fun AddProductScreen(
                                 description = description,
                                 photo = photoURI,
                                 price=price.toFloat(),
+                                section = selectedSection.value
                             )
                         )
                     } else {
@@ -315,7 +361,7 @@ fun AddProductScreen(
                                 description = description,
                                 photo = photoURI,
                                 price=price.toFloat(),
-                                section = ""
+                                section = selectedSection.value
                             )
                         )
                     }
@@ -323,10 +369,10 @@ fun AddProductScreen(
                 },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
+                Icon(Icons.Default.Save, stringResource(id = R.string.save))
                 Text(text = stringResource(id = R.string.save))
             }
-
-
         }
     }
 }
+

@@ -137,7 +137,7 @@ fun ProductCard(
             )
             Text(
                 modifier = Modifier.padding(10.dp, 0.dp),
-                text = product.name + " - " + product.price.toString() + "€",
+                text = product.name + " - " + String.format("%.${2}f",product.price) + "€",
                 fontSize = 20.sp
             )
         }

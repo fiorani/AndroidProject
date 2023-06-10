@@ -152,7 +152,7 @@ fun DetailsRestaurantScreen(
                         restaurantViewModel = restaurantsViewModel,
                         order = order!!,
                         user = user,
-                        onAddButtonClicked
+                        onAddButtonClicked = onAddButtonClicked
                     )
                 }
 
