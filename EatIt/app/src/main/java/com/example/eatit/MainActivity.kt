@@ -2,6 +2,7 @@ package com.example.eatit
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.eatit.data.LocationDetails
 import com.example.eatit.model.User
+import com.example.eatit.service.BackgroundService
 import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
@@ -107,6 +109,8 @@ class MainActivity : ComponentActivity() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         startLocationUpdates()
+        val serviceIntent = Intent(this, BackgroundService::class.java)
+        ContextCompat.startForegroundService(this, serviceIntent)
         setContent {
             EatItTheme(darkTheme = theme == "Dark") {
                 // A surface container using the 'background' color from the theme
@@ -295,121 +299,6 @@ class MainActivity : ComponentActivity() {
             Toast.LENGTH_SHORT,
         ).show()
     }
-
-    fun runtimeEnableAutoInit() {
-        // [START fcm_runtime_enable_auto_init]
-        Firebase.messaging.isAutoInitEnabled = true
-        // [END fcm_runtime_enable_auto_init]
-    }
-
-    fun deviceGroupUpstream() {
-        // [START fcm_device_group_upstream]
-        val to = "a_unique_key" // the notification key
-        val msgId = AtomicInteger()
-        Firebase.messaging.send(
-            remoteMessage(to) {
-                setMessageId(msgId.get().toString())
-                addData("hello", "world")
-            },
-        )
-        // [END fcm_device_group_upstream]
-    }
-
-    fun sendUpstream() {
-        val SENDER_ID = "YOUR_SENDER_ID"
-        val messageId = 0 // Increment for each
-        // [START fcm_send_upstream]
-        val fm = Firebase.messaging
-        fm.send(
-            remoteMessage("$SENDER_ID@fcm.googleapis.com") {
-                setMessageId(messageId.toString())
-                addData("my_message", "Hello World")
-                addData("my_action", "SAY_HELLO")
-            },
-        )
-        // [END fcm_send_upstream]
-    }
-
-    fun subscribeTopics() {
-        // [START subscribe_topics]
-        Firebase.messaging.subscribeToTopic("weather")
-            .addOnCompleteListener { task ->
-                var msg = "Subscribed"
-                if (!task.isSuccessful) {
-                    msg = "Subscribe failed"
-                }
-                Log.d(TAG, msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            }
-        // [END subscribe_topics]
-    }
-
-    fun logRegToken() {
-        // [START log_reg_token]
-        Firebase.messaging.getToken().addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@addOnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = "FCM Registration token: $token"
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        }
-        // [END log_reg_token]
-    }
-
-    // [START ask_post_notifications]
-    // Declare the launcher at the top of your Activity/Fragment:
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
-        } else {
-            // TODO: Inform user that that your app will not show notifications.
-        }
-    }
-
-    private fun askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-    }
-    // [END ask_post_notifications]
-
-    // [START get_store_token]
-    private suspend fun getAndStoreRegToken(): String {
-        val token = Firebase.messaging.token.await()
-        // Add token and timestamp to Firestore for this user
-        val deviceToken = hashMapOf(
-            "token" to token,
-            "timestamp" to FieldValue.serverTimestamp(),
-        )
-
-        // Get user ID from Firebase Auth or your own server
-        Firebase.firestore.collection("fcmTokens").document(Firebase.auth.currentUser!!.uid)
-            .set(deviceToken).await()
-        return token
-    }
-    // [END get_store_token]
 }
 
 
