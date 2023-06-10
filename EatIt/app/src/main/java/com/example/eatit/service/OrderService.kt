@@ -1,34 +1,25 @@
 package com.example.eatit.service
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.eatit.MainActivity
 import com.example.eatit.R
-import com.example.eatit.data.CartRepository
 import com.example.eatit.model.Order
-import com.example.eatit.viewModel.CartViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class BackgroundService : Service() {
+class OrderService : Service() {
     private lateinit var ordersListenerRegistration: ListenerRegistration
     private lateinit var notificationManager: NotificationManager
     private val channelId = "OrderUpdatesChannel"
@@ -50,25 +41,19 @@ class BackgroundService : Service() {
     }
 
     private fun startOrdersListener() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val ordersCollection = FirebaseFirestore.getInstance().collection("orders")
-        val query = ordersCollection
-            .whereEqualTo("userId", userId)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-        ordersListenerRegistration = query.addSnapshotListener { querySnapshot, exception ->
-            if (exception != null) {
-                // Gestisci l'errore nell'ascoltatore
-                return@addSnapshotListener
-            }
-            val updatedOrders = querySnapshot?.documents?.mapNotNull { documentSnapshot ->
-                val order = documentSnapshot.toObject(Order::class.java)
-                order?.id = documentSnapshot.id
-                order
-            }
-            if (updatedOrders != null && updatedOrders.isNotEmpty()) {
-                // I dati degli ordini sono cambiati, puoi inviare una notifica
-                sendOrderUpdateNotification()
-            }
+        FirebaseFirestore.getInstance().collection("orders")
+            .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    Log.d(TAG, "Current data: ${snapshot.documents}")
+                    sendOrderUpdateNotification()
+                } else {
+                    Log.d(TAG, "Current data: null")
+                }
         }
     }
 
@@ -81,7 +66,6 @@ class BackgroundService : Service() {
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Ordine Aggiornato")
             .setContentText("Uno o più ordini sono stati aggiornati.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
@@ -90,13 +74,11 @@ class BackgroundService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+            channelId,
+            channelName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        notificationManager.createNotificationChannel(channel)
     }
 }
