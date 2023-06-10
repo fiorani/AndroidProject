@@ -180,29 +180,22 @@ fun RegisterScreen(
                     }
 
                     var address by rememberSaveable { usersViewModel.position }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-
-                    ) {
-                        OutlinedTextField(
-                            modifier = Modifier.weight(4f),
-                            value = address,
-                            onValueChange = { newText -> address = newText },
-                            label = { Text("Address") },
-                        )
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Localized",
-                            Modifier
-                                .weight(1f)
-                                .clickable(onClick = {
-                                    startLocationUpdates()
-                                })
-                        )
-                    }
-
+                    OutlinedTextField(
+                        value = address,
+                        onValueChange = { newText -> address = newText },
+                        label = { Text("Address") },
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            Icon(
+                                Icons.Filled.LocationOn,
+                                contentDescription = "Localized",
+                                Modifier
+                                    .clickable(onClick = {
+                                        startLocationUpdates()
+                                    })
+                            )
+                        }
+                    )
 
                     var phone  by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
