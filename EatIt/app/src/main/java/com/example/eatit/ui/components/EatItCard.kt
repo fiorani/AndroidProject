@@ -169,22 +169,43 @@ fun ProductCard(
                 order.increaseCount(product)
             })
         } else {
-            val isModifying = remember { mutableStateOf(false) }
-            IconButton(
-                onClick =
-                {
-                    restaurantViewModel.selectProduct(product)
-                    isModifying.value = true
+            Row{
+                //Edit
+                val isModifying = remember { mutableStateOf(false) }
+
+                IconButton(
+                    onClick =
+                    {
+                        restaurantViewModel.selectProduct(product)
+                        isModifying.value = true
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(22.dp),
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit dish"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit"
-                )
-            }
-            if (isModifying.value) {
-                AlertDialog(onDismissRequest = { isModifying.value = false }) {
-                    AddProductScreen(onNextButtonClicked = { isModifying.value = false }, restaurantsViewModel = restaurantViewModel)
+
+                if (isModifying.value) {
+                    AlertDialog(onDismissRequest = { isModifying.value = false }) {
+                        AddProductScreen(onNextButtonClicked = { isModifying.value = false }, restaurantsViewModel = restaurantViewModel)
+                    }
+                }
+
+                //Delete
+                IconButton(
+                    onClick =
+                    {
+                        restaurantViewModel.selectProduct(product)
+                        //Gestire la cancellazione
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete dish"
+                    )
                 }
             }
         }

@@ -95,7 +95,8 @@ fun DetailsRestaurantScreen(
                 EatItFloatingButton(
                     function = {
                         cartViewModel.selectOrder(order!!)
-                        onNextButtonClicked() },
+                        onNextButtonClicked()
+                    },
                     icon = Icons.Filled.ShoppingCart
                 )
             }
@@ -104,7 +105,10 @@ fun DetailsRestaurantScreen(
         if (isAdding.value) {
             restaurantsViewModel.productSelected.id = ""
             AlertDialog(onDismissRequest = { isAdding.value = false }) {
-                AddProductScreen(onNextButtonClicked = { isAdding.value = false }, restaurantsViewModel = restaurantsViewModel)
+                AddProductScreen(
+                    onNextButtonClicked = { isAdding.value = false },
+                    restaurantsViewModel = restaurantsViewModel
+                )
             }
         }
         Column(

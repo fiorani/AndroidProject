@@ -240,6 +240,7 @@ private fun NavigationGraph(
                 onFilterClicked = {
                     navController.navigate(AppScreen.Filter.name)
                 },
+                startLocationUpdates = startLocationUpdates
             )
         }
         composable(route = AppScreen.AddRestaurant.name) {

@@ -25,9 +25,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -56,15 +58,22 @@ fun AddRestaurantScreen(
     var photo by rememberSaveable { mutableStateOf("") }
     val numRatings = 0
     val avgRating = 0.0f
-    Scaffold { paddingValues ->
+    Card {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(paddingValues)
                 .padding(10.dp)
-                .fillMaxSize()
         ) {
+            Spacer(modifier = Modifier.size(20.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                text = "Add a restaurant",
+                textAlign = TextAlign.Center,
+                fontWeight = Bold,
+                fontSize = 30.sp
+            )
             Row(
+                Modifier.fillMaxWidth().padding(10.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -73,8 +82,8 @@ fun AddRestaurantScreen(
                     onValueChange = { newText ->
                         city = newText
                     },
-                    label = { Text("Username") },
-                    modifier = Modifier.weight(4f)
+                    label = { Text("Location") },
+                    modifier = Modifier.width(230.dp)
                 )
                 Icon(
                     Icons.Filled.LocationOn,
@@ -86,15 +95,14 @@ fun AddRestaurantScreen(
                         })
                 )
             }
-            Spacer(modifier = Modifier.size(15.dp))
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 2.dp)
             )
 
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(20.dp))
 
             val context = LocalContext.current
             val file = context.createImageFile()
@@ -124,7 +132,7 @@ fun AddRestaurantScreen(
                 }
             }
 
-            Button(
+            FilledTonalButton(
                 onClick = {
                     val permissionCheckResult =
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -144,9 +152,6 @@ fun AddRestaurantScreen(
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Take a picture")
             }
-
-            Spacer(modifier = Modifier.size(15.dp))
-
 
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
@@ -169,11 +174,11 @@ fun AddRestaurantScreen(
                     )
                     onNextButtonClicked()
                 },
-                colors = ButtonDefaults.buttonColors(Color.Green),
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Text(text = stringResource(id = R.string.save))
             }
+            Spacer(Modifier.size(25.dp))
         }
     }
 }
@@ -246,7 +251,9 @@ fun AddProductScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp)
             )
 
             Spacer(modifier = Modifier.size(5.dp))
@@ -255,7 +262,9 @@ fun AddProductScreen(
                 value = description,
                 onValueChange = { description = it },
                 label = { Text(stringResource(id = R.string.restaurant_description)) },
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp)
             )
 
             Spacer(modifier = Modifier.size(5.dp))
@@ -280,7 +289,9 @@ fun AddProductScreen(
                     ),
                     visualTransformation = VisualTransformation.None,
                     label = { Text(stringResource(id = R.string.restaurant_price)) },
-                    modifier = Modifier.width(150.dp).padding(10.dp, 0.dp),
+                    modifier = Modifier
+                        .width(150.dp)
+                        .padding(10.dp, 0.dp),
                     trailingIcon = {
                         Icon(
                             Icons.Filled.Euro,

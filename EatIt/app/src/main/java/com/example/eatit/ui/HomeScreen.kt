@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +31,7 @@ import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onAddButtonClicked: () -> Unit,
@@ -38,14 +41,18 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     usersViewModel: UsersViewModel,
     cartViewModel: CartViewModel,
-    onFilterClicked: () -> Unit
+    onFilterClicked: () -> Unit,
+    startLocationUpdates: () -> Unit
 ) {
     if (Firebase.auth.currentUser == null) {
         onLoginClicked()
     }
+
+    val isNewRestaurant = remember { mutableStateOf(false) }
     cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
+
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user
@@ -60,10 +67,20 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                EatItFloatingButton(function = { onAddButtonClicked() }, icon = Icons.Filled.Add)
+                EatItFloatingButton(function = { isNewRestaurant.value = true }, icon = Icons.Filled.Add)
             }
         },
     ) { innerPadding ->
+        if (isNewRestaurant.value) {
+            AlertDialog(onDismissRequest = { isNewRestaurant.value = false }) {
+                AddRestaurantScreen(
+                    onNextButtonClicked = { isNewRestaurant.value = false },
+                    restaurantsViewModel = restaurantsViewModel,
+                    usersViewModel = usersViewModel,
+                    startLocationUpdates = startLocationUpdates
+                )
+            }
+        }
         Column(modifier.padding(innerPadding)) {
             Row(modifier=modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
