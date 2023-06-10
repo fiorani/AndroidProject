@@ -147,7 +147,7 @@ fun ProductCard(
                 imageVector = Icons.Default.Fastfood, contentDescription = "Agriculture"
             )
             Text(
-                modifier = Modifier.padding(10.dp, 0.dp),
+                modifier = Modifier.padding(10.dp, 0.dp).width(200.dp),
                 text = product.name + " - " + String.format("%.${2}f", product.price) + "€",
                 fontSize = 20.sp
             )
