@@ -81,6 +81,7 @@
             android:value="AIzaSyAtkgSO0EAakNnErsYTuO1ORfA4QFsnqiw" />
         <service
             android:name=".service.BackgroundService"
+            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

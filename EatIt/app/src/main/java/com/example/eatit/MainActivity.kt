@@ -109,8 +109,6 @@ class MainActivity : ComponentActivity() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         startLocationUpdates()
-        val serviceIntent = Intent(this, BackgroundService::class.java)
-        ContextCompat.startForegroundService(this, serviceIntent)
         setContent {
             EatItTheme(darkTheme = theme == "Dark") {
                 // A surface container using the 'background' color from the theme
