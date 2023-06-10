@@ -436,7 +436,9 @@ fun OrderProfileCard(
                                     buttonClickable = false
                                 }
                             },
-                            icon = Icons.Default.CheckCircleOutline
+                            icon = Icons.Default.CheckCircleOutline,
+                            txtsize = 16,
+                            pad = 2
                         )
                     }
                 }

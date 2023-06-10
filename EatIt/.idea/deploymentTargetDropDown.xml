@@ -12,27 +12,6 @@
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-06-10T15:43:29.462964900Z" />
-    <multipleDevicesSelectedInDropDown value="true" />
-    <runningDeviceTargetsSelectedWithDialog>
-      <Target>
-        <type value="RUNNING_DEVICE_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\silvi\.android\avd\Pixel_4_API_31.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-      <Target>
-        <type value="RUNNING_DEVICE_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\silvi\.android\avd\Pixel_6_API_33.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </runningDeviceTargetsSelectedWithDialog>
+    <timeTargetWasSelectedWithDropDown value="2023-06-10T22:23:38.622221100Z" />
   </component>
 </project>

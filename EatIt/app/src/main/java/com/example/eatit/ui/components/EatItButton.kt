@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:String, function: () -> Unit, icon: ImageVector? = null ){
+fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:String, function: () -> Unit, icon: ImageVector? = null, txtsize: Int = 20, pad: Int = 5){
     Button(
         modifier = modifier,
         enabled = enabled,
@@ -26,9 +26,9 @@ fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:Str
         function()
     }) {
         Text(
-            modifier = modifier.padding(5.dp),
+            modifier = modifier.padding(pad.dp),
             text = text,
-            fontSize = 20.sp
+            fontSize = txtsize.sp
         )
         if (icon != null) {
             Icon(
