@@ -10,13 +10,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EatItButton(text:String,function: () -> Unit,icon: ImageVector? = null ){
-    Button(onClick = {
+fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:String, function: () -> Unit, icon: ImageVector? = null ){
+    Button(
+        modifier = modifier,
+        enabled = enabled,
+        onClick = {
         function()
     }) {
         Text(

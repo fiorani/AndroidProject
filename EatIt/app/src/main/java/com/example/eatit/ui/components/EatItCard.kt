@@ -1,10 +1,10 @@
 package com.example.eatit.ui.components
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -338,7 +338,7 @@ fun RatingCard(rating: Rating) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderProfileCard(
-    orders: Order,
+    order: Order,
     listProducts: List<Product>,
     restaurant: Restaurant,
     user: User
@@ -347,7 +347,8 @@ fun OrderProfileCard(
     val rotationState by animateFloatAsState(
         targetValue = if (expandedState) 180f else 0f
     )
-    val statusText = remember { mutableStateOf(orders.status) }
+    val statusText = remember { mutableStateOf(order.status) }
+    var buttonClickable by remember { mutableStateOf(true) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -375,7 +376,9 @@ fun OrderProfileCard(
             ) {
                 Text(
                     text = restaurant.name,
-                    modifier = Modifier.padding(10.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f),
                     fontWeight = Bold,
                     fontSize = 32.sp
                 )
@@ -383,9 +386,15 @@ fun OrderProfileCard(
                     Column {
                         Spacer(modifier = Modifier.height(7.dp))
                         EatItButton(
+                            modifier = Modifier.clickable(enabled = buttonClickable) {  },
+                            enabled = buttonClickable,
                             text = statusText.value,
                             function = {
-                                       orders.changeState() //ancora non funziona, non so perchè non aggiorna l'ordine
+                                order.changeState() //ancora non funziona, aggiorna ma se cambi pagina e torni non si salva lo stato
+                                statusText.value = order.status
+                                if (order.isOrderDelivered()) {
+                                    buttonClickable = false
+                                }
                             },
                             icon = Icons.Default.CheckCircleOutline
                         )
@@ -405,7 +414,7 @@ fun OrderProfileCard(
                 )
                 val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
                 Text(
-                    text = dateFormat.format(orders.timestamp).toString(),
+                    text = dateFormat.format(order.timestamp).toString(),
                     modifier = Modifier.padding(10.dp, 1.dp),
                     fontSize = 18.sp
                 )
@@ -423,7 +432,7 @@ fun OrderProfileCard(
                     fontSize = 20.sp
                 )
                 Text(
-                    text = "€" + String.format("%.${2}f", orders.totalPrice),
+                    text = "€" + String.format("%.${2}f", order.totalPrice),
                     modifier = Modifier.padding(10.dp, 2.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp
@@ -443,7 +452,7 @@ fun OrderProfileCard(
                         fontSize = 20.sp
                     )
                     Text(
-                        text = orders.status,
+                        text = statusText.value,
                         modifier = Modifier.padding(10.dp, 2.dp),
                         fontWeight = Bold,
                         fontSize = 20.sp
@@ -482,7 +491,7 @@ fun OrderProfileCard(
                                 fontSize = 16.sp
                             )
                             Text(
-                                text = "€" + orders.listPrice[index] + "  × " + orders.listQuantity[index],
+                                text = "€" + order.listPrice[index] + "  × " + order.listQuantity[index],
                                 modifier = Modifier.padding(10.dp, 1.dp),
                                 fontSize = 16.sp
                             )
