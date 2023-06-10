@@ -6,7 +6,6 @@ import com.example.eatit.EatItApp
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -100,7 +99,7 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             .collection("products")
             .document(productId).update(
                 "name", product.name, "price", product.price,
-                "description", product.description, "photo", product.photo
+                "description", product.description, "photo", product.photo, "section", product.section
             )
 
     }

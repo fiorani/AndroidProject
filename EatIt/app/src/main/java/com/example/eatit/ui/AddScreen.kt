@@ -27,7 +27,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -185,33 +184,35 @@ fun AddProductScreen(
     onNextButtonClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
 ) {
+    val data = LocalContext.current.resources.getStringArray(R.array.categories).toList()
 
     var name by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var price by rememberSaveable { mutableStateOf("") }
     var photoURI by rememberSaveable { mutableStateOf("") }
+    val selectedSection = remember { mutableStateOf(data.firstOrNull() ?: "") }
 
-    Scaffold { paddingValues ->
+    if (restaurantsViewModel.productSelected.id != ""){
+        name = restaurantsViewModel.productSelected.name
+        description = restaurantsViewModel.productSelected.description
+        price = restaurantsViewModel.productSelected.price.toString()
+        photoURI = restaurantsViewModel.productSelected.photo
+        selectedSection.value = restaurantsViewModel.productSelected.section
+    }
+
+    Card{
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(10.dp)
-                .fillMaxSize()
+            modifier = Modifier.padding(10.dp)
         ) {
-
-
-            val data = LocalContext.current.resources.getStringArray(R.array.categories).toList()
-            val selectedSection = remember { mutableStateOf(data.firstOrNull() ?: "") }
             val rows = data.chunked(3)
-            Row {
-                Text(
-                    text = "Choose a section:",
-                    modifier = Modifier.padding(10.dp, 5.dp).weight(1f),
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Spacer(modifier = Modifier.size(20.dp))
+            Text(
+                text = "Choose a section:",
+                modifier = Modifier.padding(10.dp, 5.dp),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center
@@ -221,13 +222,12 @@ fun AddProductScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                            row.forEach { option ->
+                        row.forEach { option ->
                             RadioButton(
                                 selected = selectedSection.value == option,
                                 onClick = { selectedSection.value = option }
                             )
                             ClickableText(
-                                modifier = Modifier.padding(start = 8.dp),
                                 text = buildAnnotatedString { append(option) },
                                 onClick = { selectedSection.value = option }
                             )
@@ -235,36 +235,37 @@ fun AddProductScreen(
                     }
                 }
             }
-            Row {
-                Text(
-                    text = "Build your dish:",
-                    modifier = Modifier.padding(10.dp, 5.dp).weight(1f),
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Spacer(modifier = Modifier.size(20.dp))
+            Text(
+                text = "Build your dish:",
+                modifier = Modifier.padding(10.dp, 5.dp),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp)
             )
 
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(5.dp))
 
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
                 label = { Text(stringResource(id = R.string.restaurant_description)) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp)
             )
 
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(5.dp))
 
             val decimalOnlyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
-            Row (modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
                 OutlinedTextField(
                     value = price,
                     onValueChange = { newValue ->
@@ -279,7 +280,7 @@ fun AddProductScreen(
                     ),
                     visualTransformation = VisualTransformation.None,
                     label = { Text(stringResource(id = R.string.restaurant_price)) },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(150.dp).padding(10.dp, 0.dp),
                     trailingIcon = {
                         Icon(
                             Icons.Filled.Euro,
@@ -317,7 +318,7 @@ fun AddProductScreen(
                 }
             }
 
-            Button(
+            FilledTonalButton(
                 onClick = {
                     val permissionCheckResult =
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -341,18 +342,24 @@ fun AddProductScreen(
             Spacer(modifier = Modifier.size(15.dp))
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 LaunchedEffect(Unit) {
-                   photoURI= restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString()
+                    photoURI = restaurantsViewModel.uploadPhoto(
+                        saveImage(
+                            context.applicationContext.contentResolver,
+                            capturedImageUri
+                        )!!
+                    ).toString()
                 }
             }
             Button(
                 onClick = {
-                    if (restaurantsViewModel.productSelected.id!="") {
+                    if (price == "") price = "0"
+                    if (restaurantsViewModel.productSelected.id != "") {
                         restaurantsViewModel.setProduct(
                             Product(
                                 name = name,
                                 description = description,
                                 photo = photoURI,
-                                price=price.toFloat(),
+                                price = price.toFloat(),
                                 section = selectedSection.value
                             )
                         )
@@ -362,7 +369,7 @@ fun AddProductScreen(
                                 name = name,
                                 description = description,
                                 photo = photoURI,
-                                price=price.toFloat(),
+                                price = price.toFloat(),
                                 section = selectedSection.value
                             )
                         )
@@ -372,8 +379,12 @@ fun AddProductScreen(
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Icon(Icons.Default.Save, stringResource(id = R.string.save))
-                Text(text = stringResource(id = R.string.save))
+                Text(
+                    modifier = Modifier.padding(3.dp, 0.dp),
+                    text = stringResource(id = R.string.save)
+                )
             }
+            Spacer(modifier = Modifier.size(25.dp))
         }
     }
 }
