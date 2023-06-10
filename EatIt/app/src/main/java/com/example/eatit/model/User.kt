@@ -19,8 +19,9 @@ data class User(
         mail: String,
         photo: String,
         age: Int,
-        position: String,
         restaurateur: Boolean,
+        position: String,
+        phone: String,
         favouriteRestaurants: ArrayList<String>
     ) : this() {
         val user = Firebase.auth.currentUser
@@ -33,6 +34,7 @@ data class User(
         this.age = age
         this.restaurateur = restaurateur
         this.position = position
+        this.phone = phone
         this.favouriteRestaurants = favouriteRestaurants
     }
 }

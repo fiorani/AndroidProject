@@ -14,10 +14,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.R
@@ -86,22 +88,28 @@ fun ProfileScreen(
                             Spacer(modifier = Modifier.size(15.dp))
                         }
                     }
-                    Text(
-                        text = "Statistic order:",
-                        modifier = Modifier.padding(20.dp, 10.dp),
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
 
                     if (!user.restaurateur) {
+                        Text(
+                            modifier = Modifier.padding(20.dp, 10.dp),
+                            text = "Achievements",
+                            fontWeight = Bold,
+                            fontSize = 32.sp
+                        )
                         ImageCarouselCard()
                         Text(
-                            text = "My orders:",
+                            text = "My orders",
+                            modifier = Modifier.padding(20.dp, 10.dp),
+                            fontSize = 32.sp,
+                            fontWeight = Bold
+                        )
+                    } else {
+                        Text(
+                            text = "Order statistics:",
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold
                         )
-                    } else {
                         val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
                         Chart(
                             chart = lineChart(),
@@ -143,19 +151,14 @@ fun ImageCarouselCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp, 10.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Achievement",
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.align(Alignment.Start)
-            )
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,17 +166,13 @@ fun ImageCarouselCard() {
                     .horizontalScroll(rememberScrollState())
             ) {
                 val imageList = listOf(
-                    R.drawable.medal1,
-                    R.drawable.medal2,
-                    R.drawable.medal3,
-                    R.drawable.medal4,
-                    R.drawable.medal5,
-                    R.drawable.medal6,
-                    R.drawable.medal7,
-                    R.drawable.medal8,
-                    R.drawable.medal9,
-                    R.drawable.medal10,
-                    R.drawable.medal11
+                    R.drawable.badge1,
+                    R.drawable.badge10,
+                    R.drawable.badge20,
+                    R.drawable.badge30,
+                    R.drawable.badge40,
+                    R.drawable.badge50,
+                    R.drawable.badge_max
                 )
 
                 for (imageResId in imageList) {
@@ -182,7 +181,7 @@ fun ImageCarouselCard() {
                         contentDescription = null,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .size(50.dp)
+                            .size(80.dp)
                             .clip(shape = RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Crop
                     )

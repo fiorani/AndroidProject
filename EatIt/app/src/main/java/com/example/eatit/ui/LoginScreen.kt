@@ -56,7 +56,7 @@ fun LoginScreen(
                 elevation = CardDefaults.cardElevation(8.dp),
             ) {
                 Column(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier.padding(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -99,12 +99,12 @@ fun LoginScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(10.dp))
+            Spacer(modifier = Modifier.padding(20.dp))
             Text(
                 text = "Don't have an account yet?",
                 fontSize = 20.sp
             )
-            Spacer(modifier = Modifier.padding(10.dp))
+            Spacer(modifier = Modifier.padding(5.dp))
             EatItButton(
                 text = "Register",
                 function = { onRegisterClicked() },

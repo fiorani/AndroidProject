@@ -97,7 +97,6 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp, 10.dp),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(8.dp),
                 shape = CardDefaults.shape
             ) {
