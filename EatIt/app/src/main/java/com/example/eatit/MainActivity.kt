@@ -8,6 +8,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -54,6 +55,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var auth: FirebaseAuth
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
+    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private lateinit var connectivityManager: ConnectivityManager
     private var queue: RequestQueue? = null
@@ -71,6 +73,15 @@ class MainActivity : ComponentActivity() {
         ) { isGranted ->
             if (isGranted) {
                 startLocationUpdates()
+            } else {
+                warningViewModel.setPermissionSnackBarVisibility(true)
+            }
+        }
+        requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // FCM SDK (and your app) can post notifications.
             } else {
                 warningViewModel.setPermissionSnackBarVisibility(true)
             }
@@ -103,8 +114,7 @@ class MainActivity : ComponentActivity() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val theme = sharedPref.getString("THEME_KEY", getString(R.string.light_theme))
         startLocationUpdates()
-        val intent = Intent(this, OrderService::class.java)
-        startService(intent)
+        askNotificationPermission()
         setContent {
             EatItTheme(darkTheme = theme == "Dark") {
                 // A surface container using the 'background' color from the theme
@@ -166,7 +176,17 @@ class MainActivity : ComponentActivity() {
         super.onStop()
         queue?.cancelAll(TAG)
     }
-
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                val intent = Intent(this, OrderService::class.java)
+                startService(intent)
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
     private fun startLocationUpdates() {
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
         when {
