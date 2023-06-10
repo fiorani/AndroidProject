@@ -19,12 +19,18 @@ data class Order(
         if (this.status == "in progress") this.status = "sent"
         else                              this.status = "delivered"
     }
+
+    fun isOrderDelivered() : Boolean {
+        return this.status == "delivered"
+    }
+
     fun reduceCount(product: Product): Order {
         var productIndex = 0
         if (this.listProductId.contains(product.id)) {
             productIndex = this.listProductId.indexOf(product.id)
             this.listQuantity[productIndex] = this.listQuantity[productIndex].minus(1)
         } else {
+            //!!!!!!!!!!!!!!!!in questa riga si sta chiedendo di rimuovere un elemento che si è verificato non esserci
             this.listProductId.remove(product.id)
             this.listPrice.removeAt(productIndex)
             this.listQuantity.removeAt(productIndex)
