@@ -419,6 +419,25 @@ fun OrderProfileCard(
                     fontSize = 18.sp
                 )
             }
+            if (!user.restaurateur) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Status:",
+                        modifier = Modifier
+                            .padding(10.dp, 1.dp)
+                            .weight(1f),
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = statusText.value,
+                        modifier = Modifier.padding(10.dp, 2.dp),
+                        fontSize = 20.sp
+                    )
+                }
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -437,27 +456,6 @@ fun OrderProfileCard(
                     fontWeight = Bold,
                     fontSize = 20.sp
                 )
-            }
-            if (!user.restaurateur) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Status:",
-                        modifier = Modifier
-                            .padding(10.dp, 1.dp)
-                            .weight(1f),
-                        fontWeight = Bold,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = statusText.value,
-                        modifier = Modifier.padding(10.dp, 2.dp),
-                        fontWeight = Bold,
-                        fontSize = 20.sp
-                    )
-                }
             }
 
 

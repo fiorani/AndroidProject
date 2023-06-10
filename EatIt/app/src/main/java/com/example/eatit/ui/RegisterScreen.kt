@@ -16,16 +16,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
+import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import java.util.*
 import kotlin.reflect.KFunction8
 
@@ -56,23 +59,26 @@ fun RegisterScreen(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(40.dp, 20.dp),
+                    .padding(40.dp, 20.dp, 40.dp, 5.dp),
                 text = "Do you want to register as a customer or as a restaurant?",
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                fontWeight = Bold,
+                textAlign = TextAlign.Center
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.Center
             ) {
-                EatItButton(text = "Customer", function = {
+                EatItButton(modifier= Modifier.padding(3.dp),text = "Customer", function = {
                     isUserRegister.value = true
                     strTitle = "User registration"
                 })
-                EatItButton(text = "Restaurant", function = {
+                EatItButton(modifier= Modifier.padding(3.dp),text = "Restaurant", function = {
                     isUserRegister.value = false
                     strTitle = "Restaurant registration"
                 })
             }
+            Spacer(modifier = Modifier.size(20.dp))
             Card(
                 modifier = Modifier.padding(40.dp, 10.dp),
                 elevation = CardDefaults.cardElevation(8.dp)
@@ -83,7 +89,8 @@ fun RegisterScreen(
                 ) {
                     Text(
                         text = strTitle,
-                        fontSize = 25.sp
+                        fontSize = 25.sp,
+                        fontWeight = Bold
                     )
 
                     var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -237,14 +244,16 @@ fun RegisterScreen(
 
                 }
             }
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(20.dp))
             Text(
                 modifier = Modifier
                     .padding(5.dp, 0.dp),
                 text = "Already have an account?",
                 fontSize = 20.sp
             )
+            Spacer(modifier = Modifier.padding(5.dp))
             EatItButton(text = "Login", function = { onLoginButtonClicked() })
+            Spacer(modifier = Modifier.size(20.dp))
         }
     }
 }

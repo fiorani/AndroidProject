@@ -1,6 +1,7 @@
 package com.example.eatit.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:String, function: () -> Unit, icon: ImageVector? = null ){
@@ -24,7 +26,9 @@ fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:Str
         function()
     }) {
         Text(
+            modifier = modifier.padding(5.dp),
             text = text,
+            fontSize = 20.sp
         )
         if (icon != null) {
             Icon(
