@@ -28,15 +28,14 @@ import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
-import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import java.util.*
-import kotlin.reflect.KFunction8
+import kotlin.reflect.KFunction9
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
     startLocationUpdates: () -> Unit,
@@ -93,9 +92,7 @@ fun RegisterScreen(
                         fontWeight = Bold
                     )
 
-                    var txtNickname by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
+                    var txtNickname by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
                         value = txtNickname,
                         onValueChange = { txtNickname = it },
@@ -123,9 +120,7 @@ fun RegisterScreen(
                     )
 
                     if (!isUserRegister.value) {
-                        var txtPIVA by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                            mutableStateOf(TextFieldValue(""))
-                        }
+                        var txtPIVA by rememberSaveable { mutableStateOf("") }
                         OutlinedTextField(
                             value = txtPIVA,
                             onValueChange = { txtPIVA = it },
@@ -133,9 +128,7 @@ fun RegisterScreen(
                         )
                     } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
-                        var txtBirth by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                            mutableStateOf(TextFieldValue(""))
-                        }
+                        var txtBirth  by rememberSaveable { mutableStateOf("") }
                         val openDialog = remember { mutableStateOf(false) }
 
                         OutlinedTextField(
@@ -164,7 +157,7 @@ fun RegisterScreen(
                                         onClick = {
                                             openDialog.value = false
                                             txtBirth =
-                                                TextFieldValue(getDate(datePickerState.selectedDateMillis))
+                                                TextFieldValue(getDate(datePickerState.selectedDateMillis)).toString()
                                         },
                                         enabled = confirmEnabled.value
                                     ) {
@@ -211,18 +204,14 @@ fun RegisterScreen(
                     }
 
 
-                    var txtPhone by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
+                    var txtPhone  by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
                         value = txtPhone,
                         onValueChange = { txtPhone = it },
                         label = { Text("Phone number") }
                     )
 
-                    var txtEmail by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(""))
-                    }
+                    var txtEmail by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
                         value = txtEmail,
                         onValueChange = { txtEmail = it },
@@ -231,13 +220,14 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.size(10.dp))
                     EatItButton(text = "Register", function = {
                         createAccount(
-                            txtEmail.text,
+                            txtEmail,
                             password,
-                            txtNickname.text,
+                            txtNickname,
                             "",
                             0,
-                            address,
                             !isUserRegister.value,
+                            address,
+                            txtPhone,
                             onNextButtonClicked
                         )
                     })

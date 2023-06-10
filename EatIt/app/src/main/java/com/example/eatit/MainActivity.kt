@@ -218,8 +218,9 @@ class MainActivity : ComponentActivity() {
         name: String,
         photo: String,
         age: Int,
-        address: String,
         restaurateur: Boolean,
+        address: String,
+        phone:String,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
@@ -235,6 +236,7 @@ class MainActivity : ComponentActivity() {
                                 age = age,
                                 position = address,
                                 restaurateur = restaurateur,
+                                phone = phone,
                                 favouriteRestaurants = ArrayList(
                                     listOf()
                                 )

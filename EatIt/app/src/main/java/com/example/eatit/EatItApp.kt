@@ -20,7 +20,6 @@ import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -40,11 +39,9 @@ import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.example.eatit.viewModel.WarningViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.reflect.KFunction3
-import kotlin.reflect.KFunction8
+import kotlin.reflect.KFunction9
 
 sealed class AppScreen(var name: String) {
     object Home : AppScreen("Home")
@@ -147,7 +144,7 @@ fun NavigationApp(
     warningViewModel: WarningViewModel,
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
     theme: String?,
     sharedPref: SharedPreferences,
@@ -212,7 +209,7 @@ private fun NavigationGraph(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction8<String, String, String, String, Int, String, Boolean, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
     sharedPref: SharedPreferences,
     theme: String?,
