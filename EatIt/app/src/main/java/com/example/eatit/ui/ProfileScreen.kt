@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -96,7 +97,7 @@ fun ProfileScreen(
                             fontWeight = Bold,
                             fontSize = 32.sp
                         )
-                        ImageCarouselCard()
+                        ImageCarouselCard(getBadges(orders.size))
                         Text(
                             text = "My orders",
                             modifier = Modifier.padding(20.dp, 10.dp),
@@ -147,7 +148,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ImageCarouselCard() {
+fun ImageCarouselCard(badgesList: List<Int>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,17 +166,7 @@ fun ImageCarouselCard() {
                     .padding(top = 8.dp)
                     .horizontalScroll(rememberScrollState())
             ) {
-                val imageList = listOf(
-                    R.drawable.badge1,
-                    R.drawable.badge10,
-                    R.drawable.badge20,
-                    R.drawable.badge30,
-                    R.drawable.badge40,
-                    R.drawable.badge50,
-                    R.drawable.badge_max
-                )
-
-                for (imageResId in imageList) {
+                for (imageResId in badgesList) {
                     Image(
                         painter = painterResource(imageResId),
                         contentDescription = null,
@@ -189,4 +180,25 @@ fun ImageCarouselCard() {
             }
         }
     }
+}
+
+fun getBadges(orderNum: Int) : List<Int> {
+    val result = mutableListOf<Int>()
+    val badgeMap = mapOf<Int, Int>(
+        Pair(1, R.drawable.badge1),
+        Pair(10, R.drawable.badge10),
+        Pair(20, R.drawable.badge20),
+        Pair(30, R.drawable.badge30),
+        Pair(40, R.drawable.badge40),
+        Pair(50, R.drawable.badge50),
+        Pair(60, R.drawable.badge_max)
+    )
+
+    badgeMap.forEach(){level ->
+        if (orderNum >= level.key) {
+            result.add(level.value)
+        }
+    }
+
+    return result
 }
