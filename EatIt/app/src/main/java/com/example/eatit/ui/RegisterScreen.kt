@@ -68,11 +68,11 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                EatItButton(modifier= Modifier.padding(3.dp),text = "Customer", function = {
+                EatItButton(modifier = Modifier.padding(3.dp), text = "Customer", function = {
                     isUserRegister.value = true
                     strTitle = "User registration"
                 })
-                EatItButton(modifier= Modifier.padding(3.dp),text = "Restaurant", function = {
+                EatItButton(modifier = Modifier.padding(3.dp), text = "Restaurant", function = {
                     isUserRegister.value = false
                     strTitle = "Restaurant registration"
                 })
@@ -128,7 +128,7 @@ fun RegisterScreen(
                         )
                     } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
-                        var birth  by rememberSaveable { mutableStateOf("") }
+                        var birth by rememberSaveable { mutableStateOf("") }
                         val openDialog = remember { mutableStateOf(false) }
 
                         OutlinedTextField(
@@ -197,7 +197,7 @@ fun RegisterScreen(
                         }
                     )
 
-                    var phone  by rememberSaveable { mutableStateOf("") }
+                    var phone by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
                         value = phone,
                         onValueChange = { phone = it },

@@ -74,7 +74,9 @@ fun RestaurantCard(
                     )
                     Text(
                         text = restaurant.address,
-                        modifier = Modifier.padding(4.dp).width(200.dp),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .width(200.dp),
                         fontSize = 20.sp
                     )
                 }
@@ -94,7 +96,13 @@ fun RestaurantCard(
                         spaceBetween = 1.dp,
                         size = 20.dp
                     )
-                    val (isFavorite, setFavorite) = remember { mutableStateOf(user.favouriteRestaurants.contains(restaurant.id)) }
+                    val (isFavorite, setFavorite) = remember {
+                        mutableStateOf(
+                            user.favouriteRestaurants.contains(
+                                restaurant.id
+                            )
+                        )
+                    }
                     if (isFavorite) {
                         EatItIconButton(icon = Icons.Filled.Favorite, function = {
                             user.favouriteRestaurants.remove(restaurant.id)
@@ -137,7 +145,7 @@ fun ProductCard(
             )
             Text(
                 modifier = Modifier.padding(10.dp, 0.dp),
-                text = product.name + " - " + String.format("%.${2}f",product.price) + "€",
+                text = product.name + " - " + String.format("%.${2}f", product.price) + "€",
                 fontSize = 20.sp
             )
         }
@@ -149,8 +157,10 @@ fun ProductCard(
             }
             val (count, updateCount) = remember { mutableStateOf(quantity) }
             QuantitySelector(count = count, decreaseItemCount = {
-                if (count > 0) updateCount(count - 1)
-                order.reduceCount(product)
+                if (count > 0) {
+                    updateCount(count - 1)
+                    order.reduceCount(product)
+                }
             }, increaseItemCount = {
                 updateCount(count + 1)
                 order.increaseCount(product)
@@ -386,7 +396,7 @@ fun OrderProfileCard(
                     Column {
                         Spacer(modifier = Modifier.height(7.dp))
                         EatItButton(
-                            modifier = Modifier.clickable(enabled = buttonClickable) {  },
+                            modifier = Modifier.clickable(enabled = buttonClickable) { },
                             enabled = buttonClickable,
                             text = statusText.value,
                             function = {
