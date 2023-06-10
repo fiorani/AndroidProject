@@ -49,8 +49,9 @@ class CartRepository(eatItApp: EatItApp) {
                         order?.id = documentSnapshot.id
                         order
                     }
+            }else{
+                emptyList<Order>()
             }
-            emptyList<Order>()
         } catch (e: Exception) {
             throw e
         }
@@ -73,5 +74,9 @@ class CartRepository(eatItApp: EatItApp) {
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    fun updateOrder(order: Order) {
+        FirebaseFirestore.getInstance().collection("orders").document(order.id.toString()).set(order)
     }
 }

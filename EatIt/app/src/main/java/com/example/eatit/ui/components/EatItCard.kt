@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.*
+import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
@@ -351,7 +352,8 @@ fun OrderProfileCard(
     order: Order,
     listProducts: List<Product>,
     restaurant: Restaurant,
-    user: User
+    user: User,
+    cartViewModel: CartViewModel
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -401,6 +403,7 @@ fun OrderProfileCard(
                             text = statusText.value,
                             function = {
                                 order.changeState() //ancora non funziona, aggiorna ma se cambi pagina e torni non si salva lo stato
+                                cartViewModel.updateOrder(order)
                                 statusText.value = order.status
                                 if (order.isOrderDelivered()) {
                                     buttonClickable = false

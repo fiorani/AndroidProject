@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Euro
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Save
@@ -263,8 +264,7 @@ fun AddProductScreen(
             val decimalOnlyRegex = Regex("^\\d+(\\.\\d{0,2})?\$")
 
             Row (modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.weight(1f))
+                horizontalArrangement = Arrangement.End) {
                 OutlinedTextField(
                     value = price,
                     onValueChange = { newValue ->
@@ -279,11 +279,13 @@ fun AddProductScreen(
                     ),
                     visualTransformation = VisualTransformation.None,
                     label = { Text(stringResource(id = R.string.restaurant_price)) },
-                    modifier = Modifier.width(100.dp).padding(horizontal = 10.dp)
-                )
-                Text(
-                    text = "€",
-                    fontSize = 32.sp
+                    modifier = Modifier.width(150.dp),
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Euro,
+                            contentDescription = "Euro icon",
+                        )
+                    }
                 )
             }
             Spacer(modifier = Modifier.size(15.dp))
