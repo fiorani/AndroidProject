@@ -1,6 +1,5 @@
 package com.example.eatit.ui
 
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,12 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,7 +38,6 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
 
@@ -72,7 +68,7 @@ fun ProfileScreen(
             ) {
                 item {
                     Box(modifier = Modifier.fillMaxWidth()) {
-                        ImageProfile(user.photo.toString())
+                        ImageProfile(user.photo)
                         Column(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.Start,
@@ -81,13 +77,13 @@ fun ProfileScreen(
                                 .padding(10.dp)
                         ) {
                             Text(
-                                text = user.name.toString(),
+                                text = user.name,
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.White
                             )
                             Spacer(modifier = Modifier.size(15.dp))
                             Text(
-                                text = user.position.toString(),
+                                text = user.position,
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White
                             )
@@ -114,7 +110,7 @@ fun ProfileScreen(
                             text = "Order statistics:",
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = Bold
                         )
                         val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
                         Chart(
@@ -127,7 +123,7 @@ fun ProfileScreen(
                             text = "Orders:",
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = Bold
                         )
                     }
                 }
@@ -239,10 +235,10 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
 }
 
 fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
-    val result = mutableListOf<Triple<Int, String, String>>(
+    val result = mutableListOf(
         Triple(R.drawable.badge_login, "First login!", "Login for the first time.")
     )
-    val badgeMap = mapOf<Int, Triple<Int, String, String>>(
+    val badgeMap = mapOf(
         Pair(1, Triple(R.drawable.badge1, "First Order!", "Congratulations! You have made your first order.")),
         Pair(10, Triple(R.drawable.badge1, "10 Orders", "You have made 10 orders!")),
         Pair(20, Triple(R.drawable.badge1, "20 Orders", "You have made 20 orders!")),
@@ -252,7 +248,7 @@ fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
         Pair(60, Triple(R.drawable.badge1, "EatIt Master", "Amazing! You have made a lot of orders!"))
     )
 
-    badgeMap.forEach(){level ->
+    badgeMap.forEach{level ->
         if (orderNum >= level.key) {
             result.add(level.value)
         }
