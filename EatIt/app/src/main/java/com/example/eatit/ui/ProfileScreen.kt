@@ -141,7 +141,8 @@ fun ProfileScreen(
                         orders[item],
                         products,
                         restaurant,
-                        user
+                        user,
+                        cartViewModel
                     )
                 }
             }

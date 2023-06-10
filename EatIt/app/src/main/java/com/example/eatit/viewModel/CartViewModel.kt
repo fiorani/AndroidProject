@@ -40,6 +40,8 @@ class CartViewModel @Inject constructor(
     fun resetOrder() {
         _orderLines = Order()
     }
-
+    fun updateOrder(order: Order) = viewModelScope.launch {
+        repository.updateOrder(order)
+    }
 
 }

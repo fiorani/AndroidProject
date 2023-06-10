@@ -75,4 +75,8 @@ class CartRepository(eatItApp: EatItApp) {
             throw e
         }
     }
+
+    fun updateOrder(order: Order) {
+        FirebaseFirestore.getInstance().collection("orders").document(order.id.toString()).set(order)
+    }
 }
