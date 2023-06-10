@@ -74,7 +74,7 @@ fun RestaurantCard(
                     )
                     Text(
                         text = restaurant.address,
-                        modifier = Modifier.padding(4.dp),
+                        modifier = Modifier.padding(4.dp).width(200.dp),
                         fontSize = 20.sp
                     )
                 }
@@ -182,10 +182,9 @@ fun ShoppingCard(product: Product, order: Order) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Card(
-            modifier = Modifier.padding(5.dp),
+            modifier = Modifier.padding(5.dp, 0.dp),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
-            elevation = CardDefaults.cardElevation(8.dp),
-            shape = CardDefaults.shape
+            elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
