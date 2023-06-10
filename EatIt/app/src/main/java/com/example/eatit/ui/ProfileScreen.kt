@@ -240,12 +240,12 @@ fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
     )
     val badgeMap = mapOf(
         Pair(1, Triple(R.drawable.badge1, "First Order!", "Congratulations! You have made your first order.")),
-        Pair(10, Triple(R.drawable.badge1, "10 Orders", "You have made 10 orders!")),
-        Pair(20, Triple(R.drawable.badge1, "20 Orders", "You have made 20 orders!")),
-        Pair(30, Triple(R.drawable.badge1, "30 Orders", "You have made 30 orders!")),
-        Pair(40, Triple(R.drawable.badge1, "40 Orders", "You have made 40 orders!")),
-        Pair(50, Triple(R.drawable.badge1, "50 Orders", "You have made 50 orders!")),
-        Pair(60, Triple(R.drawable.badge1, "EatIt Master", "Amazing! You have made a lot of orders!"))
+        Pair(10, Triple(R.drawable.badge10, "10 Orders", "You have made 10 orders!")),
+        Pair(20, Triple(R.drawable.badge20, "20 Orders", "You have made 20 orders!")),
+        Pair(30, Triple(R.drawable.badge30, "30 Orders", "You have made 30 orders!")),
+        Pair(40, Triple(R.drawable.badge40, "40 Orders", "You have made 40 orders!")),
+        Pair(50, Triple(R.drawable.badge50, "50 Orders", "You have made 50 orders!")),
+        Pair(60, Triple(R.drawable.badge_max, "EatIt Master", "Amazing! You have made a lot of orders!"))
     )
 
     badgeMap.forEach{level ->
