@@ -75,4 +75,8 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         _user.favouriteRestaurants = restaurants
         repository.setRestaurants(restaurants)
     }
+
+    fun deleteUser() {
+        repository.deleteUser()
+    }
 }
