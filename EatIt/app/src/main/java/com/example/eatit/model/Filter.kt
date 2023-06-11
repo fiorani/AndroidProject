@@ -16,26 +16,51 @@
 
 package com.example.eatit.model
 
+import android.content.Context
 import android.location.Geocoder
 import android.location.Location
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-class Filter {
-    @Composable
-    fun filterDistance(restaurant: Restaurant, user: User, distance: String): Boolean {
+class Filter(
+    var favorite: Boolean = false,
+    var distance: Int = 25000,
+    var sort: String? = "Predefinito",
+) {
+
+    fun filterDistance(restaurant: Restaurant, user: User, distance: Int,context:Context): Boolean {
         val positionRestaurant =
-            Geocoder(LocalContext.current).getFromLocationName(restaurant.address.toString(), 1)
+            Geocoder(context).getFromLocationName(restaurant.address, 1)
         val positionUser =
-            Geocoder(LocalContext.current).getFromLocationName(user.position.toString(), 1)
-        var locationRestaurant: Location = Location("restaurant")
+            Geocoder(context).getFromLocationName(user.position, 1)
+        val locationRestaurant = Location("restaurant")
         locationRestaurant.latitude = positionRestaurant?.get(0)!!.latitude
         locationRestaurant.longitude = positionRestaurant.get(0)!!.longitude
-        var locationUser: Location = Location("user")
+        Log.d("distance", locationRestaurant.toString())
+        val locationUser = Location("user")
         locationUser.latitude = positionUser?.get(0)!!.latitude
         locationUser.longitude = positionUser.get(0)!!.longitude
+        Log.d("distance", locationUser.toString())
         val distanceBetween = locationRestaurant.distanceTo(locationUser)
-        return distanceBetween <= distance.toFloat()
+        restaurant.distance = distanceBetween.toInt()
+        Log.d("distance", distanceBetween.toString())
+        if (distanceBetween <= distance) {
+            return true
+        }
+        return false
+    }
+
+    fun sort(restaurant: List<Restaurant>,sort:String?):List<Restaurant> {
+        if (sort == "Distanza") {
+            Log.d("distance", restaurant.sortedBy { it.distance }.toString())
+            return restaurant.sortedBy { it.distance }
+        }
+        if (sort == "Alfabetico") {
+            Log.d("Alfabetico", restaurant.sortedBy { it.name }.toString())
+            return restaurant.sortedBy { it.name }
+        }
+        return restaurant
     }
 }
 

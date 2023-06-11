@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.EatItIconButton
@@ -52,18 +53,34 @@ fun HomeScreen(
     cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user
     }
+    var restaurantsf by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     LaunchedEffect(user) {
-        restaurants = if (user.restaurateur) {
-            restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
-        } else {
-            restaurantsViewModel.getRestaurants()
+         if (user.restaurateur) {
+             restaurantsf =restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         }
     }
+    LaunchedEffect(usersViewModel.filter.favorite) {
+        if(usersViewModel.filter.favorite){
+            restaurantsf = restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
+        } else {
+            restaurantsf = restaurantsViewModel.getRestaurants()
+
+        }
+    }
+    LaunchedEffect(restaurantsf) {
+        restaurants = restaurantsf.filter { restaurant ->
+            usersViewModel.filter.filterDistance(restaurant, user, usersViewModel.filter.distance, context)
+        }
+        restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
+    }
+
+
+
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {

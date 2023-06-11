@@ -33,7 +33,9 @@ class RestaurantsViewModel @Inject constructor(
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> {
         return repository.getRestaurantsByUserId(userId)
     }
-
+    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> {
+        return repository.getRestaurantsByFavorite(userId)
+    }
     suspend fun getProducts(restaurantId: String): List<Product> {
         return repository.getProducts(restaurantId)
     }

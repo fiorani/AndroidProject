@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,13 +30,13 @@ fun FilterScreen(
     restaurantsViewModel: RestaurantsViewModel
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        val filterDistance = listOf<String>("25", "50", "100")
+        val filterDistance = listOf<String>("25000", "50000", "100000")
         val (selectedOptionFilter, onOptionSelectedFilter) = remember {
-            mutableStateOf(
-                filterDistance[0]
-            )
+            mutableStateOf(usersViewModel.filter.distance.toString())
         }
         Column(Modifier.selectableGroup()) {
+
+        if (!usersViewModel.user.restaurateur){
             Text(
                 text = "Filtra per distanza",
                 style = MaterialTheme.typography.bodyLarge,
@@ -48,7 +49,9 @@ fun FilterScreen(
                         .height(56.dp)
                         .selectable(
                             selected = (text == selectedOptionFilter),
-                            onClick = { onOptionSelectedFilter(text) },
+                            onClick = { onOptionSelectedFilter(text)
+                                Log.d(  "FilterScreen", "FilterScreen: " + text)
+                                usersViewModel.filter.distance = text.toInt()},
                             role = Role.RadioButton
                         )
                         .padding(horizontal = 16.dp),
@@ -56,46 +59,50 @@ fun FilterScreen(
                 ) {
                     RadioButton(
                         selected = (text == selectedOptionFilter),
-                        onClick = null // null recommended for accessibility with screenreaders
+                        onClick = {}
                     )
                     Text(
-                        text = "< " + text + " km",
+                        text = "< " + text + " m",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(start = 16.dp)
                     )
                 }
             }
         }
-        Text(
-            text = "Filtra per preferiti",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-        )
-        val (checkedState, onStateChange) = remember { mutableStateOf(false) }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .toggleable(
-                    value = checkedState,
-                    onValueChange = { onStateChange(!checkedState) },
-                    role = Role.Checkbox
-                )
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = checkedState,
-                onCheckedChange = null // null recommended for accessibility with screenreaders
-            )
             Text(
-                text = "solo i preferiti",
+                text = "Filtra per preferiti",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
             )
+            val (checkedState, onStateChange) = remember { mutableStateOf(usersViewModel.filter.favorite) }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .toggleable(
+                        value = checkedState,
+                        onValueChange = { onStateChange(!checkedState)
+                            usersViewModel.filter.favorite = !usersViewModel.filter.favorite
+                        },
+                        role = Role.Checkbox
+                    )
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = checkedState,
+                    onCheckedChange = null // null recommended for accessibility with screenreaders
+                )
+                Text(
+                    text = "solo i preferiti",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
         }
+
         val sort = listOf<String>("Predefinito", "Distanza", "Alfabetico")
-        val (selectedOption, onOptionSelected) = remember { mutableStateOf(sort[0]) }
+        val (selectedOption, onOptionSelected) = remember { mutableStateOf(usersViewModel.filter.sort) }
         Column(Modifier.selectableGroup()) {
             Text(
                 text = "Sort by",
@@ -109,7 +116,9 @@ fun FilterScreen(
                         .height(56.dp)
                         .selectable(
                             selected = (text == selectedOption),
-                            onClick = { onOptionSelected(text) },
+                            onClick = { onOptionSelected(text)
+                                      usersViewModel.filter.sort = text
+                                      },
                             role = Role.RadioButton
                         )
                         .padding(horizontal = 16.dp),
@@ -117,7 +126,7 @@ fun FilterScreen(
                 ) {
                     RadioButton(
                         selected = (text == selectedOption),
-                        onClick = null // null recommended for accessibility with screenreaders
+                        onClick = {}
                     )
                     Text(
                         text = text,
