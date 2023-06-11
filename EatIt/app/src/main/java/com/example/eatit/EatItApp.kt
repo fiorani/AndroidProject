@@ -34,7 +34,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
+import com.example.eatit.ui.components.AddProductScreen
+import com.example.eatit.ui.components.AddRestaurantScreen
+import com.example.eatit.ui.components.ConnectivitySnackBarComposable
 import com.example.eatit.ui.components.EatItIconButton
+import com.example.eatit.ui.components.GPSAlertDialogComposable
+import com.example.eatit.ui.components.PermissionSnackBarComposable
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -45,8 +50,6 @@ import kotlin.reflect.KFunction9
 
 sealed class AppScreen(var name: String) {
     object Home : AppScreen("Home")
-    object AddRestaurant : AppScreen("AddRestaurant")
-    object AddProduct : AppScreen("AddProduct")
     object Details : AppScreen("Details")
     object Settings : AppScreen("Settings")
     object Profile : AppScreen("Profile")
@@ -225,9 +228,6 @@ private fun NavigationGraph(
     ) {
         composable(route = AppScreen.Home.name) {
             HomeScreen(
-                onAddButtonClicked = {
-                    navController.navigate(AppScreen.AddRestaurant.name)
-                },
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
@@ -241,24 +241,6 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Filter.name)
                 },
                 startLocationUpdates = startLocationUpdates
-            )
-        }
-        composable(route = AppScreen.AddRestaurant.name) {
-            AddRestaurantScreen(
-                onNextButtonClicked = {
-                    navController.popBackStack(AppScreen.Home.name, inclusive = false)
-                },
-                restaurantsViewModel = restaurantsViewModel,
-                usersViewModel = usersViewModel,
-                startLocationUpdates = startLocationUpdates
-            )
-        }
-        composable(route = AppScreen.AddProduct.name) {
-            AddProductScreen(
-                onNextButtonClicked = {
-                    navController.popBackStack(AppScreen.Home.name, inclusive = false)
-                },
-                restaurantsViewModel = restaurantsViewModel
             )
         }
         composable(route = AppScreen.Details.name) {

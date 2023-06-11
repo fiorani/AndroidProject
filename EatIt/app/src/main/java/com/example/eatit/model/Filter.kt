@@ -53,7 +53,7 @@ class Filter(
 
     fun sort(restaurant: List<Restaurant>,sort:String?):List<Restaurant> {
         if (sort == "Distanza") {
-            Log.d("distance", restaurant.sortedBy { it.distance }.toString())
+            Log.d("Distanza", restaurant.sortedBy { it.distance }.toString())
             return restaurant.sortedBy { it.distance }
         }
         if (sort == "Alfabetico") {

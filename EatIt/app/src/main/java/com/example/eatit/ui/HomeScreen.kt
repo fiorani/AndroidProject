@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
+import com.example.eatit.ui.components.AddRestaurantScreen
 import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.ui.components.EatItSearchBar
 import com.example.eatit.ui.components.EatItFloatingButton
@@ -35,7 +36,6 @@ import com.google.firebase.ktx.Firebase
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onAddButtonClicked: () -> Unit,
     onItemClicked: () -> Unit,
     restaurantsViewModel: RestaurantsViewModel,
     onLoginClicked: () -> Unit,
