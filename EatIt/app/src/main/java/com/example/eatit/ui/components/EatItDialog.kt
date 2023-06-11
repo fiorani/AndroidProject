@@ -35,10 +35,14 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.eatit.R
+import com.example.eatit.data.AndroidFileSystem
+import com.example.eatit.data.PhotoPicker
+import com.example.eatit.model.FileDetails
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
+import com.example.eatit.utilities.toOkioPath
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
@@ -342,6 +346,7 @@ fun AddProductScreen(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@androidx.annotation.OptIn(androidx.core.os.BuildCompat.PrereleaseSdkCheck::class)
 @Composable
 fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
     var restaurant = restaurantsViewModel.restaurantSelected
@@ -373,13 +378,53 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     onValueChange = { txtName = it },
                     label = { Text("Restaurant name") }
                 )
+                var phone by rememberSaveable { mutableStateOf("") }
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    visualTransformation = VisualTransformation.None,
+                    label = { Text("Phone number") },
+                )
+
+                //Photo
+                val fileSystem = AndroidFileSystem(LocalContext.current)
+                var selectedFiles by remember { mutableStateOf<List<FileDetails>>(emptyList()) }
+                val photoPicker = rememberLauncherForActivityResult(PhotoPicker()) { uris ->
+                    selectedFiles = uris.map { uri ->
+                        val path = uri.toOkioPath()
+                        val metadata = fileSystem.metadataOrNull(path) ?: return@map null
+                        FileDetails(uri, path, metadata)
+                    }.filterNotNull()
+                }
 
                 ChangeImageButton(
                     restaurant.photo,
                     onClick = {
-                        //TODO: Apri modifica immagine dialog
+                        photoPicker.launch(
+                            PhotoPicker.Args(
+                                PhotoPicker.Type.IMAGES_ONLY,
+                                1
+                            )
+                        )
                     }
                 )
+                //TODO: Salvare immagine, aiuto
+                if (selectedFiles.isNotEmpty()) {
+                    /*LaunchedEffect(Unit) {
+                        restaurantsViewModel.selectRestaurant.setPhoto(
+                            usersViewModel.uploadPhoto(
+                                saveImage(
+                                    context.applicationContext.contentResolver,
+                                    selectedFiles[0].uri
+                                )!!
+                            ).toString()
+                        )
+                    }*/
+                }
             }
 
             Row(
