@@ -99,25 +99,27 @@ fun RestaurantCard(
                         spaceBetween = 1.dp,
                         size = 20.dp
                     )
-                    val (isFavorite, setFavorite) = remember {
-                        mutableStateOf(
-                            user.favouriteRestaurants.contains(
-                                restaurant.id
+                    if (!user.restaurateur) {
+                        val (isFavorite, setFavorite) = remember {
+                            mutableStateOf(
+                                user.favouriteRestaurants.contains(
+                                    restaurant.id
+                                )
                             )
-                        )
-                    }
-                    if (isFavorite) {
-                        EatItIconButton(icon = Icons.Filled.Favorite, function = {
-                            user.favouriteRestaurants.remove(restaurant.id)
-                            usersViewModel.setRestaurants(user.favouriteRestaurants)
-                            setFavorite(false)
-                        })
-                    } else {
-                        EatItIconButton(icon = Icons.Default.FavoriteBorder, function = {
-                            user.favouriteRestaurants.add(restaurant.id!!)
-                            usersViewModel.setRestaurants(user.favouriteRestaurants)
-                            setFavorite(true)
-                        })
+                        }
+                        if (isFavorite) {
+                            EatItIconButton(icon = Icons.Filled.Favorite, function = {
+                                user.favouriteRestaurants.remove(restaurant.id)
+                                usersViewModel.setRestaurants(user.favouriteRestaurants)
+                                setFavorite(false)
+                            })
+                        } else {
+                            EatItIconButton(icon = Icons.Default.FavoriteBorder, function = {
+                                user.favouriteRestaurants.add(restaurant.id!!)
+                                usersViewModel.setRestaurants(user.favouriteRestaurants)
+                                setFavorite(true)
+                            })
+                        }
                     }
 
                 }
