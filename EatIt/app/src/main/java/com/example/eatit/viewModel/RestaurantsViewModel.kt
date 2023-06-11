@@ -30,12 +30,8 @@ class RestaurantsViewModel @Inject constructor(
         return repository.getRestaurants()
     }
 
-    suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> {
-        return repository.getRestaurantsByUserId(userId)
-    }
-
-    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> {
-        return repository.getRestaurantsByFavorite(userId)
+    suspend fun getRestaurantsByUserId(): List<Restaurant> {
+        return repository.getRestaurantsByUserId()
     }
 
     suspend fun getProducts(restaurantId: String): List<Product> {
@@ -84,7 +80,4 @@ class RestaurantsViewModel @Inject constructor(
         repository.deleteRestaurant(_restaurantSelected.id!!)
     }
 
-    fun setRestaurant(restaurant: Restaurant) {
-        repository.setRestaurant(restaurant, _restaurantSelected.id!!)
-    }
 }

@@ -32,6 +32,7 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.concurrent.thread
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,37 +59,23 @@ fun HomeScreen(
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user
     }
-    var restaurantsf by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     LaunchedEffect(user) {
         if (user.restaurateur) {
-            restaurantsf =
-                restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
+            restaurants = restaurantsViewModel.getRestaurantsByUserId()
+        } else {
+            restaurants = restaurantsViewModel.getRestaurants()
         }
     }
-    LaunchedEffect(usersViewModel.filter.favorite) {
+    LaunchedEffect(restaurants) {
         if (usersViewModel.filter.favorite) {
-            restaurantsf =
-                restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
-        } else {
-            restaurantsf = restaurantsViewModel.getRestaurants()
-
+            restaurants = usersViewModel.filter.filterFavorite(
+                restaurants,
+                usersViewModel.user.favouriteRestaurants
+            )
         }
-    }
-    LaunchedEffect(restaurantsf) {
-        if (!user.restaurateur) {
-            restaurants = restaurantsf.filter { restaurant ->
-                usersViewModel.filter.filterDistance(
-                    restaurant,
-                    user,
-                    usersViewModel.filter.distance,
-                    context
-                )
-            }
-        } else {
-            restaurants = restaurantsf
+        if (usersViewModel.filter.sort == "Alfabetico") {
+            restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
         }
-
-        restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
     }
 
 
