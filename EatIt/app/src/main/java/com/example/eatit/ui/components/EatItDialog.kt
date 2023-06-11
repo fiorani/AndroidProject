@@ -70,7 +70,7 @@ fun AddRestaurantScreen(
     startLocationUpdates: () -> Unit
 ) {
     var name by rememberSaveable { mutableStateOf("") }
-    var city by rememberSaveable { usersViewModel.position }
+    var address by rememberSaveable { usersViewModel.position }
     var photo by rememberSaveable { mutableStateOf("") }
     val numRatings = 0
     val avgRating = 0.0f
@@ -88,29 +88,22 @@ fun AddRestaurantScreen(
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp
             )
-            Row(
-                Modifier.fillMaxWidth().padding(10.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = city,
-                    onValueChange = { newText ->
-                        city = newText
-                    },
-                    label = { Text("Location") },
-                    modifier = Modifier.width(230.dp)
-                )
-                Icon(
-                    Icons.Filled.LocationOn,
-                    contentDescription = "Localized",
-                    Modifier
-                        .weight(1f)
-                        .clickable(onClick = {
-                            startLocationUpdates()
-                        })
-                )
-            }
+            OutlinedTextField(
+                value = address,
+                onValueChange = { newText -> address = newText },
+                label = { Text("Address") },
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    Icon(
+                        Icons.Filled.LocationOn,
+                        contentDescription = "Localized",
+                        Modifier
+                            .clickable(onClick = {
+                                startLocationUpdates()
+                            })
+                    )
+                }
+            )
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -181,7 +174,7 @@ fun AddRestaurantScreen(
                     restaurantsViewModel.addNewRestaurant(
                         Restaurant(
                             name = name,
-                            address = city,
+                            address = address,
                             photo = photo,
                             numRatings = numRatings,
                             avgRating = avgRating,
