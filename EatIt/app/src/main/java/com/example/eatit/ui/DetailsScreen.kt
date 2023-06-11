@@ -60,12 +60,14 @@ fun DetailsRestaurantScreen(
     var ratings by remember { mutableStateOf<List<Rating>>(emptyList()) }
     var order by remember { mutableStateOf<Order?>(Order()) }
     val user = usersViewModel.user
-
     val isAdding = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         products = restaurantsViewModel.getProducts(restaurant.id!!)
         ratings = restaurantsViewModel.getRatings(restaurant.id!!)
+    }
+    LaunchedEffect(isAdding.value) {
+        products = restaurantsViewModel.getProducts(restaurant.id!!)
     }
     if (cartViewModel.orderSelected.id != "") {
         order = cartViewModel.orderSelected
@@ -133,7 +135,9 @@ fun DetailsRestaurantScreen(
                         verticalArrangement = Arrangement.Top
                     ) {
                         val isDeleting = remember { mutableStateOf(false) }
-
+                        LaunchedEffect(isDeleting.value) {
+                            products = restaurantsViewModel.getProducts(restaurant.id!!)
+                        }
                         IconButton(onClick = { isDeleting.value = true })
                         {
                             Icon(
@@ -149,8 +153,8 @@ fun DetailsRestaurantScreen(
                                 onDismissRequest = { isDeleting.value = false },
                                 text = "Are you sure you want to delete this restaurant?",
                                 cancellingQuery = {
-
-
+                                    restaurantsViewModel.deleteRestaurant()
+                                    isDeleting.value = false
                                 }
                             )
                         }
