@@ -13,9 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.model.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -131,8 +133,7 @@ fun ProductCard(
     product: Product,
     restaurantViewModel: RestaurantsViewModel,
     order: Order,
-    user: User,
-    //onAddButtonClicked: () -> Unit
+    user: User
 ) {
     Row(
         modifier = Modifier
@@ -143,13 +144,13 @@ fun ProductCard(
     ) {
         Row {
             Icon(
-                imageVector = Icons.Default.Fastfood, contentDescription = "Agriculture"
+                imageVector = Icons.Default.Fastfood, contentDescription = "FastFood"
             )
             Text(
                 modifier = Modifier
                     .padding(10.dp, 0.dp)
                     .width(200.dp),
-                text = product.name + " - " + String.format("%.${2}f", product.price) + "€",
+                text = product.name + " - " + String.format("%.${2}f", product.price) + stringResource(R.string.Euro2),
                 fontSize = 20.sp
             )
         }
@@ -212,7 +213,7 @@ fun ProductCard(
                 if (isDeleting.value) {
                     CancelDialog(
                         onDismissRequest = { isDeleting.value = false },
-                        text = "Are you sure you want to delete this product?",
+                        text = stringResource(R.string.delete_product),
                         cancellingQuery = {
                             restaurantViewModel.deleteProduct(product.id!!)
                             isDeleting.value = false
@@ -249,7 +250,7 @@ fun ShoppingCard(product: Product, order: Order) {
                 )
                 Text(
                     modifier = Modifier.padding(17.dp, 7.dp),
-                    text = product.price.toString() + "€ x " + order.listQuantity[
+                    text = product.price.toString() + stringResource(R.string.euro_x) + order.listQuantity[
                             order.listProductId.indexOf(product.id)
                     ].toString(),
                     fontSize = 17.sp
@@ -441,7 +442,7 @@ fun OrderProfileCard(
                             enabled = buttonClickable,
                             text = statusText.value,
                             function = {
-                                order.changeState() //ancora non funziona, aggiorna ma se cambi pagina e torni non si salva lo stato
+                                order.changeState()
                                 cartViewModel.updateOrder(order)
                                 statusText.value = order.status
                                 if (order.isOrderDelivered()) {
@@ -460,7 +461,7 @@ fun OrderProfileCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Order date:",
+                    text = stringResource(R.string.order_date),
                     modifier = Modifier
                         .padding(10.dp, 1.dp)
                         .weight(1f),
@@ -479,7 +480,7 @@ fun OrderProfileCard(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Status:",
+                        text = stringResource(R.string.status),
                         modifier = Modifier
                             .padding(10.dp, 1.dp)
                             .weight(1f),
@@ -497,7 +498,7 @@ fun OrderProfileCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Order total:",
+                    text = stringResource(R.string.order_tot),
                     modifier = Modifier
                         .padding(10.dp, 1.dp)
                         .weight(1f),
@@ -505,7 +506,7 @@ fun OrderProfileCard(
                     fontSize = 20.sp
                 )
                 Text(
-                    text = "€" + String.format("%.${2}f", order.totalPrice),
+                    text = stringResource(R.string.Euro3) + String.format("%.${2}f", order.totalPrice),
                     modifier = Modifier.padding(10.dp, 2.dp),
                     fontWeight = Bold,
                     fontSize = 20.sp
@@ -520,7 +521,7 @@ fun OrderProfileCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "DETAILS",
+                            text = stringResource(R.string.details),
                             modifier = Modifier
                                 .padding(10.dp),
                             fontSize = 20.sp,
@@ -543,7 +544,7 @@ fun OrderProfileCard(
                                 fontSize = 16.sp
                             )
                             Text(
-                                text = "€" + order.listPrice[index] + "  × " + order.listQuantity[index],
+                                text = stringResource(R.string.Euro5) + order.listPrice[index] + "  × " + order.listQuantity[index],
                                 modifier = Modifier.padding(10.dp, 1.dp),
                                 fontSize = 16.sp
                             )

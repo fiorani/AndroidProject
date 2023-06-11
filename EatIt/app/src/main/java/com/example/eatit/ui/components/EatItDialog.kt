@@ -72,7 +72,7 @@ fun AddRestaurantScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
-                text = "Add a restaurant",
+                text = stringResource(R.string.add_rest),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp
@@ -80,14 +80,14 @@ fun AddRestaurantScreen(
             OutlinedTextField(
                 value = address,
                 onValueChange = { newText -> address = newText },
-                label = { Text("Address") },
+                label = { Text(stringResource(R.string.address2)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp, 2.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
-                        contentDescription = "Localized",
+                        contentDescription = stringResource(R.string.localized2),
                         Modifier
                             .clickable(onClick = {
                                 startLocationUpdates()
@@ -152,7 +152,7 @@ fun AddRestaurantScreen(
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Take a picture")
+                Text(stringResource(R.string.take_picture))
             }
 
 
@@ -218,7 +218,7 @@ fun AddProductScreen(
             val rows = data.chunked(3)
             Spacer(modifier = Modifier.size(20.dp))
             Text(
-                text = "Choose a section:",
+                text = stringResource(R.string.choose_section),
                 modifier = Modifier.padding(10.dp, 5.dp),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
@@ -247,7 +247,7 @@ fun AddProductScreen(
             }
             Spacer(modifier = Modifier.size(20.dp))
             Text(
-                text = "Build your dish:",
+                text = stringResource(R.string.build_dish),
                 modifier = Modifier.padding(10.dp, 5.dp),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
@@ -361,7 +361,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp, 5.dp),
-                text = "Modify restaurant",
+                text = stringResource(R.string.modify_restaurant),
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
@@ -376,7 +376,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                 OutlinedTextField(
                     value = txtName,
                     onValueChange = { txtName = it },
-                    label = { Text("Restaurant name") }
+                    label = { Text(stringResource(R.string.rest_name)) }
                 )
                 var phone by rememberSaveable { mutableStateOf("") }
                 OutlinedTextField(
@@ -387,7 +387,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                         imeAction = ImeAction.Done
                     ),
                     visualTransformation = VisualTransformation.None,
-                    label = { Text("Phone number") },
+                    label = { Text(stringResource(R.string.phone_number2)) },
                 )
 
                 //Photo
@@ -439,7 +439,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                         //TODO: Aggiorna info ristorante
                         onDismissRequest()
                     },
-                    text = "Save",
+                    text = stringResource(R.string.save3),
                     enabled = true,
                     icon = Icons.Default.Save
                 )
@@ -448,7 +448,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     onClick = onDismissRequest
                 ) {
                     Text(
-                        text = "Back",
+                        text = stringResource(R.string.back2),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     )

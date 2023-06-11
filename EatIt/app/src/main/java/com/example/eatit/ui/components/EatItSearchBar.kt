@@ -17,7 +17,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
+import com.example.eatit.R
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -50,7 +52,7 @@ fun EatItSearchBar(
             ) {
                 Text(
                     fontStyle = Italic,
-                    text = "Search a restaurant..."
+                    text = stringResource(R.string.search_restaurant)
                 )
                 Icon(
                     Icons.Filled.Search,

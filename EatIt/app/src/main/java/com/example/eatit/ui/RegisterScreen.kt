@@ -16,11 +16,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -49,12 +51,12 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center
         ) {
             val isUserRegister = remember { mutableStateOf(true) }
-            var strTitle = "User registration"
+            var strTitle = stringResource(R.string.user_reg)
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(40.dp, 20.dp, 40.dp, 5.dp),
-                text = "Do you want to register as a customer or as a restaurant?",
+                text = stringResource(R.string.customer_or_restaurant),
                 fontSize = 20.sp,
                 fontWeight = Bold,
                 textAlign = TextAlign.Center
@@ -63,14 +65,16 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                EatItButton(modifier = Modifier.padding(3.dp), text = "Customer", function = {
+                EatItButton(modifier = Modifier.padding(3.dp), text = stringResource(R.string.customer), function = {
                     isUserRegister.value = true
-                    strTitle = "User registration"
+                    strTitle = "User"
                 })
-                EatItButton(modifier = Modifier.padding(3.dp), text = "Restaurant", function = {
+                EatItButton(modifier = Modifier.padding(3.dp), text = stringResource(R.string.restaurant), function = {
                     isUserRegister.value = false
-                    strTitle = "Restaurant registration"
+                    strTitle = "Restaurant"
                 })
+                if (strTitle == "User") strTitle = stringResource(R.string.user_registration)
+                if (strTitle == "Restaurant") strTitle = stringResource(R.string.restaurant_registration)
             }
             Spacer(modifier = Modifier.size(20.dp))
             Card(
@@ -91,7 +95,7 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = name,
                         onValueChange = { name = it },
-                        label = { Text("Nickname") }
+                        label = { Text(stringResource(R.string.nickname)) }
                     )
 
                     var password by rememberSaveable { mutableStateOf("") }
@@ -99,7 +103,7 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text("Password") },
+                        label = { Text(stringResource(R.string.password2)) },
                         visualTransformation =
                         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -108,7 +112,8 @@ fun RegisterScreen(
                                 val visibilityIcon =
                                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                                 val description =
-                                    if (passwordHidden) "Show password" else "Hide password"
+                                    if (passwordHidden) stringResource(R.string.show_pw2) else stringResource(
+                                                                            R.string.hide_pw2)
                                 Icon(imageVector = visibilityIcon, contentDescription = description)
                             }
                         }
@@ -121,7 +126,7 @@ fun RegisterScreen(
                         OutlinedTextField(
                             value = piva,
                             onValueChange = { piva = it },
-                            label = { Text("P.IVA") }
+                            label = { Text(stringResource(R.string.p_iva)) }
                         )
                     } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
@@ -137,7 +142,7 @@ fun RegisterScreen(
                                     openDialog.value = true
                                 }
                             },
-                            label = { Text("Birthday") }
+                            label = { Text(stringResource(R.string.birthday)) }
                         )
 
                         if (openDialog.value) {
@@ -157,7 +162,7 @@ fun RegisterScreen(
                                         },
                                         enabled = confirmEnabled.value
                                     ) {
-                                        Text("OK")
+                                        Text(stringResource(R.string.ok))
                                     }
                                 },
                                 dismissButton = {
@@ -166,7 +171,7 @@ fun RegisterScreen(
                                             openDialog.value = false
                                         }
                                     ) {
-                                        Text("Cancel")
+                                        Text(stringResource(R.string.cancel2))
                                     }
                                 }
                             ) {
@@ -179,12 +184,12 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = address,
                         onValueChange = { newText -> address = newText },
-                        label = { Text("Address") },
+                        label = { Text(stringResource(R.string.address)) },
                         modifier = Modifier.fillMaxWidth(),
                         trailingIcon = {
                             Icon(
                                 Icons.Filled.LocationOn,
-                                contentDescription = "Localized",
+                                contentDescription = stringResource(R.string.localized),
                                 Modifier
                                     .clickable(onClick = {
                                         startLocationUpdates()
@@ -202,17 +207,17 @@ fun RegisterScreen(
                             imeAction = ImeAction.Done
                         ),
                         visualTransformation = VisualTransformation.None,
-                        label = { Text("Phone number") },
+                        label = { Text(stringResource(R.string.phone_number)) },
                     )
 
                     var email by rememberSaveable { mutableStateOf("") }
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text("Email") }
+                        label = { Text(stringResource(R.string.email2)) }
                     )
                     Spacer(modifier = Modifier.size(10.dp))
-                    EatItButton(text = "Register", function = {
+                    EatItButton(text = stringResource(R.string.register2), function = {
                         createAccount(
                             email,
                             password,
@@ -232,11 +237,11 @@ fun RegisterScreen(
             Text(
                 modifier = Modifier
                     .padding(5.dp, 0.dp),
-                text = "Already have an account?",
+                text = stringResource(R.string.already_account),
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.padding(5.dp))
-            EatItButton(text = "Login", function = { onLoginButtonClicked() })
+            EatItButton(text = stringResource(R.string.login3), function = { onLoginButtonClicked() })
             Spacer(modifier = Modifier.size(20.dp))
         }
     }

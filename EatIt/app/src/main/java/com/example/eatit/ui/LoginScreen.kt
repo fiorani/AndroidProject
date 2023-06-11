@@ -25,12 +25,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
 import kotlin.reflect.KFunction3
@@ -60,7 +62,7 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = "Login",
+                        text = stringResource(R.string.login),
                         fontSize = 32.sp,
                         fontWeight = Bold
                     )
@@ -69,7 +71,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = mail,
                         onValueChange = { mail = it },
-                        label = { Text("Email") }
+                        label = { Text(stringResource(R.string.email)) }
                     )
 
                     var password by rememberSaveable { mutableStateOf("") }
@@ -77,7 +79,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text("Password") },
+                        label = { Text(stringResource(R.string.password)) },
                         visualTransformation =
                         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -86,14 +88,14 @@ fun LoginScreen(
                                 val visibilityIcon =
                                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                                 val description =
-                                    if (passwordHidden) "Show password" else "Hide password"
+                                    if (passwordHidden) stringResource(R.string.show_pw) else stringResource(R.string.hide_pw)
                                 Icon(imageVector = visibilityIcon, contentDescription = description)
                             }
                         }
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     EatItButton(
-                        text = "Login",
+                        text = stringResource(R.string.login2),
                         function = { signIn(mail, password, onNextButtonClicked) },
                         icon = Icons.Default.Login
                     )
@@ -101,12 +103,12 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.padding(20.dp))
             Text(
-                text = "Don't have an account yet?",
+                text = stringResource(R.string.account_yet),
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.padding(5.dp))
             EatItButton(
-                text = "Register",
+                text = stringResource(R.string.register),
                 function = { onRegisterClicked() },
                 icon = Icons.Default.AppRegistration
             )
