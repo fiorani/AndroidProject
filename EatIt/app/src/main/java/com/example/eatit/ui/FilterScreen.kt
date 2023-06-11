@@ -32,45 +32,6 @@ fun FilterScreen(
     Column(modifier = Modifier.fillMaxWidth()) {
 
         if (!usersViewModel.user.restaurateur) {
-            val filterDistance = listOf<String>("25000", "50000", "100000")
-            val (selectedOptionFilter, onOptionSelectedFilter) = remember {
-                mutableStateOf(usersViewModel.filter.distance.toString())
-            }
-            Column(Modifier.selectableGroup()) {
-                Text(
-                    text = "Filtra per distanza",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                )
-                filterDistance.forEach { text ->
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .selectable(
-                                selected = (text == selectedOptionFilter),
-                                onClick = {
-                                    onOptionSelectedFilter(text)
-                                    Log.d("FilterScreen", "FilterScreen: $text")
-                                    usersViewModel.filter.distance = text.toInt()
-                                },
-                                role = Role.RadioButton
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (text == selectedOptionFilter),
-                            onClick = {}
-                        )
-                        Text(
-                            text = "< " + text + " m",
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-            }
             Text(
                 text = "Filtra per preferiti",
                 style = MaterialTheme.typography.bodyLarge,
@@ -103,10 +64,7 @@ fun FilterScreen(
                 )
             }
         }
-        var sort = listOf<String>("Predefinito", "Distanza", "Alfabetico")
-        if (usersViewModel.user.restaurateur) {
-            sort = listOf<String>("Predefinito", "Alfabetico")
-        }
+        val sort = listOf<String>("Predefinito", "Alfabetico")
         val (selectedOption, onOptionSelected) = remember { mutableStateOf(usersViewModel.filter.sort) }
         Column(Modifier.selectableGroup()) {
             Text(
