@@ -54,7 +54,7 @@ fun RestaurantCard(
         onItemClicked()
     }) {
         Column {
-            ImageCard(restaurant.photo)
+            ImageCard(restaurant.photo, modifier = Modifier.height(150.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
