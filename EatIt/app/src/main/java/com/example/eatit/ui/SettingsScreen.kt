@@ -344,7 +344,7 @@ fun SettingsScreen(
                 ShowAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
             }
             if (showDialog2.value) {
-                ShowImportantAlertDialog(showDialog = showDialog2, changedThing = changedThing.value, onNextButtonClicked)
+                ShowImportantAlertDialog(usersViewModel, showDialog = showDialog2, changedThing = changedThing.value, onNextButtonClicked)
             }
             if (themeChanged.value) {
                 themeChanged.value = false
@@ -375,7 +375,7 @@ fun ShowAlertDialog(showDialog: MutableState<Boolean>, changedThing: String) {
 }
 
 @Composable
-fun ShowImportantAlertDialog(showDialog: MutableState<Boolean>, changedThing: String, onNextButtonClicked: () -> Unit) {
+fun ShowImportantAlertDialog(usersViewModel: UsersViewModel, showDialog: MutableState<Boolean>, changedThing: String, onNextButtonClicked: () -> Unit) {
     AlertDialog(
         onDismissRequest = {
             showDialog.value = false
@@ -390,7 +390,7 @@ fun ShowImportantAlertDialog(showDialog: MutableState<Boolean>, changedThing: St
                         Firebase.auth.signOut()
                         onNextButtonClicked()
                     } else {
-                        //Firebase.auth.deleteUser(user.id)
+                        usersViewModel.deleteUser()
                         onNextButtonClicked()
                     }
                 }
