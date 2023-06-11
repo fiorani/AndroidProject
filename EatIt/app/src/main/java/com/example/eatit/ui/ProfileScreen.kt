@@ -5,8 +5,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +39,6 @@ import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.entry.entryModelOf
-import java.time.ZoneId
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +84,9 @@ fun ProfileScreen(
                         Column(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.Start,
-                            modifier = Modifier.matchParentSize().padding(10.dp)
+                            modifier = Modifier
+                                .matchParentSize()
+                                .padding(10.dp)
                         ) {
                             Text(
                                 text = user.name,
@@ -127,11 +126,36 @@ fun ProfileScreen(
                         )
                         // Creazione del modello dei dati per il grafico
                         val chartEntryModel = entryModelOf(
-                            giorni[0].toFloat(), giorni[1].toFloat(), giorni[2].toFloat(), giorni[3].toFloat(), giorni[4].toFloat(), giorni[5].toFloat(),
-                            giorni[6].toFloat(), giorni[7].toFloat(), giorni[8].toFloat(), giorni[9].toFloat(), giorni[10].toFloat(), giorni[11].toFloat(),
-                            giorni[12].toFloat(), giorni[13].toFloat(), giorni[14].toFloat(), giorni[15].toFloat(), giorni[16].toFloat(), giorni[17].toFloat(),
-                            giorni[18].toFloat(), giorni[19].toFloat(), giorni[20].toFloat(), giorni[21].toFloat(), giorni[22].toFloat(), giorni[23].toFloat(),
-                            giorni[24].toFloat(), giorni[25].toFloat(), giorni[26].toFloat(), giorni[27].toFloat(), giorni[28].toFloat(), giorni[29].toFloat()
+                            giorni[0].toFloat(),
+                            giorni[1].toFloat(),
+                            giorni[2].toFloat(),
+                            giorni[3].toFloat(),
+                            giorni[4].toFloat(),
+                            giorni[5].toFloat(),
+                            giorni[6].toFloat(),
+                            giorni[7].toFloat(),
+                            giorni[8].toFloat(),
+                            giorni[9].toFloat(),
+                            giorni[10].toFloat(),
+                            giorni[11].toFloat(),
+                            giorni[12].toFloat(),
+                            giorni[13].toFloat(),
+                            giorni[14].toFloat(),
+                            giorni[15].toFloat(),
+                            giorni[16].toFloat(),
+                            giorni[17].toFloat(),
+                            giorni[18].toFloat(),
+                            giorni[19].toFloat(),
+                            giorni[20].toFloat(),
+                            giorni[21].toFloat(),
+                            giorni[22].toFloat(),
+                            giorni[23].toFloat(),
+                            giorni[24].toFloat(),
+                            giorni[25].toFloat(),
+                            giorni[26].toFloat(),
+                            giorni[27].toFloat(),
+                            giorni[28].toFloat(),
+                            giorni[29].toFloat()
                         )
                         Chart(
                             chart = lineChart(),
@@ -175,7 +199,7 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
     val showBadgeDesc = remember { mutableStateOf(false) }
     var badgeTitle = ""
     var badgeDesc = ""
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -218,7 +242,7 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
-                ){
+                ) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -258,21 +282,31 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
     }
 }
 
-fun getBadges(orderNum: Int) : List<Triple<Int, String, String>> {
+fun getBadges(orderNum: Int): List<Triple<Int, String, String>> {
     val result = mutableListOf(
         Triple(R.drawable.badge_login, "First login!", "Login for the first time.")
     )
     val badgeMap = mapOf(
-        Pair(1, Triple(R.drawable.badge1, "First Order!", "Congratulations! You have made your first order.")),
+        Pair(
+            1,
+            Triple(
+                R.drawable.badge1,
+                "First Order!",
+                "Congratulations! You have made your first order."
+            )
+        ),
         Pair(10, Triple(R.drawable.badge10, "10 Orders", "You have made 10 orders!")),
         Pair(20, Triple(R.drawable.badge20, "20 Orders", "You have made 20 orders!")),
         Pair(30, Triple(R.drawable.badge30, "30 Orders", "You have made 30 orders!")),
         Pair(40, Triple(R.drawable.badge40, "40 Orders", "You have made 40 orders!")),
         Pair(50, Triple(R.drawable.badge50, "50 Orders", "You have made 50 orders!")),
-        Pair(60, Triple(R.drawable.badge_max, "EatIt Master", "Amazing! You have made a lot of orders!"))
+        Pair(
+            60,
+            Triple(R.drawable.badge_max, "EatIt Master", "Amazing! You have made a lot of orders!")
+        )
     )
 
-    badgeMap.forEach{level ->
+    badgeMap.forEach { level ->
         if (orderNum >= level.key) {
             result.add(level.value)
         }

@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,9 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -58,7 +54,7 @@ fun AddRestaurantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var address by rememberSaveable { usersViewModel.position }
-    var photo by rememberSaveable { mutableStateOf("")}
+    var photo by rememberSaveable { mutableStateOf("") }
     val numRatings = 0
     val avgRating = 0.0f
     Card {
@@ -81,7 +77,9 @@ fun AddRestaurantScreen(
                 value = address,
                 onValueChange = { newText -> address = newText },
                 label = { Text("Address") },
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 2.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
@@ -156,7 +154,12 @@ fun AddRestaurantScreen(
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 LaunchedEffect(Unit) {
-                    photo=restaurantsViewModel.uploadPhoto(saveImage(context.applicationContext.contentResolver, capturedImageUri)!!).toString()
+                    photo = restaurantsViewModel.uploadPhoto(
+                        saveImage(
+                            context.applicationContext.contentResolver,
+                            capturedImageUri
+                        )!!
+                    ).toString()
                 }
             }
 
@@ -196,14 +199,14 @@ fun AddProductScreen(
     var price by rememberSaveable { mutableStateOf("") }
     val selectedSection = remember { mutableStateOf(data.firstOrNull() ?: "") }
 
-    if (restaurantsViewModel.productSelected.id != ""){
+    if (restaurantsViewModel.productSelected.id != "") {
         name = restaurantsViewModel.productSelected.name
         description = restaurantsViewModel.productSelected.description
         price = restaurantsViewModel.productSelected.price.toString()
         selectedSection.value = restaurantsViewModel.productSelected.section
     }
 
-    Card{
+    Card {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(10.dp)
@@ -340,7 +343,7 @@ fun AddProductScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditRestaurantDialog (onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
+fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
     var restaurant = restaurantsViewModel.restaurantSelected
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(

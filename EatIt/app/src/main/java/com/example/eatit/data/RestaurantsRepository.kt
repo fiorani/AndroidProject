@@ -3,12 +3,10 @@ package com.example.eatit.data
 import android.net.Uri
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
-import com.example.eatit.model.Filter
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -42,21 +40,25 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             throw e
         }
     }
-    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> = withContext(Dispatchers.IO) {
-        try {
-            var list = mutableListOf<Restaurant>()
-           FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", userId).get().await()
-                .documents.mapNotNull { documentSnapshot ->
-                    val user = documentSnapshot.toObject(User::class.java)
-                   user?.favouriteRestaurants?.forEach() { restaurantId ->
-                       list.add(getRestaurant(restaurantId))
-                   }
-                }
-            list
-        } catch (e: Exception) {
-            throw e
+
+    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> =
+        withContext(Dispatchers.IO) {
+            try {
+                var list = mutableListOf<Restaurant>()
+                FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", userId).get()
+                    .await()
+                    .documents.mapNotNull { documentSnapshot ->
+                        val user = documentSnapshot.toObject(User::class.java)
+                        user?.favouriteRestaurants?.forEach() { restaurantId ->
+                            list.add(getRestaurant(restaurantId))
+                        }
+                    }
+                list
+            } catch (e: Exception) {
+                throw e
+            }
         }
-    }
+
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> =
         withContext(Dispatchers.IO) {
             try {
@@ -123,7 +125,8 @@ class RestaurantsRepository(eatItApp: EatItApp) {
 
     suspend fun uploadPhoto(uri: Uri): Uri = withContext(Dispatchers.IO) {
         try {
-            Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri).await().storage.downloadUrl.await()
+            Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri)
+                .await().storage.downloadUrl.await()
         } catch (e: Exception) {
             throw e
         }
@@ -134,9 +137,11 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             .collection("products")
             .document(productId).delete()
     }
+
     fun deleteRestaurant(restaurantId: String) {
         FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).delete()
     }
+
     fun setRestaurant(restaurant: Restaurant, restaurantId: String) {
         FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).update(
             "name", restaurant.name, "address", restaurant.address,

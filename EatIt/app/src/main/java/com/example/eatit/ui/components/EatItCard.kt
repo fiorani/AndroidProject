@@ -170,7 +170,7 @@ fun ProductCard(
                 order.increaseCount(product)
             })
         } else {
-            Row{
+            Row {
                 //Edit
                 val isModifying = remember { mutableStateOf(false) }
 
@@ -190,7 +190,10 @@ fun ProductCard(
 
                 if (isModifying.value) {
                     AlertDialog(onDismissRequest = { isModifying.value = false }) {
-                        AddProductScreen(onNextButtonClicked = { isModifying.value = false }, restaurantsViewModel = restaurantViewModel)
+                        AddProductScreen(
+                            onNextButtonClicked = { isModifying.value = false },
+                            restaurantsViewModel = restaurantViewModel
+                        )
                     }
                 }
 

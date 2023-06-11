@@ -17,10 +17,10 @@ data class Order(
 
     fun changeState() { //in teoria non ci deve essere modo per tornare allo stato precedente
         if (this.status == "in progress") this.status = "sent"
-        else                              this.status = "delivered"
+        else this.status = "delivered"
     }
 
-    fun isOrderDelivered() : Boolean {
+    fun isOrderDelivered(): Boolean {
         return this.status == "delivered"
     }
 

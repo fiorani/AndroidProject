@@ -1,11 +1,9 @@
 package com.example.eatit.data
 
 import android.net.Uri
-import android.util.Log
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
 import com.example.eatit.model.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,7 +12,6 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class UsersRepository(eatItApp: EatItApp) {
     @WorkerThread
@@ -37,13 +34,15 @@ class UsersRepository(eatItApp: EatItApp) {
                 it.documents.firstOrNull()?.reference?.update("name", name)
             }
     }
-    fun setRestaurants(restaurants: ArrayList<String> ) {
+
+    fun setRestaurants(restaurants: ArrayList<String>) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
                 it.documents.firstOrNull()?.reference?.update("favouriteRestaurants", restaurants)
             }
     }
+
     fun setPhoto(photo: String) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
@@ -54,7 +53,8 @@ class UsersRepository(eatItApp: EatItApp) {
 
     suspend fun uploadPhoto(uri: Uri): Uri = withContext(Dispatchers.IO) {
         try {
-            Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri).await().storage.downloadUrl.await()
+            Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri)
+                .await().storage.downloadUrl.await()
         } catch (e: Exception) {
             throw e
         }

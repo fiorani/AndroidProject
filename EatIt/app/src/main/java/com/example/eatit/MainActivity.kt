@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var auth: FirebaseAuth
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
-    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private lateinit var connectivityManager: ConnectivityManager
     private var queue: RequestQueue? = null
@@ -175,10 +175,15 @@ class MainActivity : ComponentActivity() {
         super.onStop()
         queue?.cancelAll(TAG)
     }
+
     private fun askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 val intent = Intent(this, OrderService::class.java)
                 startService(intent)
             } else {
@@ -186,6 +191,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun startLocationUpdates() {
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
         when {
@@ -247,7 +253,7 @@ class MainActivity : ComponentActivity() {
         birth: String,
         restaurateur: Boolean,
         address: String,
-        phone:String,
+        phone: String,
         onNextButtonClicked: () -> Unit
     ) {
         val usersViewModel by viewModels<UsersViewModel>()
@@ -287,14 +293,18 @@ class MainActivity : ComponentActivity() {
                         onNextButtonClicked()
                         FirebaseMessaging.getInstance().token.addOnCompleteListener(
                             OnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                                return@OnCompleteListener
-                            }
+                                if (!task.isSuccessful) {
+                                    Log.w(
+                                        TAG,
+                                        "Fetching FCM registration token failed",
+                                        task.exception
+                                    )
+                                    return@OnCompleteListener
+                                }
 
-                            // Get new FCM registration token
-                            val token = task.result
-                        })
+                                // Get new FCM registration token
+                                val token = task.result
+                            })
                     } else {
                         task.exception?.let { errorToast("signInWithEmail:failure", it) }
                     }

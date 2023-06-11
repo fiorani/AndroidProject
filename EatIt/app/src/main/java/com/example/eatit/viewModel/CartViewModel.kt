@@ -13,7 +13,7 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val repository: CartRepository
 ) : ViewModel() {
-    private var _orderLines: Order= Order()
+    private var _orderLines: Order = Order()
     fun addNewOrder(order: Order) = viewModelScope.launch {
         repository.insertNewOrder(order)
     }
@@ -40,6 +40,7 @@ class CartViewModel @Inject constructor(
     fun resetOrder() {
         _orderLines = Order()
     }
+
     fun updateOrder(order: Order) = viewModelScope.launch {
         repository.updateOrder(order)
     }

@@ -22,7 +22,7 @@ class CartRepository(eatItApp: EatItApp) {
         try {
             FirebaseFirestore.getInstance().collection("orders")
                 .whereEqualTo("userId", Firebase.auth.currentUser?.uid)
-                .orderBy("timestamp",Query.Direction.DESCENDING).get().await()
+                .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
                 .documents.mapNotNull { documentSnapshot ->
                     val order = documentSnapshot.toObject(Order::class.java)
                     order?.id = documentSnapshot.id
@@ -32,30 +32,33 @@ class CartRepository(eatItApp: EatItApp) {
             throw e
         }
     }
+
     suspend fun getOrdersRestaurateur(): List<Order> = withContext(Dispatchers.IO) {
 
         try {
-            val restaurants:List<String> = FirebaseFirestore.getInstance().collection("restaurants")
-                .whereEqualTo("userId", Firebase.auth.currentUser?.uid).get().await().documents
-                .mapNotNull { documentSnapshot ->
-                    documentSnapshot.id
-                }
-            if(restaurants.isNotEmpty()){
+            val restaurants: List<String> =
+                FirebaseFirestore.getInstance().collection("restaurants")
+                    .whereEqualTo("userId", Firebase.auth.currentUser?.uid).get().await().documents
+                    .mapNotNull { documentSnapshot ->
+                        documentSnapshot.id
+                    }
+            if (restaurants.isNotEmpty()) {
                 FirebaseFirestore.getInstance().collection("orders")
                     .whereIn("restaurantId", restaurants)
-                    .orderBy("timestamp",Query.Direction.DESCENDING).get().await()
+                    .orderBy("timestamp", Query.Direction.DESCENDING).get().await()
                     .documents.mapNotNull { documentSnapshot ->
                         val order = documentSnapshot.toObject(Order::class.java)
                         order?.id = documentSnapshot.id
                         order
                     }
-            }else{
+            } else {
                 emptyList<Order>()
             }
         } catch (e: Exception) {
             throw e
         }
     }
+
     suspend fun getProducts(order: Order): List<Product> = withContext(Dispatchers.IO) {
         try {
             val products = mutableListOf<Product>()
@@ -77,6 +80,7 @@ class CartRepository(eatItApp: EatItApp) {
     }
 
     fun updateOrder(order: Order) {
-        FirebaseFirestore.getInstance().collection("orders").document(order.id.toString()).set(order)
+        FirebaseFirestore.getInstance().collection("orders").document(order.id.toString())
+            .set(order)
     }
 }

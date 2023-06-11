@@ -117,24 +117,39 @@ fun BottomAppBarFunction(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 if (currentScreen == AppScreen.Home.name) {
-                    EatItIconButton(function = {onHomeButtonClicked()},icon=Icons.Filled.Home)
+                    EatItIconButton(function = { onHomeButtonClicked() }, icon = Icons.Filled.Home)
                 } else {
-                    EatItIconButton(function = {onHomeButtonClicked()},icon=Icons.Outlined.Home)
+                    EatItIconButton(
+                        function = { onHomeButtonClicked() },
+                        icon = Icons.Outlined.Home
+                    )
                 }
                 if (currentScreen == AppScreen.Profile.name) {
-                    EatItIconButton(function = {onUserProfileButtonClicked()},icon=Icons.Filled.AccountCircle)
+                    EatItIconButton(
+                        function = { onUserProfileButtonClicked() },
+                        icon = Icons.Filled.AccountCircle
+                    )
                 } else {
-                    EatItIconButton(function = {onUserProfileButtonClicked()},icon=Icons.Outlined.AccountCircle)
+                    EatItIconButton(
+                        function = { onUserProfileButtonClicked() },
+                        icon = Icons.Outlined.AccountCircle
+                    )
                 }
                 if (currentScreen == AppScreen.Map.name) {
-                    EatItIconButton(function = {onMapButtonClicked()},icon=Icons.Filled.Map)
+                    EatItIconButton(function = { onMapButtonClicked() }, icon = Icons.Filled.Map)
                 } else {
-                    EatItIconButton(function = {onMapButtonClicked()},icon=Icons.Outlined.Map)
+                    EatItIconButton(function = { onMapButtonClicked() }, icon = Icons.Outlined.Map)
                 }
                 if (currentScreen == AppScreen.Settings.name) {
-                    EatItIconButton(function = {onSettingsButtonClicked()},icon=Icons.Filled.Settings)
+                    EatItIconButton(
+                        function = { onSettingsButtonClicked() },
+                        icon = Icons.Filled.Settings
+                    )
                 } else {
-                    EatItIconButton(function = {onSettingsButtonClicked()},icon=Icons.Outlined.Settings)
+                    EatItIconButton(
+                        function = { onSettingsButtonClicked() },
+                        icon = Icons.Outlined.Settings
+                    )
                 }
             }
         }

@@ -26,9 +26,10 @@ class OrderService : Service() {
         startOrdersListener()
         return START_STICKY
     }
+
     private fun createNotificationChannel() {
-        val name =  "OrderChannel"
-        val descriptionText =  "OrderChannel"
+        val name = "OrderChannel"
+        val descriptionText = "OrderChannel"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel("OrderChannel", name, importance).apply {
             description = descriptionText
@@ -38,6 +39,7 @@ class OrderService : Service() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -69,17 +71,18 @@ class OrderService : Service() {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val builder = NotificationCompat.Builder(this, "OrderChannel")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Order status changed")
-            .setContentText("status:"+order.status)
+            .setContentText("status:" + order.status)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
-            with(NotificationManagerCompat.from(this)) {
-                notify(notificationId, builder.build())
-            }
+        with(NotificationManagerCompat.from(this)) {
+            notify(notificationId, builder.build())
+        }
     }
 
 }

@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.AddRestaurantScreen
+import com.example.eatit.ui.components.EatItFloatingButton
 import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.ui.components.EatItSearchBar
-import com.example.eatit.ui.components.EatItFloatingButton
 import com.example.eatit.ui.components.RestaurantCard
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
@@ -60,13 +60,15 @@ fun HomeScreen(
     }
     var restaurantsf by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     LaunchedEffect(user) {
-         if (user.restaurateur) {
-             restaurantsf =restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
+        if (user.restaurateur) {
+            restaurantsf =
+                restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
         }
     }
     LaunchedEffect(usersViewModel.filter.favorite) {
-        if(usersViewModel.filter.favorite){
-            restaurantsf = restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
+        if (usersViewModel.filter.favorite) {
+            restaurantsf =
+                restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
         } else {
             restaurantsf = restaurantsViewModel.getRestaurants()
 
@@ -75,9 +77,14 @@ fun HomeScreen(
     LaunchedEffect(restaurantsf) {
         if (!user.restaurateur) {
             restaurants = restaurantsf.filter { restaurant ->
-                usersViewModel.filter.filterDistance(restaurant, user, usersViewModel.filter.distance, context)
+                usersViewModel.filter.filterDistance(
+                    restaurant,
+                    user,
+                    usersViewModel.filter.distance,
+                    context
+                )
             }
-        }else{
+        } else {
             restaurants = restaurantsf
         }
 
@@ -89,7 +96,10 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             if (user.restaurateur) {
-                EatItFloatingButton(function = { isNewRestaurant.value = true }, icon = Icons.Filled.Add)
+                EatItFloatingButton(
+                    function = { isNewRestaurant.value = true },
+                    icon = Icons.Filled.Add
+                )
             }
         },
     ) { innerPadding ->
@@ -104,11 +114,18 @@ fun HomeScreen(
             }
         }
         Column(modifier.padding(innerPadding)) {
-            Row(modifier=modifier.fillMaxWidth(),
+            Row(
+                modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                EatItSearchBar(restaurants, onItemClicked, restaurantsViewModel,user,usersViewModel)
-                EatItIconButton(function = { onFilterClicked()}, icon = Icons.Filled.FilterList)
+                EatItSearchBar(
+                    restaurants,
+                    onItemClicked,
+                    restaurantsViewModel,
+                    user,
+                    usersViewModel
+                )
+                EatItIconButton(function = { onFilterClicked() }, icon = Icons.Filled.FilterList)
             }
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(restaurants.size) { index ->

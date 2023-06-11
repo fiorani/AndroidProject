@@ -9,9 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore
-import android.util.Log
-import androidx.compose.runtime.LaunchedEffect
-import com.example.eatit.viewModel.UsersViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date

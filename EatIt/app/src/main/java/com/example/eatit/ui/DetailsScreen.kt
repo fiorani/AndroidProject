@@ -103,7 +103,7 @@ fun DetailsRestaurantScreen(
             restaurantsViewModel.resetProduct()
             AlertDialog(onDismissRequest = { isAdding.value = false }) {
                 AddProductScreen(
-                    onNextButtonClicked = { isAdding.value = false},
+                    onNextButtonClicked = { isAdding.value = false },
                     restaurantsViewModel = restaurantsViewModel
                 )
             }
@@ -165,8 +165,8 @@ fun DetailsRestaurantScreen(
                                     onDismissRequest = { isDeleting.value = false },
                                     text = "Are you sure you want to delete this restaurant?",
                                     cancellingQuery = {
-                                    restaurantsViewModel.deleteRestaurant()
-                                    isDeleting.value = false
+                                        restaurantsViewModel.deleteRestaurant()
+                                        isDeleting.value = false
 
                                     }
                                 )

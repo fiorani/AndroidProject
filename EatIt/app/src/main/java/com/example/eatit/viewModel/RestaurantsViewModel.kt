@@ -16,7 +16,7 @@ class RestaurantsViewModel @Inject constructor(
     private val repository: RestaurantsRepository
 ) : ViewModel() {
     private var _restaurantSelected: Restaurant = Restaurant()
-    private var _productSelected: Product= Product()
+    private var _productSelected: Product = Product()
 
     fun addNewRestaurant(restaurant: Restaurant) = viewModelScope.launch {
         repository.insertNewRestaurant(restaurant)
@@ -33,9 +33,11 @@ class RestaurantsViewModel @Inject constructor(
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> {
         return repository.getRestaurantsByUserId(userId)
     }
+
     suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> {
         return repository.getRestaurantsByFavorite(userId)
     }
+
     suspend fun getProducts(restaurantId: String): List<Product> {
         return repository.getProducts(restaurantId)
     }
@@ -73,6 +75,7 @@ class RestaurantsViewModel @Inject constructor(
     suspend fun uploadPhoto(uri: Uri): Uri {
         return repository.uploadPhoto(uri)
     }
+
     fun deleteProduct(productId: String) {
         repository.deleteProduct(_restaurantSelected.id!!, productId)
     }
@@ -80,6 +83,7 @@ class RestaurantsViewModel @Inject constructor(
     fun deleteRestaurant() {
         repository.deleteRestaurant(_restaurantSelected.id!!)
     }
+
     fun setRestaurant(restaurant: Restaurant) {
         repository.setRestaurant(restaurant, _restaurantSelected.id!!)
     }

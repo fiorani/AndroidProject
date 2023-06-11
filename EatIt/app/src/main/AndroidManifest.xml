@@ -7,10 +7,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.SEND" />
@@ -62,8 +64,7 @@
             android:value="AIzaSyAtkgSO0EAakNnErsYTuO1ORfA4QFsnqiw" />
         <service
             android:name=".service.OrderService"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
     </application>
 
 </manifest>

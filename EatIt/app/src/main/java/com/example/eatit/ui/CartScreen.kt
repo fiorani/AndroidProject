@@ -27,7 +27,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
     val order = cartViewModel.orderSelected
     val showToast = remember { mutableStateOf(false) }
     var time by remember { mutableStateOf("") }
-    val timePicker =TimePickerDialog(
+    val timePicker = TimePickerDialog(
         LocalContext.current,
         { _, hourOfDay, minute ->
             time = "$hourOfDay:$minute"
@@ -141,6 +141,10 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                 }
         }
     }
-    if (showToast.value) Toast.makeText(LocalContext.current, "Your order has been received",Toast.LENGTH_SHORT).show()
+    if (showToast.value) Toast.makeText(
+        LocalContext.current,
+        "Your order has been received",
+        Toast.LENGTH_SHORT
+    ).show()
 }
 

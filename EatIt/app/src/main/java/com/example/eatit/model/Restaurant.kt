@@ -1,7 +1,5 @@
 package com.example.eatit.model
 
-import android.location.Location
-
 data class Restaurant(
     var name: String = "",
     var address: String = "",

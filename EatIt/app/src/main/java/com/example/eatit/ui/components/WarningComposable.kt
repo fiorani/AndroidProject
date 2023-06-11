@@ -112,29 +112,35 @@ fun ConnectivitySnackBarComposable(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CancelDialog (onDismissRequest: () -> Unit, text: String, cancellingQuery: () -> Unit) {
+fun CancelDialog(onDismissRequest: () -> Unit, text: String, cancellingQuery: () -> Unit) {
     AlertDialog(onDismissRequest = onDismissRequest) {
-        Card (
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             Text(
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 5.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 5.dp),
                 text = "Attention!",
                 fontSize = 25.sp,
                 fontWeight = Bold,
                 textAlign = TextAlign.Center
             )
             Text(
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp),
                 text = text,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(

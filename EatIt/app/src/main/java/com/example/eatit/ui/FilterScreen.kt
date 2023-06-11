@@ -31,44 +31,46 @@ fun FilterScreen(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
 
-        if (!usersViewModel.user.restaurateur){
+        if (!usersViewModel.user.restaurateur) {
             val filterDistance = listOf<String>("25000", "50000", "100000")
             val (selectedOptionFilter, onOptionSelectedFilter) = remember {
                 mutableStateOf(usersViewModel.filter.distance.toString())
             }
             Column(Modifier.selectableGroup()) {
-            Text(
-                text = "Filtra per distanza",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-            )
-            filterDistance.forEach { text ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .selectable(
+                Text(
+                    text = "Filtra per distanza",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                )
+                filterDistance.forEach { text ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .selectable(
+                                selected = (text == selectedOptionFilter),
+                                onClick = {
+                                    onOptionSelectedFilter(text)
+                                    Log.d("FilterScreen", "FilterScreen: " + text)
+                                    usersViewModel.filter.distance = text.toInt()
+                                },
+                                role = Role.RadioButton
+                            )
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
                             selected = (text == selectedOptionFilter),
-                            onClick = { onOptionSelectedFilter(text)
-                                Log.d(  "FilterScreen", "FilterScreen: " + text)
-                                usersViewModel.filter.distance = text.toInt()},
-                            role = Role.RadioButton
+                            onClick = {}
                         )
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = (text == selectedOptionFilter),
-                        onClick = {}
-                    )
-                    Text(
-                        text = "< " + text + " m",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
+                        Text(
+                            text = "< " + text + " m",
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                    }
                 }
             }
-        }
             Text(
                 text = "Filtra per preferiti",
                 style = MaterialTheme.typography.bodyLarge,
@@ -81,7 +83,8 @@ fun FilterScreen(
                     .height(56.dp)
                     .toggleable(
                         value = checkedState,
-                        onValueChange = { onStateChange(!checkedState)
+                        onValueChange = {
+                            onStateChange(!checkedState)
                             usersViewModel.filter.favorite = !usersViewModel.filter.favorite
                         },
                         role = Role.Checkbox
@@ -118,9 +121,10 @@ fun FilterScreen(
                         .height(56.dp)
                         .selectable(
                             selected = (text == selectedOption),
-                            onClick = { onOptionSelected(text)
-                                      usersViewModel.filter.sort = text
-                                      },
+                            onClick = {
+                                onOptionSelected(text)
+                                usersViewModel.filter.sort = text
+                            },
                             role = Role.RadioButton
                         )
                         .padding(horizontal = 16.dp),

@@ -156,7 +156,9 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
 
         cursor.use { cursor ->
             while (cursor.moveToNext()) {
-                result.add(DocumentsContract.buildDocumentUriUsingTree(rootUri, documentId).toOkioPath())
+                result.add(
+                    DocumentsContract.buildDocumentUriUsingTree(rootUri, documentId).toOkioPath()
+                )
             }
         }
 
@@ -190,7 +192,8 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         }
 
         val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(file.toString())
-        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.lowercase(Locale.getDefault()))
+        val mimeType = MimeTypeMap.getSingleton()
+            .getMimeTypeFromExtension(fileExtension.lowercase(Locale.getDefault()))
 
         val extras = mutableMapOf(
             Path::class to path,
@@ -256,16 +259,22 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
             var lastModifiedTime: Long? = null
 
             if (isPhotoPickerUri) {
-                createdTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_TAKEN))
+                createdTime =
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_TAKEN))
             } else {
-                createdTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED))
-                lastModifiedTime = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_MODIFIED))
+                createdTime =
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED))
+                lastModifiedTime =
+                    cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_MODIFIED))
             }
 
-            val displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
-            val mimeType = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE))
+            val displayName =
+                cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+            val mimeType =
+                cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE))
             val size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE))
-            val filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
+            val filePath =
+                cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
 
             return FileMetadata(
                 isRegularFile = true,

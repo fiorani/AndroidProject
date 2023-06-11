@@ -20,8 +20,6 @@ import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 class Filter(
     var favorite: Boolean = false,
@@ -29,7 +27,12 @@ class Filter(
     var sort: String? = "Predefinito",
 ) {
 
-    fun filterDistance(restaurant: Restaurant, user: User, distance: Int,context:Context): Boolean {
+    fun filterDistance(
+        restaurant: Restaurant,
+        user: User,
+        distance: Int,
+        context: Context
+    ): Boolean {
         val positionRestaurant =
             Geocoder(context).getFromLocationName(restaurant.address, 1)
         val positionUser =
@@ -51,7 +54,7 @@ class Filter(
         return false
     }
 
-    fun sort(restaurant: List<Restaurant>,sort:String?):List<Restaurant> {
+    fun sort(restaurant: List<Restaurant>, sort: String?): List<Restaurant> {
         if (sort == "Distanza") {
             Log.d("Distanza", restaurant.sortedBy { it.distance }.toString())
             return restaurant.sortedBy { it.distance }

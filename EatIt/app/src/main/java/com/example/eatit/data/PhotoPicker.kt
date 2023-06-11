@@ -1,4 +1,5 @@
 package com.example.eatit.data
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -6,8 +7,6 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.CallSuper
 import androidx.core.os.BuildCompat
-import java.util.ArrayList
-import java.util.LinkedHashSet
 
 @BuildCompat.PrereleaseSdkCheck
 class PhotoPicker : ActivityResultContract<PhotoPicker.Args, List<Uri>>() {
@@ -54,8 +53,10 @@ class PhotoPicker : ActivityResultContract<PhotoPicker.Args, List<Uri>>() {
                 when (input.type) {
                     Type.IMAGES_ONLY ->
                         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
+
                     Type.VIDEO_ONLY ->
                         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
+
                     Type.IMAGES_AND_VIDEO ->
                         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
                 }
@@ -65,12 +66,17 @@ class PhotoPicker : ActivityResultContract<PhotoPicker.Args, List<Uri>>() {
         }
     }
 
-    override fun getSynchronousResult(context: Context, input: Args): SynchronousResult<List<Uri>>? {
+    override fun getSynchronousResult(
+        context: Context,
+        input: Args
+    ): SynchronousResult<List<Uri>>? {
         return null
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): List<Uri> {
-        return if (resultCode != Activity.RESULT_OK || intent == null) emptyList() else getClipDataUris(intent)
+        return if (resultCode != Activity.RESULT_OK || intent == null) emptyList() else getClipDataUris(
+            intent
+        )
     }
 
     private fun getClipDataUris(intent: Intent): List<Uri> {
