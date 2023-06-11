@@ -30,13 +30,13 @@ fun FilterScreen(
     restaurantsViewModel: RestaurantsViewModel
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        val filterDistance = listOf<String>("25000", "50000", "100000")
-        val (selectedOptionFilter, onOptionSelectedFilter) = remember {
-            mutableStateOf(usersViewModel.filter.distance.toString())
-        }
-        Column(Modifier.selectableGroup()) {
 
         if (!usersViewModel.user.restaurateur){
+            val filterDistance = listOf<String>("25000", "50000", "100000")
+            val (selectedOptionFilter, onOptionSelectedFilter) = remember {
+                mutableStateOf(usersViewModel.filter.distance.toString())
+            }
+            Column(Modifier.selectableGroup()) {
             Text(
                 text = "Filtra per distanza",
                 style = MaterialTheme.typography.bodyLarge,
