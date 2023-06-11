@@ -85,4 +85,9 @@ class UsersRepository(eatItApp: EatItApp) {
                 throw e
             }
         }
+
+    //Caution!! Query della Silvia
+    fun deleteUser(userId: String) {
+        FirebaseFirestore.getInstance().collection("users").document(userId).delete()
+    }
 }
