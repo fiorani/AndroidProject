@@ -4,14 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.eatit.viewModel.WarningViewModel
 
 @Composable
@@ -105,6 +108,62 @@ fun ConnectivitySnackBarComposable(
             SnackbarResult.Dismissed -> {
                 warningViewModel.setConnectivitySnackBarVisibility(false)
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CancelDialog (onDismissRequest: () -> Unit, text: String, cancellingQuery: () -> Unit) {
+    AlertDialog(onDismissRequest = onDismissRequest) {
+        Card (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Spacer(modifier = Modifier.size(30.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 5.dp),
+                text = "Attention!",
+                fontSize = 25.sp,
+                fontWeight = Bold,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp),
+                text = text,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(
+                    modifier = Modifier.padding(0.dp, 10.dp),
+                    onClick = {
+                        cancellingQuery()
+                        onDismissRequest()
+                    }
+                ) {
+                    Text(
+                        text = "Delete",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Button(
+                    modifier = Modifier.padding(10.dp, 10.dp),
+                    onClick = onDismissRequest
+                ) {
+                    Text(
+                        text = "Back",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(15.dp))
         }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.eatit.model.*
 import com.example.eatit.ui.AddProductScreen
+import com.example.eatit.ui.CancelDialog
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -147,7 +148,9 @@ fun ProductCard(
                 imageVector = Icons.Default.Fastfood, contentDescription = "Agriculture"
             )
             Text(
-                modifier = Modifier.padding(10.dp, 0.dp).width(200.dp),
+                modifier = Modifier
+                    .padding(10.dp, 0.dp)
+                    .width(200.dp),
                 text = product.name + " - " + String.format("%.${2}f", product.price) + "€",
                 fontSize = 20.sp
             )
@@ -194,17 +197,25 @@ fun ProductCard(
                 }
 
                 //Delete
-                IconButton(
-                    onClick =
-                    {
-                        restaurantViewModel.selectProduct(product)
-                        //Gestire la cancellazione
-                    }
-                ) {
+                val isDeleting = remember { mutableStateOf(false) }
+
+                IconButton(onClick = { isDeleting.value = true })
+                {
                     Icon(
                         modifier = Modifier.size(20.dp),
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete dish"
+                    )
+                }
+
+                if (isDeleting.value) {
+                    CancelDialog(
+                        onDismissRequest = { isDeleting.value = false },
+                        text = "Are you sure you want to delete this product?",
+                        cancellingQuery = {
+                            var producttt = restaurantViewModel.selectProduct(product)
+
+                        }
                     )
                 }
             }

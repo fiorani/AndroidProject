@@ -5,6 +5,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,14 +82,12 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 item {
-                    Box(modifier = Modifier.fillMaxWidth()) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         ImageProfile(user.photo)
                         Column(
                             verticalArrangement = Arrangement.Bottom,
                             horizontalAlignment = Alignment.Start,
-                            modifier = Modifier
-                                .height(200.dp)
-                                .padding(10.dp)
+                            modifier = Modifier.matchParentSize().padding(10.dp)
                         ) {
                             Text(
                                 text = user.name,

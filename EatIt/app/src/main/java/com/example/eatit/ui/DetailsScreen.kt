@@ -15,10 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +36,7 @@ import com.example.eatit.ui.components.EatItButton
 import com.example.eatit.ui.components.EatItFloatingButton
 import com.example.eatit.ui.components.ImageProfile
 import com.example.eatit.ui.components.SectionMenuCard
+import com.example.eatit.ui.theme.EatItTheme
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -127,6 +125,35 @@ fun DetailsRestaurantScreen(
                         .height(200.dp)
                         .fillMaxWidth()
                 ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        val isDeleting = remember { mutableStateOf(false) }
+
+                        IconButton(onClick = { isDeleting.value = true })
+                        {
+                            Icon(
+                                modifier = Modifier.size(25.dp),
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete restaurant",
+                                tint = MaterialTheme.colorScheme.background
+                            )
+                        }
+
+                        if (isDeleting.value) {
+                            CancelDialog(
+                                onDismissRequest = { isDeleting.value = false },
+                                text = "Are you sure you want to delete this restaurant?",
+                                cancellingQuery = {
+
+
+                                }
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.size(20.dp))
                     Text(
                         text = restaurant.name,
                         style = MaterialTheme.typography.titleLarge,
