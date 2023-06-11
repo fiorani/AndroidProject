@@ -27,7 +27,7 @@ fun QuantitySelector(
         ) {
             Icon(
                 imageVector = Icons.Default.Remove,
-                contentDescription = "Drop-Down Arrow"
+                contentDescription = "Remove item"
             )
         }
         Text(
@@ -39,7 +39,7 @@ fun QuantitySelector(
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "Drop-Down Arrow"
+                contentDescription = "Add item"
             )
         }
     }

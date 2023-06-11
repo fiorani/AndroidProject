@@ -39,6 +39,7 @@ import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.entry.entryModelOf
+import java.time.ZoneId
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,7 +113,18 @@ fun ProfileScreen(
                             fontSize = 32.sp,
                             fontWeight = Bold
                         )
-                        val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
+                        //QUESTO CODICE DOVREBBE ESSERE CAUSA DEL CRUSH QUANDO SI ENTRA NEL PROFILO DA RISTO
+                        val monthValues = MutableList(30) { 0f }
+                        monthValues.forEachIndexed() { index, dayCounter ->
+                            val thisOrder = orders[monthValues.indexOf(dayCounter)]
+                            orders.forEach() {order ->
+                                val operand1 = thisOrder.timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                                val operand2 = order.timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                                if (operand1 == operand2) monthValues[index]++
+                            }
+                        }
+                        //------------------------------FINO QUI--------------------------------------------
+                        val chartEntryModel = entryModelOf(1f, 2f, 3f, 4f, 5f, 6f, 7f)
                         Chart(
                             chart = lineChart(),
                             model = chartEntryModel,
@@ -185,7 +197,7 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
                                 showBadgeDesc.value = true
                                 badgeTitle = badge.second
                                 badgeDesc = badge.third
-                                       },
+                            },
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -200,14 +212,18 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
                         .padding(10.dp)
                 ){
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(20.dp, 40.dp, 20.dp, 10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp, 40.dp, 20.dp, 10.dp),
                         text = badgeTitle,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         fontWeight = Bold
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(20.dp, 0.dp, 20.dp, 10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp, 0.dp, 20.dp, 10.dp),
                         text = badgeDesc,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
