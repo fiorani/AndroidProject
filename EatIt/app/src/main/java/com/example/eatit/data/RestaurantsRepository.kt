@@ -103,7 +103,7 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             .collection("products")
             .document(productId).update(
                 "name", product.name, "price", product.price,
-                "description", product.description, "photo", "section", product.section
+                "description", product.description, "section", product.section
             )
 
     }

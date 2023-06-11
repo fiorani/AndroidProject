@@ -1,11 +1,7 @@
 package com.example.eatit.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,10 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 
 @Composable
 fun EatItButton(
@@ -35,7 +33,7 @@ fun EatItButton(
     text: String,
     function: () -> Unit,
     icon: ImageVector? = null,
-    txtsize: Int = 20,
+    txtSize: Int = 20,
     pad: Int = 5
 ) {
     Button(
@@ -45,9 +43,9 @@ fun EatItButton(
             function()
         }) {
         Text(
-            modifier = modifier.padding(pad.dp),
+            modifier = Modifier.padding(pad.dp),
             text = text,
-            fontSize = txtsize.sp,
+            fontSize = txtSize.sp,
             textAlign = TextAlign.Center
         )
         if (icon != null) {
@@ -131,6 +129,6 @@ fun ChangeImageButton(photo: String, onClick: () -> Unit) {
                     )
                 }
         )
-        Icon(Icons.Default.PhotoCamera, "Photo", tint = MaterialTheme.colorScheme.background)
+        Icon(Icons.Default.PhotoCamera, "photo", tint = MaterialTheme.colorScheme.background)
     }
 }

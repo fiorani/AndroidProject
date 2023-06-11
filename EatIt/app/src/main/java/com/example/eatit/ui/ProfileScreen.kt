@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +39,7 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
 
@@ -105,65 +107,35 @@ fun ProfileScreen(
                     if (!user.restaurateur) {
                         Text(
                             modifier = Modifier.padding(20.dp, 10.dp),
-                            text = "Achievements",
+                            text = stringResource(R.string.achivements),
                             fontWeight = Bold,
                             fontSize = 32.sp
                         )
                         ImageCarouselCard(getBadges(orders.size))
                         Text(
-                            text = "My orders",
+                            text = stringResource(R.string.my_orders),
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
                             fontWeight = Bold
                         )
                     } else {
                         Text(
-                            text = "Order statistics:",
+                            text = stringResource(R.string.order_statisctics),
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
                             fontWeight = Bold
                         )
                         // Creazione del modello dei dati per il grafico
-                        val chartEntryModel = entryModelOf(
-                            giorni[0].toFloat(),
-                            giorni[1].toFloat(),
-                            giorni[2].toFloat(),
-                            giorni[3].toFloat(),
-                            giorni[4].toFloat(),
-                            giorni[5].toFloat(),
-                            giorni[6].toFloat(),
-                            giorni[7].toFloat(),
-                            giorni[8].toFloat(),
-                            giorni[9].toFloat(),
-                            giorni[10].toFloat(),
-                            giorni[11].toFloat(),
-                            giorni[12].toFloat(),
-                            giorni[13].toFloat(),
-                            giorni[14].toFloat(),
-                            giorni[15].toFloat(),
-                            giorni[16].toFloat(),
-                            giorni[17].toFloat(),
-                            giorni[18].toFloat(),
-                            giorni[19].toFloat(),
-                            giorni[20].toFloat(),
-                            giorni[21].toFloat(),
-                            giorni[22].toFloat(),
-                            giorni[23].toFloat(),
-                            giorni[24].toFloat(),
-                            giorni[25].toFloat(),
-                            giorni[26].toFloat(),
-                            giorni[27].toFloat(),
-                            giorni[28].toFloat(),
-                            giorni[29].toFloat()
-                        )
                         Chart(
                             chart = lineChart(),
-                            model = chartEntryModel,
+                            model = entryModelOf(giorni.take(30).mapIndexed { index, value ->
+                                FloatEntry(index.toFloat() + 1, value.toFloat())
+                            }),
                             startAxis = startAxis(),
                             bottomAxis = bottomAxis()
                         )
                         Text(
-                            text = "Orders:",
+                            text = stringResource(R.string.orders),
                             modifier = Modifier.padding(20.dp, 10.dp),
                             fontSize = 32.sp,
                             fontWeight = Bold
@@ -268,7 +240,7 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
                             onClick = { showBadgeDesc.value = false }
                         ) {
                             Text(
-                                text = "Close",
+                                text = stringResource(R.string.close),
                                 fontSize = 20.sp,
                                 fontStyle = Italic
                             )
@@ -281,27 +253,28 @@ fun ImageCarouselCard(badgesList: List<Triple<Int, String, String>>) {
     }
 }
 
+@Composable
 fun getBadges(orderNum: Int): List<Triple<Int, String, String>> {
     val result = mutableListOf(
-        Triple(R.drawable.badge_login, "First login!", "Login for the first time.")
+        Triple(R.drawable.badge_login, stringResource(R.string.b_first_login), stringResource(R.string.b_firstlogin_desc))
     )
     val badgeMap = mapOf(
         Pair(
             1,
             Triple(
                 R.drawable.badge1,
-                "First Order!",
-                "Congratulations! You have made your first order."
+                stringResource(R.string.b_first_order),
+                stringResource(R.string.b_firstorder_desc)
             )
         ),
-        Pair(10, Triple(R.drawable.badge10, "10 Orders", "You have made 10 orders!")),
-        Pair(20, Triple(R.drawable.badge20, "20 Orders", "You have made 20 orders!")),
-        Pair(30, Triple(R.drawable.badge30, "30 Orders", "You have made 30 orders!")),
-        Pair(40, Triple(R.drawable.badge40, "40 Orders", "You have made 40 orders!")),
-        Pair(50, Triple(R.drawable.badge50, "50 Orders", "You have made 50 orders!")),
+        Pair(10, Triple(R.drawable.badge10, stringResource(R.string.b_10), stringResource(R.string.b_10_desc))),
+        Pair(20, Triple(R.drawable.badge20, stringResource(R.string.b_20), stringResource(R.string.b_20_desc))),
+        Pair(30, Triple(R.drawable.badge30, stringResource(R.string.b_30), stringResource(R.string.b_30_desc))),
+        Pair(40, Triple(R.drawable.badge40, stringResource(R.string.b_40), stringResource(R.string.b_40_desc))),
+        Pair(50, Triple(R.drawable.badge50, stringResource(R.string.b_50), stringResource(R.string.b_50_desc))),
         Pair(
             60,
-            Triple(R.drawable.badge_max, "EatIt Master", "Amazing! You have made a lot of orders!")
+            Triple(R.drawable.badge_max, stringResource(R.string.b_master), stringResource(R.string.b_master_desc))
         )
     )
 
