@@ -100,8 +100,10 @@ fun FilterScreen(
                 )
             }
         }
-
-        val sort = listOf<String>("Predefinito", "Distanza", "Alfabetico")
+        var sort = listOf<String>("Predefinito", "Distanza", "Alfabetico")
+        if (usersViewModel.user.restaurateur) {
+            sort = listOf<String>("Predefinito", "Alfabetico")
+        }
         val (selectedOption, onOptionSelected) = remember { mutableStateOf(usersViewModel.filter.sort) }
         Column(Modifier.selectableGroup()) {
             Text(

@@ -73,9 +73,14 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(restaurantsf) {
-        restaurants = restaurantsf.filter { restaurant ->
-            usersViewModel.filter.filterDistance(restaurant, user, usersViewModel.filter.distance, context)
+        if (!user.restaurateur) {
+            restaurants = restaurantsf.filter { restaurant ->
+                usersViewModel.filter.filterDistance(restaurant, user, usersViewModel.filter.distance, context)
+            }
+        }else{
+            restaurants = restaurantsf
         }
+
         restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
     }
 
