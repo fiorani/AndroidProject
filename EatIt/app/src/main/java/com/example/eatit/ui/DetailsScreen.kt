@@ -32,12 +32,7 @@ import com.example.eatit.R
 import com.example.eatit.model.Order
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
-import com.example.eatit.ui.components.AddProductScreen
-import com.example.eatit.ui.components.CancelDialog
-import com.example.eatit.ui.components.EatItButton
-import com.example.eatit.ui.components.EatItFloatingButton
-import com.example.eatit.ui.components.ImageProfile
-import com.example.eatit.ui.components.SectionMenuCard
+import com.example.eatit.ui.components.*
 import com.example.eatit.viewModel.CartViewModel
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
@@ -141,6 +136,13 @@ fun DetailsRestaurantScreen(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = "Edit restaurant",
                                     tint = MaterialTheme.colorScheme.background
+                                )
+                            }
+
+                            if (isEditing.value) {
+                                EditRestaurantDialog(
+                                    onDismissRequest = { isEditing.value = false },
+                                    restaurantsViewModel = restaurantsViewModel
                                 )
                             }
 

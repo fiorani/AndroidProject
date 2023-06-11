@@ -18,7 +18,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun ImageCard(photo: String) {
+fun ImageCard(photo: String, modifier: Modifier=Modifier.fillMaxWidth().height(150.dp)) {
     if (photo != "") {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -26,9 +26,7 @@ fun ImageCard(photo: String) {
                 .crossfade(true)
                 .build(),
             contentDescription = "image of the restaurant",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp),
+            modifier = modifier,
             contentScale = ContentScale.FillWidth,
         )
 

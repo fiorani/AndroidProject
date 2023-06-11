@@ -7,29 +7,13 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Euro
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -82,14 +69,18 @@ fun AddRestaurantScreen(
         ) {
             Spacer(modifier = Modifier.size(20.dp))
             Text(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 text = "Add a restaurant",
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp
             )
             Row(
-                Modifier.fillMaxWidth().padding(10.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -115,7 +106,9 @@ fun AddRestaurantScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.restaurant_name)) },
-                modifier = Modifier.fillMaxWidth().padding(10.dp, 2.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 2.dp)
             )
 
             Spacer(modifier = Modifier.size(20.dp))
@@ -412,6 +405,95 @@ fun AddProductScreen(
                 )
             }
             Spacer(modifier = Modifier.size(25.dp))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditRestaurantDialog (onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
+    var restaurant = restaurantsViewModel.restaurantSelected
+    AlertDialog(onDismissRequest = onDismissRequest) {
+        Card (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Spacer(modifier = Modifier.size(30.dp))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 5.dp),
+                text = "Modify restaurant",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp, 5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
+                OutlinedTextField(
+                    value = txtName,
+                    onValueChange = { txtName = it },
+                    label = { Text("Restaurant name") }
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .height(130.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable {
+                            //TODO: Apri modifica immagine dialog
+                        },
+                    contentAlignment = Alignment.Center
+                ){
+                    ImageCard(
+                        restaurant.photo,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .drawWithContent {
+                                drawContent()
+                                drawRect(
+                                    color = Color.Black.copy(alpha = 0.5f)
+                                )
+                            }
+                    )
+                    Icon(Icons.Default.PhotoCamera, "Photo", tint = MaterialTheme.colorScheme.background)
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                EatItButton(
+                    function = {
+                        //TODO: Aggiorna info ristorante
+                        onDismissRequest()
+                    },
+                    text = "Save",
+                    enabled= true,
+                    icon = Icons.Default.Save
+                )
+                TextButton(
+                    modifier = Modifier.padding(10.dp, 10.dp),
+                    onClick = onDismissRequest
+                ) {
+                    Text(
+                        text = "Back",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(15.dp))
         }
     }
 }
