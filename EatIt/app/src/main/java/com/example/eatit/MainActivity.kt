@@ -24,7 +24,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -245,7 +244,7 @@ class MainActivity : ComponentActivity() {
         password: String,
         name: String,
         photo: String,
-        age: Int,
+        birth: String,
         restaurateur: Boolean,
         address: String,
         phone:String,
@@ -261,7 +260,7 @@ class MainActivity : ComponentActivity() {
                                 name = name,
                                 mail = email,
                                 photo = photo,
-                                age = age,
+                                birth = birth,
                                 position = address,
                                 restaurateur = restaurateur,
                                 phone = phone,

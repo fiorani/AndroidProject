@@ -58,7 +58,7 @@ fun AddRestaurantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var address by rememberSaveable { usersViewModel.position }
-    var photo by rememberSaveable { mutableStateOf("") }
+    var photo by rememberSaveable { mutableStateOf("")}
     val numRatings = 0
     val avgRating = 0.0f
     Card {
@@ -194,14 +194,12 @@ fun AddProductScreen(
     var name by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var price by rememberSaveable { mutableStateOf("") }
-    var photoURI by rememberSaveable { mutableStateOf("") }
     val selectedSection = remember { mutableStateOf(data.firstOrNull() ?: "") }
 
     if (restaurantsViewModel.productSelected.id != ""){
         name = restaurantsViewModel.productSelected.name
         description = restaurantsViewModel.productSelected.description
         price = restaurantsViewModel.productSelected.price.toString()
-        photoURI = restaurantsViewModel.productSelected.photo
         selectedSection.value = restaurantsViewModel.productSelected.section
     }
 
@@ -300,71 +298,9 @@ fun AddProductScreen(
                     }
                 )
             }
-            Spacer(modifier = Modifier.size(15.dp))
-            val context = LocalContext.current
-            val file = context.createImageFile()
-            val uri = FileProvider.getUriForFile(
-                Objects.requireNonNull(context),
-                context.packageName + ".provider", file
-            )
-
-            var capturedImageUri by remember {
-                mutableStateOf<Uri>(Uri.EMPTY)
-            }
-
-            val cameraLauncher =
-                rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-                    if (isSuccess) {
-                        capturedImageUri = uri
-                    }
-                }
-
-            val permissionLauncher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) {
-                if (it) {
-                    cameraLauncher.launch(uri)
-                } else {
-                    Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            if (restaurantsViewModel.productSelected.id != ""){
-                //TODO: ImgPicker
-            }
-
-            FilledTonalButton(
-                onClick = {
-                    val permissionCheckResult =
-                        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                        cameraLauncher.launch(uri)
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-            ) {
-                Icon(
-                    Icons.Filled.PhotoCamera,
-                    contentDescription = "Camera icon",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Take a picture")
-            }
 
             Spacer(modifier = Modifier.size(15.dp))
-            if (capturedImageUri.path?.isNotEmpty() == true) {
-                LaunchedEffect(Unit) {
-                    photoURI = restaurantsViewModel.uploadPhoto(
-                        saveImage(
-                            context.applicationContext.contentResolver,
-                            capturedImageUri
-                        )!!
-                    ).toString()
-                }
-            }
+
             Button(
                 onClick = {
                     if (price == "") price = "0"
@@ -373,7 +309,6 @@ fun AddProductScreen(
                             Product(
                                 name = name,
                                 description = description,
-                                photo = photoURI,
                                 price = price.toFloat(),
                                 section = selectedSection.value
                             )
@@ -383,7 +318,6 @@ fun AddProductScreen(
                             Product(
                                 name = name,
                                 description = description,
-                                photo = photoURI,
                                 price = price.toFloat(),
                                 section = selectedSection.value
                             )
@@ -409,7 +343,7 @@ fun AddProductScreen(
 fun EditRestaurantDialog (onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
     var restaurant = restaurantsViewModel.restaurantSelected
     AlertDialog(onDismissRequest = onDismissRequest) {
-        Card (
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -429,36 +363,20 @@ fun EditRestaurantDialog (onDismissRequest: () -> Unit, restaurantsViewModel: Re
                     .fillMaxWidth()
                     .padding(20.dp, 5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
                 OutlinedTextField(
                     value = txtName,
                     onValueChange = { txtName = it },
                     label = { Text("Restaurant name") }
                 )
-                Box(
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .height(130.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .clickable {
-                            //TODO: Apri modifica immagine dialog
-                        },
-                    contentAlignment = Alignment.Center
-                ){
-                    ImageCard(
-                        restaurant.photo,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .drawWithContent {
-                                drawContent()
-                                drawRect(
-                                    color = Color.Black.copy(alpha = 0.5f)
-                                )
-                            }
-                    )
-                    Icon(Icons.Default.PhotoCamera, "Photo", tint = MaterialTheme.colorScheme.background)
-                }
+
+                ChangeImageButton(
+                    restaurant.photo,
+                    onClick = {
+                        //TODO: Apri modifica immagine dialog
+                    }
+                )
             }
 
             Row(
@@ -474,7 +392,7 @@ fun EditRestaurantDialog (onDismissRequest: () -> Unit, restaurantsViewModel: Re
                         onDismissRequest()
                     },
                     text = "Save",
-                    enabled= true,
+                    enabled = true,
                     icon = Icons.Default.Save
                 )
                 TextButton(

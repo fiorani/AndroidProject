@@ -2,6 +2,7 @@ package com.example.eatit
 
 import android.app.Application
 import android.content.SharedPreferences
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -34,8 +35,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.eatit.ui.*
-import com.example.eatit.ui.components.AddProductScreen
-import com.example.eatit.ui.components.AddRestaurantScreen
 import com.example.eatit.ui.components.ConnectivitySnackBarComposable
 import com.example.eatit.ui.components.EatItIconButton
 import com.example.eatit.ui.components.GPSAlertDialogComposable
@@ -147,7 +146,7 @@ fun NavigationApp(
     warningViewModel: WarningViewModel,
     navController: NavHostController = rememberNavController(),
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, String, Boolean, String, String, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
     theme: String?,
     sharedPref: SharedPreferences,
@@ -206,13 +205,14 @@ fun NavigationApp(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     signIn: KFunction3<String, String, () -> Unit, Unit>,
-    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, String, Boolean, String, String, () -> Unit, Unit>,
     startLocationUpdates: () -> Unit,
     sharedPref: SharedPreferences,
     theme: String?,

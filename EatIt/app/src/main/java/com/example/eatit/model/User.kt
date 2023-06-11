@@ -8,7 +8,7 @@ data class User(
     var name: String = "",
     var mail: String = "",
     var photo: String = "",
-    var age: Int = 0,
+    var birth: String = "",
     var restaurateur: Boolean = false,
     var position: String = "",
     var phone: String = "",
@@ -18,7 +18,7 @@ data class User(
         name: String,
         mail: String,
         photo: String,
-        age: Int,
+        birth: String,
         restaurateur: Boolean,
         position: String,
         phone: String,
@@ -31,7 +31,7 @@ data class User(
         this.name = name
         this.mail = mail
         this.photo = photo
-        this.age = age
+        this.birth = birth
         this.restaurateur = restaurateur
         this.position = position
         this.phone = phone

@@ -35,7 +35,7 @@ import kotlin.reflect.KFunction9
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    createAccount: KFunction9<String, String, String, String, Int, Boolean, String, String, () -> Unit, Unit>,
+    createAccount: KFunction9<String, String, String, String, String, Boolean, String, String, () -> Unit, Unit>,
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
     startLocationUpdates: () -> Unit,
@@ -119,8 +119,10 @@ fun RegisterScreen(
                         }
                     )
 
+                    var birth by rememberSaveable { mutableStateOf("") }
+                    var piva by rememberSaveable { mutableStateOf("") }
+
                     if (!isUserRegister.value) {
-                        var piva by rememberSaveable { mutableStateOf("") }
                         OutlinedTextField(
                             value = piva,
                             onValueChange = { piva = it },
@@ -128,7 +130,6 @@ fun RegisterScreen(
                         )
                     } else {
                         // date picker not fully working: 'ok' button not broken anymore, not checking for future dates.
-                        var birth by rememberSaveable { mutableStateOf("") }
                         val openDialog = remember { mutableStateOf(false) }
 
                         OutlinedTextField(
@@ -222,7 +223,7 @@ fun RegisterScreen(
                             password,
                             name,
                             "",
-                            0,
+                            birth,
                             !isUserRegister.value,
                             address,
                             phone,
