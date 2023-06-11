@@ -129,4 +129,18 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         }
     }
 
+    fun deleteProduct(restaurantId: String, productId: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
+            .collection("products")
+            .document(productId).delete()
+    }
+    fun deleteRestaurant(restaurantId: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).delete()
+    }
+    fun setRestaurant(restaurant: Restaurant, restaurantId: String) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).update(
+            "name", restaurant.name, "address", restaurant.address,
+            "photo", restaurant.photo, "userId", restaurant.userId
+        )
+    }
 }

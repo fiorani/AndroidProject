@@ -211,8 +211,8 @@ fun ProductCard(
                         onDismissRequest = { isDeleting.value = false },
                         text = "Are you sure you want to delete this product?",
                         cancellingQuery = {
-                            var producttt = restaurantViewModel.selectProduct(product)
-
+                            restaurantViewModel.deleteProduct()
+                            isDeleting.value = false
                         }
                     )
                 }

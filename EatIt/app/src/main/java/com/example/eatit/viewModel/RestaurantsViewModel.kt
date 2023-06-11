@@ -73,4 +73,14 @@ class RestaurantsViewModel @Inject constructor(
     suspend fun uploadPhoto(uri: Uri): Uri {
         return repository.uploadPhoto(uri)
     }
+    fun deleteProduct() {
+        repository.deleteProduct(_restaurantSelected.id!!, _productSelected.id!!)
+    }
+
+    fun deleteRestaurant() {
+        repository.deleteRestaurant(_restaurantSelected.id!!)
+    }
+    fun setRestaurant(restaurant: Restaurant) {
+        repository.setRestaurant(restaurant, _restaurantSelected.id!!)
+    }
 }
