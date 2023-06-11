@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.AddRestaurantScreen
@@ -32,7 +31,6 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlin.concurrent.thread
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,16 +52,15 @@ fun HomeScreen(
     cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user
     }
     LaunchedEffect(user) {
-        if (user.restaurateur) {
-            restaurants = restaurantsViewModel.getRestaurantsByUserId()
+        restaurants = if (user.restaurateur) {
+            restaurantsViewModel.getRestaurantsByUserId()
         } else {
-            restaurants = restaurantsViewModel.getRestaurants()
+            restaurantsViewModel.getRestaurants()
         }
     }
     LaunchedEffect(restaurants) {

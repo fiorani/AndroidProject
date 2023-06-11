@@ -38,8 +38,6 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
@@ -129,8 +127,8 @@ fun ProfileScreen(
                         // Creazione del modello dei dati per il grafico
                         Chart(
                             chart = lineChart(),
-                            model = entryModelOf(giorni.mapIndexed { index, value ->
-                                FloatEntry(index.toFloat(), value.toFloat())
+                            model = entryModelOf(giorni.take(30).mapIndexed { index, value ->
+                                FloatEntry(index.toFloat() + 1, value.toFloat())
                             }),
                             startAxis = startAxis(),
                             bottomAxis = bottomAxis()

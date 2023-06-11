@@ -399,7 +399,7 @@ fun OrderProfileCard(
         targetValue = if (expandedState) 180f else 0f
     )
     val statusText = remember { mutableStateOf(order.status) }
-    var buttonClickable by remember { mutableStateOf(true) }
+    var buttonClickable by remember { mutableStateOf(order.status != "delivered") }
     Card(
         modifier = Modifier
             .fillMaxWidth()
