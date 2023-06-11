@@ -51,7 +51,7 @@ fun FilterScreen(
                                 selected = (text == selectedOptionFilter),
                                 onClick = {
                                     onOptionSelectedFilter(text)
-                                    Log.d("FilterScreen", "FilterScreen: " + text)
+                                    Log.d("FilterScreen", "FilterScreen: $text")
                                     usersViewModel.filter.distance = text.toInt()
                                 },
                                 role = Role.RadioButton

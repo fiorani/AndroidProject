@@ -306,7 +306,6 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Login.name)
                 },
                 startLocationUpdates = startLocationUpdates,
-                restaurantsViewModel,
                 usersViewModel = usersViewModel,
             )
         }

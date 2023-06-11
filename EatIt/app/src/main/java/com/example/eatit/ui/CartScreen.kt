@@ -68,7 +68,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
 
                 Text(
                     modifier = Modifier.padding(0.dp, 25.dp, 0.dp, 10.dp),
-                    text = "Delivery time: " + time,
+                    text = "Delivery time: $time",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )

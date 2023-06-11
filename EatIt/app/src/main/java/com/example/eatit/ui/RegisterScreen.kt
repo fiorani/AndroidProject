@@ -36,8 +36,6 @@ fun RegisterScreen(
     onNextButtonClicked: () -> Unit,
     onLoginButtonClicked: () -> Unit,
     startLocationUpdates: () -> Unit,
-    restaurantsViewModel: RestaurantsViewModel,
-
     usersViewModel: UsersViewModel
 ) {
     Scaffold { innerPadding ->
@@ -248,8 +246,7 @@ fun getDate(timestamp: Long?): String {
     if (timestamp != null) {
         val calendar = Calendar.getInstance(Locale.ITALIAN)
         calendar.timeInMillis = timestamp
-        val date = DateFormat.format("dd-MM-yyyy", calendar).toString()
-        return date
+        return DateFormat.format("dd-MM-yyyy", calendar).toString()
     }
     return ""
 }
