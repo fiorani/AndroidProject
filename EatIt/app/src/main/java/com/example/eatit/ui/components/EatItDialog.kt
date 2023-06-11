@@ -92,7 +92,7 @@ fun AddRestaurantScreen(
                 value = address,
                 onValueChange = { newText -> address = newText },
                 label = { Text("Address") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(10.dp, 2.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
