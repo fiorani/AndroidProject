@@ -3,9 +3,12 @@ package com.example.eatit.data
 import android.net.Uri
 import androidx.annotation.WorkerThread
 import com.example.eatit.EatItApp
+import com.example.eatit.model.Filter
 import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
+import com.example.eatit.model.User
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -39,7 +42,21 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             throw e
         }
     }
-
+    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> = withContext(Dispatchers.IO) {
+        try {
+            var list = mutableListOf<Restaurant>()
+           FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", userId).get().await()
+                .documents.mapNotNull { documentSnapshot ->
+                    val user = documentSnapshot.toObject(User::class.java)
+                   user?.favouriteRestaurants?.forEach() { restaurantId ->
+                       list.add(getRestaurant(restaurantId))
+                   }
+                }
+            list
+        } catch (e: Exception) {
+            throw e
+        }
+    }
     suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> =
         withContext(Dispatchers.IO) {
             try {
