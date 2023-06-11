@@ -66,7 +66,7 @@ fun ProfileScreen(
         for (order in orders) {
             val calendar = Calendar.getInstance()
             calendar.time = order.timestamp
-            val day = calendar.get(order.timestamp.DAY_OF_MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
             if (day in 1..30) {
                 giorni[day - 1] += 1
             }
