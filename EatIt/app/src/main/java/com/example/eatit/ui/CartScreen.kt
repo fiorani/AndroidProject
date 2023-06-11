@@ -1,5 +1,6 @@
 package com.example.eatit.ui
 
+import android.app.TimePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +26,16 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val order = cartViewModel.orderSelected
     val showToast = remember { mutableStateOf(false) }
+    var time by remember { mutableStateOf("") }
+    val timePicker =TimePickerDialog(
+        LocalContext.current,
+        { _, hourOfDay, minute ->
+            time = "$hourOfDay:$minute"
+        },
+        14,
+        30,
+        true
+    )
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 115.dp,
@@ -53,18 +64,24 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                     )
                 }
                 Divider(modifier = Modifier.padding(20.dp, 20.dp, 20.dp, 0.dp))
+
+
                 Text(
                     modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
-                    text = "Delivery time:",
+                    text = "Delivery time: " + time,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    modifier = Modifier.padding(5.dp),
-                    text = "14:30",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Button(onClick = { timePicker.show() }) {
+                    Text(
+                        modifier = Modifier.padding(5.dp),
+                        text = "change time",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
                 Button(
                     modifier = Modifier.padding(20.dp),
                     onClick = {
