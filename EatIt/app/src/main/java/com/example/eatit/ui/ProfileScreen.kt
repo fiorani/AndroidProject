@@ -52,6 +52,10 @@ fun ProfileScreen(
 ) {
     val user: User = usersViewModel.user
     var orders by remember { mutableStateOf<List<Order>>(emptyList()) }
+    val giorni by remember { mutableStateOf(mutableListOf<Int>()) }
+    for (i in 0 until 30) {
+        giorni.add(0)
+    }
     LaunchedEffect(Unit) {
         orders = if (user.restaurateur) {
             cartViewModel.getOrdersRestaurateur()
@@ -59,6 +63,14 @@ fun ProfileScreen(
             cartViewModel.getOrders()
         }
         Log.d("ORDERS", orders.toString())
+        for (order in orders) {
+            val calendar = Calendar.getInstance()
+            calendar.time = order.timestamp
+            val day = calendar.get(order.timestamp.DAY_OF_MONTH)
+            if (day in 1..30) {
+                giorni[day - 1] += 1
+            }
+        }
     }
 
     Scaffold { innerPadding ->
@@ -113,23 +125,19 @@ fun ProfileScreen(
                             fontSize = 32.sp,
                             fontWeight = Bold
                         )
-                        //QUESTO CODICE DOVREBBE ESSERE CAUSA DEL CRUSH QUANDO SI ENTRA NEL PROFILO DA RISTO
-                        val monthValues = MutableList(30) { 0f }
-                        monthValues.forEachIndexed() { index, dayCounter ->
-                            val thisOrder = orders[monthValues.indexOf(dayCounter)]
-                            orders.forEach() {order ->
-                                val operand1 = thisOrder.timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                                val operand2 = order.timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                                if (operand1 == operand2) monthValues[index]++
-                            }
-                        }
-                        //------------------------------FINO QUI--------------------------------------------
-                        val chartEntryModel = entryModelOf(1f, 2f, 3f, 4f, 5f, 6f, 7f)
+                        // Creazione del modello dei dati per il grafico
+                        val chartEntryModel = entryModelOf(
+                            giorni[0].toFloat(), giorni[1].toFloat(), giorni[2].toFloat(), giorni[3].toFloat(), giorni[4].toFloat(), giorni[5].toFloat(),
+                            giorni[6].toFloat(), giorni[7].toFloat(), giorni[8].toFloat(), giorni[9].toFloat(), giorni[10].toFloat(), giorni[11].toFloat(),
+                            giorni[12].toFloat(), giorni[13].toFloat(), giorni[14].toFloat(), giorni[15].toFloat(), giorni[16].toFloat(), giorni[17].toFloat(),
+                            giorni[18].toFloat(), giorni[19].toFloat(), giorni[20].toFloat(), giorni[21].toFloat(), giorni[22].toFloat(), giorni[23].toFloat(),
+                            giorni[24].toFloat(), giorni[25].toFloat(), giorni[26].toFloat(), giorni[27].toFloat(), giorni[28].toFloat(), giorni[29].toFloat()
+                        )
                         Chart(
                             chart = lineChart(),
                             model = chartEntryModel,
                             startAxis = startAxis(),
-                            bottomAxis = bottomAxis(),
+                            bottomAxis = bottomAxis()
                         )
                         Text(
                             text = "Orders:",
