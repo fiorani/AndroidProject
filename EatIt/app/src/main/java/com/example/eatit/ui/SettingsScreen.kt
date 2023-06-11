@@ -9,24 +9,10 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -49,7 +35,17 @@ import androidx.core.content.FileProvider
 import com.example.eatit.R
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.text.style.TextAlign
 import com.example.eatit.data.AndroidFileSystem
 import com.example.eatit.model.FileDetails
 import com.example.eatit.data.PhotoPicker
@@ -57,6 +53,7 @@ import com.example.eatit.utilities.toOkioPath
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
+import com.example.eatit.ui.components.ImageCard
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.UsersViewModel
@@ -125,7 +122,8 @@ fun SettingsScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(10.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -175,55 +173,93 @@ fun SettingsScreen(
                     )
                 }
             )
-            Spacer(modifier = Modifier.size(10.dp))
-            EatItButton(text = "Change Profile Picture", function = {
-                val permissionCheckResult =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                    cameraLauncher.launch(uri)
-                } else {
-                    permissionLauncher.launch(Manifest.permission.CAMERA)
-                }
-            }, icon = Icons.Filled.PhotoCamera)
-            if (capturedImageUri.path?.isNotEmpty() == true) {
-                LaunchedEffect(Unit) {
-                    usersViewModel.setPhoto(
-                        usersViewModel.uploadPhoto(
-                            saveImage(
-                                context.applicationContext.contentResolver,
-                                capturedImageUri
-                            )!!
-                        ).toString()
+            Spacer(modifier = Modifier.size(20.dp))
+            Card(elevation = CardDefaults.cardElevation(3.dp),) {
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(
+                    text = "Change image",
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    textAlign = TextAlign.Center,
+                    fontWeight = Bold
+                )
+                ImageCard(
+                    user.photo,
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .height(160.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .fillMaxWidth()
+                        .drawWithContent {
+                            drawContent()
+                            drawRect(
+                                color = Color.Black.copy(alpha = 0.5f)
+                            )
+                        }
+                )
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp), horizontalArrangement = Arrangement.Center){
+                    EatItButton(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .padding(2.dp),
+                        text = "Camera",
+                        function = {
+                            val permissionCheckResult =
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                                cameraLauncher.launch(uri)
+                            } else {
+                                permissionLauncher.launch(Manifest.permission.CAMERA)
+                            }
+                        },
+                        icon = Icons.Filled.PhotoCamera
                     )
+                    if (capturedImageUri.path?.isNotEmpty() == true) {
+                        LaunchedEffect(Unit) {
+                            usersViewModel.setPhoto(
+                                usersViewModel.uploadPhoto(
+                                    saveImage(
+                                        context.applicationContext.contentResolver,
+                                        capturedImageUri
+                                    )!!
+                                ).toString()
+                            )
+                        }
+                    }
+
+                    Button(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .padding(2.dp),
+                        onClick = {
+                            photoPicker.launch(
+                                PhotoPicker.Args(
+                                    PhotoPicker.Type.IMAGES_ONLY,
+                                    1
+                                )
+                            )
+                        }
+                    ) {
+                        Text("Gallery", fontSize = 20.sp, modifier = Modifier.padding(7.dp))
+                    }
+                    if(selectedFiles.isNotEmpty()) {
+                        LaunchedEffect(Unit) {
+                            usersViewModel.setPhoto(
+                                usersViewModel.uploadPhoto(
+                                    saveImage(
+                                        context.applicationContext.contentResolver,
+                                        selectedFiles[0].uri
+                                    )!!
+                                ).toString()
+                            )
+                        }
+                    }
                 }
-                //ImageCard(photo = capturedImageUri.path!!)
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                modifier = Modifier.padding(4.dp).fillMaxWidth(),
-                onClick = {
-                    photoPicker.launch(
-                        PhotoPicker.Args(
-                            PhotoPicker.Type.IMAGES_ONLY,
-                            1
-                        )
-                    )
-                }
-            ) {
-                Text("Change Profile Picture")
-            }
-            if(selectedFiles.isNotEmpty()) {
-                LaunchedEffect(Unit) {
-                    usersViewModel.setPhoto(
-                        usersViewModel.uploadPhoto(
-                            saveImage(
-                                context.applicationContext.contentResolver,
-                                selectedFiles[0].uri
-                            )!!
-                        ).toString()
-                    )
-                }
-                //ImageCard(photo = selectedFiles[0].uri.path!!)
+                Spacer(modifier = Modifier.size(10.dp))
             }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = "Change password", function = {

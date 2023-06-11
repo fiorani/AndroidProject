@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +31,8 @@ fun EatItButton(modifier: Modifier = Modifier, enabled: Boolean = true, text:Str
         Text(
             modifier = modifier.padding(pad.dp),
             text = text,
-            fontSize = txtsize.sp
+            fontSize = txtsize.sp,
+            textAlign = TextAlign.Center
         )
         if (icon != null) {
             Icon(
@@ -90,15 +92,14 @@ fun EatItButtonPreview(){
 }
 
 @Composable
-fun ChangeImageButton(photo: String, onClick: () -> Unit){
+fun ChangeImageButton(photo: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(20.dp)
             .height(130.dp)
             .clip(RoundedCornerShape(16.dp))
             .clickable {
-                       onClick()
-                //TODO: Apri modifica immagine dialog
+                onClick()
             },
         contentAlignment = Alignment.Center
     ){
