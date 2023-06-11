@@ -1,13 +1,15 @@
 package com.example.eatit.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,19 +48,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import coil.compose.AsyncImage
 import com.example.eatit.R
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.Button
+import com.example.eatit.di.AndroidFileSystem
+import com.example.eatit.di.FileDetails
+import com.example.eatit.di.PhotoPicker
+import com.example.eatit.di.toOkioPath
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.EatItButton
-import com.example.eatit.ui.components.ImageCard
 import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.Objects
-
+@SuppressLint("UnsafeOptInUsageError")
+@ExperimentalFoundationApi
 @Composable
 fun SettingsScreen(
     onNextButtonClicked: () -> Unit,
@@ -103,6 +113,15 @@ fun SettingsScreen(
         } else {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
+    }
+    val fileSystem = AndroidFileSystem(LocalContext.current)
+    var selectedFiles by remember { mutableStateOf<List<FileDetails>>(emptyList()) }
+    val photoPicker = rememberLauncherForActivityResult(PhotoPicker()) { uris ->
+        selectedFiles = uris.map { uri ->
+            val path = uri.toOkioPath()
+            val metadata = fileSystem.metadataOrNull(path) ?: return@map null
+            FileDetails(uri, path, metadata)
+        }.filterNotNull()
     }
     Scaffold { paddingValues ->
         BackgroundImage(alpha = 0.1f)
@@ -182,6 +201,33 @@ fun SettingsScreen(
                     )
                 }
                 //ImageCard(photo = capturedImageUri.path!!)
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+            Button(
+                modifier = Modifier.padding(4.dp).fillMaxWidth(),
+                onClick = {
+                    photoPicker.launch(
+                        PhotoPicker.Args(
+                            PhotoPicker.Type.IMAGES_ONLY,
+                            1
+                        )
+                    )
+                }
+            ) {
+                Text("Change Profile Picture")
+            }
+            if(selectedFiles.isNotEmpty()) {
+                LaunchedEffect(Unit) {
+                    usersViewModel.setPhoto(
+                        usersViewModel.uploadPhoto(
+                            saveImage(
+                                context.applicationContext.contentResolver,
+                                selectedFiles[0].uri
+                            )!!
+                        ).toString()
+                    )
+                }
+                //ImageCard(photo = selectedFiles[0].uri.path!!)
             }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = "Change password", function = {
