@@ -329,6 +329,10 @@ fun AddProductScreen(
                 }
             }
 
+            if (restaurantsViewModel.productSelected.id != ""){
+                //TODO: ImgPicker
+            }
+
             FilledTonalButton(
                 onClick = {
                     val permissionCheckResult =
