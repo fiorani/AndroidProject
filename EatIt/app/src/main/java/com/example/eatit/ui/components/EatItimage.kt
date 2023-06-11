@@ -21,9 +21,7 @@ import coil.request.ImageRequest
 import com.example.eatit.R
 
 @Composable
-fun ImageCard(photo: String, modifier: Modifier = Modifier
-    .fillMaxWidth()
-    .height(150.dp)) {
+fun ImageCard(photo: String, modifier: Modifier = Modifier) {
     if (photo != "") {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)

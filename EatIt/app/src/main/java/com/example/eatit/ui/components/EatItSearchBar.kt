@@ -60,10 +60,10 @@ fun EatItSearchBar(
         },
         modifier = Modifier
     ) {
-        var searchResults = remember { mutableStateListOf<Restaurant>() }
+        val searchResults = remember { mutableStateListOf<Restaurant>() }
         searchResults.clear()
         restaurants.forEach { document ->
-            if (document.name.toString().contains(query, ignoreCase = true)) {
+            if (document.name.contains(query, ignoreCase = true)) {
                 searchResults.add(document)
             }
         }
