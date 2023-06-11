@@ -1,11 +1,7 @@
 package com.example.eatit.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -37,7 +33,7 @@ fun EatItButton(
     text: String,
     function: () -> Unit,
     icon: ImageVector? = null,
-    txtsize: Int = 20,
+    txtSize: Int = 20,
     pad: Int = 5
 ) {
     Button(
@@ -47,9 +43,9 @@ fun EatItButton(
             function()
         }) {
         Text(
-            modifier = modifier.padding(pad.dp),
+            modifier = Modifier.padding(pad.dp),
             text = text,
-            fontSize = txtsize.sp,
+            fontSize = txtSize.sp,
             textAlign = TextAlign.Center
         )
         if (icon != null) {

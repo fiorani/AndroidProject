@@ -450,7 +450,7 @@ fun OrderProfileCard(
                                 }
                             },
                             icon = Icons.Default.CheckCircleOutline,
-                            txtsize = 16,
+                            txtSize = 16,
                             pad = 2
                         )
                     }
