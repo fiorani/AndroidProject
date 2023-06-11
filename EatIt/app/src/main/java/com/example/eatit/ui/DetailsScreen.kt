@@ -106,8 +106,7 @@ fun DetailsRestaurantScreen(
             restaurantsViewModel.resetProduct()
             AlertDialog(onDismissRequest = { isAdding.value = false }) {
                 AddProductScreen(
-                    onNextButtonClicked = { isAdding.value = false
-                                          },
+                    onNextButtonClicked = { isAdding.value = false},
                     restaurantsViewModel = restaurantsViewModel
                 )
             }
