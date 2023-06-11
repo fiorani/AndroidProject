@@ -1,4 +1,4 @@
-package com.example.eatit.di
+package com.example.eatit.data
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,6 +7,8 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
+import com.example.eatit.utilities.toOkioPath
+import com.example.eatit.utilities.toUri
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okio.FileHandle
 import okio.FileMetadata
@@ -196,7 +198,8 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
             MetadataExtras.FilePath::class to MetadataExtras.FilePath(file.absolutePath),
         )
 
-        if (mimeType != null) extras[MetadataExtras.MimeType::class] = MetadataExtras.MimeType(mimeType)
+        if (mimeType != null) extras[MetadataExtras.MimeType::class] =
+            MetadataExtras.MimeType(mimeType)
 
         return FileMetadata(
             isRegularFile = isRegularFile,

@@ -1,4 +1,4 @@
-package com.example.eatit.di
+package com.example.eatit.data
 
 object MetadataExtras {
     @JvmInline

@@ -1,4 +1,4 @@
-package com.example.eatit.di
+package com.example.eatit.model
 
 import android.net.Uri
 import okio.FileMetadata

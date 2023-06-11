@@ -1,4 +1,4 @@
-package com.example.eatit.di
+package com.example.eatit.data
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
