@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.Settings.Global.getString
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
@@ -75,6 +77,8 @@ fun SettingsScreen(
     val name = remember { mutableStateOf(user.name) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
+
+    val showDialog2 = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val changedThing = remember { mutableStateOf("") }
     val showChangedPsw = remember { mutableStateOf(false) }
@@ -235,22 +239,21 @@ fun SettingsScreen(
                             )
                         }
                     }
-
-                    Button(
+                    EatItButton(
                         modifier = Modifier
                             .width(150.dp)
                             .padding(2.dp),
-                        onClick = {
+                        text = stringResource(R.string.gallery),
+                        function = {
                             photoPicker.launch(
                                 PhotoPicker.Args(
                                     PhotoPicker.Type.IMAGES_ONLY,
                                     1
                                 )
                             )
-                        }
-                    ) {
-                        Text(stringResource(R.string.gallery), fontSize = 20.sp, modifier = Modifier.padding(7.dp))
-                    }
+                        },
+                        icon = Icons.Filled.Photo
+                    )
                     if (selectedFiles.isNotEmpty()) {
                         LaunchedEffect(Unit) {
                             usersViewModel.setPhoto(
@@ -297,8 +300,13 @@ fun SettingsScreen(
             }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = stringResource(R.string.logout), function = {
-                Firebase.auth.signOut()
-                onNextButtonClicked()
+                showDialog2.value = true
+                changedThing.value = "logout"
+            })
+            Spacer(modifier = Modifier.size(10.dp))
+            EatItButton(text = stringResource(R.string.delete_profile), function = {
+                showDialog2.value = true
+                changedThing.value = "delete your profile"
             })
             Spacer(modifier = Modifier.size(10.dp))
             Text(
@@ -309,17 +317,17 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.size(10.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(R.string.dark_theme2),
                     fontWeight = Bold,
-                    modifier = Modifier.weight(4f)
+                    fontSize = 20.sp
                 )
                 Switch(
                     modifier = Modifier
-                        .semantics { contentDescription = "Demo" }
-                        .weight(1f),
+                        .semantics { contentDescription = "Demo" },
                     checked = theme == dark,
                     onCheckedChange = {
                         val tmp = if (it) dark else light
@@ -334,6 +342,9 @@ fun SettingsScreen(
 
             if (showDialog.value) {
                 ShowAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
+            }
+            if (showDialog2.value) {
+                ShowImportantAlertDialog(showDialog = showDialog2, changedThing = changedThing.value, onNextButtonClicked)
             }
             if (themeChanged.value) {
                 themeChanged.value = false
@@ -358,6 +369,42 @@ fun ShowAlertDialog(showDialog: MutableState<Boolean>, changedThing: String) {
                 }
             ) {
                 Text(stringResource(R.string.ok4))
+            }
+        }
+    )
+}
+
+@Composable
+fun ShowImportantAlertDialog(showDialog: MutableState<Boolean>, changedThing: String, onNextButtonClicked: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = {
+            showDialog.value = false
+        },
+        title = { Text(stringResource(R.string.important_edit)) },
+        text = { Text(stringResource(R.string.important_edit_phrase) + changedThing + stringResource(R.string.important_edit_phrase1)) },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    showDialog.value = false
+                    if (changedThing == "logout") {
+                        Firebase.auth.signOut()
+                        onNextButtonClicked()
+                    } else {
+                        //Firebase.auth.deleteUser(user.id)
+                        onNextButtonClicked()
+                    }
+                }
+            ) {
+                Text(stringResource(R.string.ok4))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    showDialog.value = false
+                }
+            ) {
+                Text(stringResource(R.string.back))
             }
         }
     )

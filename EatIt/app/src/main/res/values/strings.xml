@@ -214,7 +214,7 @@
     <string name="ok2">OK</string>
     <string name="logout">Logout</string>
     <string name="settings_app">Settings App:</string>
-    <string name="dark_theme2">\"Dark Theme: \"</string>
+    <string name="dark_theme2">Dark Theme:</string>
     <string name="modify_user">Modify user</string>
     <string name="your">Your</string>
     <string name="your2">\" has been changed.\"</string>
@@ -247,4 +247,8 @@
     <string name="attention">Attention!</string>
     <string name="delete">Delete</string>
     <string name="back3">Back</string>
+    <string name="delete_profile">Delete profile</string>
+    <string name="important_edit">Warning!</string>
+    <string name="important_edit_phrase">"You're trying to "</string>
+    <string name="important_edit_phrase1">. Do you want to continue?</string>
 </resources>
