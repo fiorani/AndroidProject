@@ -67,12 +67,12 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
 
 
                 Text(
-                    modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
+                    modifier = Modifier.padding(0.dp, 25.dp, 0.dp, 10.dp),
                     text = "Delivery time: " + time,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Button(onClick = { timePicker.show() }) {
+                FilledTonalButton(onClick = { timePicker.show() }) {
                     Text(
                         modifier = Modifier.padding(5.dp),
                         text = "change time",
