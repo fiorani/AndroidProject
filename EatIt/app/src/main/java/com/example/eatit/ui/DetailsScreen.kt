@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.eatit.R
 import com.example.eatit.model.Order
@@ -43,7 +44,6 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun DetailsRestaurantScreen(
     restaurantsViewModel: RestaurantsViewModel,
-    //onAddButtonClicked: () -> Unit,
     cartViewModel: CartViewModel,
     usersViewModel: UsersViewModel,
     onNextButtonClicked: () -> Unit,
@@ -136,7 +136,7 @@ fun DetailsRestaurantScreen(
                                 Icon(
                                     modifier = Modifier.size(25.dp),
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = "Edit restaurant",
+                                    contentDescription = stringResource(R.string.editRestaurant),
                                     tint = MaterialTheme.colorScheme.background
                                 )
                             }
@@ -155,7 +155,7 @@ fun DetailsRestaurantScreen(
                                 Icon(
                                     modifier = Modifier.size(25.dp),
                                     imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete restaurant",
+                                    contentDescription = stringResource(R.string.delete_restaurant),
                                     tint = MaterialTheme.colorScheme.background
                                 )
                             }
@@ -163,7 +163,7 @@ fun DetailsRestaurantScreen(
                             if (isDeleting.value) {
                                 CancelDialog(
                                     onDismissRequest = { isDeleting.value = false },
-                                    text = "Are you sure you want to delete this restaurant?",
+                                    text = stringResource(R.string.cancel_restaurant_dialog),
                                     cancellingQuery = {
                                         restaurantsViewModel.deleteRestaurant()
                                         isDeleting.value = false
@@ -185,7 +185,7 @@ fun DetailsRestaurantScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         val context = LocalContext.current
-                        EatItButton(text = "GO ", function = {
+                        EatItButton(text = stringResource(R.string.go), function = {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${restaurant.address}")
@@ -193,7 +193,7 @@ fun DetailsRestaurantScreen(
                             context.startActivity(intent)
                         }, icon = Icons.Filled.Map)
                         Spacer(modifier = Modifier.size(15.dp))
-                        EatItButton(text = "call", function = {
+                        EatItButton(text = stringResource(R.string.call), function = {
                             val intent = Intent(Intent.ACTION_DIAL)
                             intent.data = Uri.parse("tel:${restaurant.phone}")
                             context.startActivity(intent)
@@ -209,8 +209,7 @@ fun DetailsRestaurantScreen(
                         products = products,
                         restaurantViewModel = restaurantsViewModel,
                         order = order!!,
-                        user = user,
-                        //onAddButtonClicked = onAddButtonClicked
+                        user = user
                     )
                 }
             Spacer(modifier = Modifier.size(80.dp))

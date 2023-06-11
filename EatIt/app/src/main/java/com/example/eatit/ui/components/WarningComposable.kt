@@ -9,10 +9,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.eatit.R
 import com.example.eatit.viewModel.WarningViewModel
 
 @Composable
@@ -25,10 +27,10 @@ internal fun GPSAlertDialogComposable(
             warningViewModel.setGPSAlertDialogVisibility(false)
         },
         title = {
-            Text(text = "GPS disabled")
+            Text(text = stringResource(R.string.gps_disabled))
         },
         text = {
-            Text(text = "GPS is turned off but is needed to get the coordinates")
+            Text(text = stringResource(R.string.gps_off))
         },
         confirmButton = {
             TextButton(
@@ -40,14 +42,14 @@ internal fun GPSAlertDialogComposable(
                     warningViewModel.setGPSAlertDialogVisibility(false)
                 }
             ) {
-                Text("Turned on the GPS")
+                Text(stringResource(R.string.hps_on))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = { warningViewModel.setGPSAlertDialogVisibility(false) }
             ) {
-                Text("Dismiss")
+                Text(stringResource(R.string.dismiss))
             }
         }
     )
@@ -124,7 +126,7 @@ fun CancelDialog(onDismissRequest: () -> Unit, text: String, cancellingQuery: ()
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp, 5.dp),
-                text = "Attention!",
+                text = stringResource(R.string.attention),
                 fontSize = 25.sp,
                 fontWeight = Bold,
                 textAlign = TextAlign.Center
@@ -151,7 +153,7 @@ fun CancelDialog(onDismissRequest: () -> Unit, text: String, cancellingQuery: ()
                     }
                 ) {
                     Text(
-                        text = "Delete",
+                        text = stringResource(R.string.delete),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     )
@@ -161,7 +163,7 @@ fun CancelDialog(onDismissRequest: () -> Unit, text: String, cancellingQuery: ()
                     onClick = onDismissRequest
                 ) {
                     Text(
-                        text = "Back",
+                        text = stringResource(R.string.back3),
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     )

@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -127,7 +128,7 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Settings Profile:",
+                text = stringResource(R.string.settings_profile),
                 fontSize = 30.sp,
                 fontWeight = Bold,
                 modifier = Modifier.fillMaxWidth()
@@ -136,12 +137,12 @@ fun SettingsScreen(
             OutlinedTextField(
                 value = name.value,
                 onValueChange = { newText -> name.value = newText },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.name)) },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.Save,
-                        contentDescription = "Save",
+                        contentDescription = stringResource(R.string.save2),
                         Modifier
                             .clickable(onClick = {
                                 showDialog.value = true
@@ -156,12 +157,12 @@ fun SettingsScreen(
             OutlinedTextField(
                 value = address,
                 onValueChange = { newText -> address = newText },
-                label = { Text("Address") },
+                label = { Text(stringResource(R.string.address_sett)) },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     Icon(
                         Icons.Filled.LocationOn,
-                        contentDescription = "Localized",
+                        contentDescription = stringResource(R.string.localized_sett),
                         Modifier
                             .clickable(onClick = {
                                 showDialog.value = true
@@ -176,7 +177,7 @@ fun SettingsScreen(
             Card(elevation = CardDefaults.cardElevation(3.dp)) {
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    text = "Change image",
+                    text = stringResource(R.string.change_img),
                     fontSize = 20.sp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -207,7 +208,7 @@ fun SettingsScreen(
                         modifier = Modifier
                             .width(150.dp)
                             .padding(2.dp),
-                        text = "Camera",
+                        text = stringResource(R.string.camera),
                         function = {
                             val permissionCheckResult =
                                 ContextCompat.checkSelfPermission(
@@ -248,7 +249,7 @@ fun SettingsScreen(
                             )
                         }
                     ) {
-                        Text("Gallery", fontSize = 20.sp, modifier = Modifier.padding(7.dp))
+                        Text(stringResource(R.string.gallery), fontSize = 20.sp, modifier = Modifier.padding(7.dp))
                     }
                     if (selectedFiles.isNotEmpty()) {
                         LaunchedEffect(Unit) {
@@ -266,7 +267,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.size(10.dp))
             }
             Spacer(modifier = Modifier.size(10.dp))
-            EatItButton(text = "Change password", function = {
+            EatItButton(text = stringResource(R.string.change_password), function = {
                 showChangedPsw.value = true
                 usersViewModel.changePsw()
             })
@@ -275,12 +276,12 @@ fun SettingsScreen(
                     onDismissRequest = {
                         showChangedPsw.value = false
                     },
-                    title = { Text("Modify password") },
+                    title = { Text(stringResource(R.string.modify_psw)) },
                     text = {
                         Text(
-                            "You will receive an email shortly to reset your password. " +
-                                    "Follow the instructions in the email to complete the process.\n\n" +
-                                    "Make sure to check your spam folder in your email!"
+                            stringResource(R.string.change_psw_desc) +
+                                    stringResource(R.string.change_psw_desc2) + "\n\n" +
+                                    stringResource(R.string.change_psw_desc3)
                         )
                     },
                     confirmButton = {
@@ -289,19 +290,19 @@ fun SettingsScreen(
                                 showChangedPsw.value = false
                             }
                         ) {
-                            Text("OK")
+                            Text(stringResource(R.string.ok2))
                         }
                     }
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
-            EatItButton(text = "Logout", function = {
+            EatItButton(text = stringResource(R.string.logout), function = {
                 Firebase.auth.signOut()
                 onNextButtonClicked()
             })
             Spacer(modifier = Modifier.size(10.dp))
             Text(
-                text = "Settings App:",
+                text = stringResource(R.string.settings_app),
                 fontSize = 30.sp,
                 fontWeight = Bold,
             )
@@ -311,7 +312,7 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Dark Theme: ",
+                    text = stringResource(R.string.dark_theme2),
                     fontWeight = Bold,
                     modifier = Modifier.weight(4f)
                 )
@@ -348,15 +349,15 @@ fun ShowAlertDialog(showDialog: MutableState<Boolean>, changedThing: String) {
         onDismissRequest = {
             showDialog.value = false
         },
-        title = { Text("Modify user") },
-        text = { Text("Your $changedThing has been changed.") },
+        title = { Text(stringResource(R.string.modify_user)) },
+        text = { Text(stringResource(R.string.your) + changedThing + stringResource(R.string.your2)) },
         confirmButton = {
             TextButton(
                 onClick = {
                     showDialog.value = false
                 }
             ) {
-                Text("OK")
+                Text(stringResource(R.string.ok4))
             }
         }
     )

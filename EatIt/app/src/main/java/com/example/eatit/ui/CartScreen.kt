@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,13 +53,13 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = "Total:",
+                        text = stringResource(R.string.Total),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = order.totalPrice.toString() + "€",
+                        text = order.totalPrice.toString() + stringResource(R.string.Euro),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -68,14 +69,14 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
 
                 Text(
                     modifier = Modifier.padding(0.dp, 25.dp, 0.dp, 10.dp),
-                    text = "Delivery time: $time",
+                    text = stringResource(R.string.delivery_time) + time,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
                 FilledTonalButton(onClick = { timePicker.show() }) {
                     Text(
                         modifier = Modifier.padding(5.dp),
-                        text = "change time",
+                        text = stringResource(R.string.change_time),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -92,7 +93,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                 ) {
                     Text(
                         modifier = Modifier.padding(20.dp, 10.dp),
-                        text = "PAY",
+                        text = stringResource(R.string.pay),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -121,7 +122,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp, 5.dp),
-                    text = "Order summary",
+                    text = stringResource(R.string.order_summary),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -143,7 +144,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
     }
     if (showToast.value) Toast.makeText(
         LocalContext.current,
-        "Your order has been received",
+        stringResource(R.string.order_recived),
         Toast.LENGTH_SHORT
     ).show()
 }
