@@ -129,34 +129,46 @@ fun DetailsRestaurantScreen(
                         .height(200.dp)
                         .fillMaxWidth()
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        val isDeleting = remember { mutableStateOf(false) }
-                        LaunchedEffect(isDeleting.value) {
-                            products = restaurantsViewModel.getProducts(restaurant.id!!)
-                        }
-                        IconButton(onClick = { isDeleting.value = true })
-                        {
-                            Icon(
-                                modifier = Modifier.size(25.dp),
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete restaurant",
-                                tint = MaterialTheme.colorScheme.background
-                            )
-                        }
+                    if (user.restaurateur) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            //Edit
+                            val isEditing = remember { mutableStateOf(false) }
 
-                        if (isDeleting.value) {
-                            CancelDialog(
-                                onDismissRequest = { isDeleting.value = false },
-                                text = "Are you sure you want to delete this restaurant?",
-                                cancellingQuery = {
+                            IconButton(onClick = { isEditing.value = true }) {
+                                Icon(
+                                    modifier = Modifier.size(25.dp),
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit restaurant",
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+                            }
+
+                            //Delete
+                            val isDeleting = remember { mutableStateOf(false) }
+
+                            IconButton(onClick = { isDeleting.value = true }) {
+                                Icon(
+                                    modifier = Modifier.size(25.dp),
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete restaurant",
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+                            }
+
+                            if (isDeleting.value) {
+                                CancelDialog(
+                                    onDismissRequest = { isDeleting.value = false },
+                                    text = "Are you sure you want to delete this restaurant?",
+                                    cancellingQuery = {
                                     restaurantsViewModel.deleteRestaurant()
                                     isDeleting.value = false
-                                }
-                            )
+
+                                    }
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.size(20.dp))
