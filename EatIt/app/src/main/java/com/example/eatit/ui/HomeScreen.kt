@@ -66,17 +66,16 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(usersViewModel.filter.favorite) {
-        if (usersViewModel.filter.favorite) {
-            restaurantsf =
-                restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
+        restaurantsf = if (usersViewModel.filter.favorite) {
+            restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
         } else {
-            restaurantsf = restaurantsViewModel.getRestaurants()
+            restaurantsViewModel.getRestaurants()
 
         }
     }
     LaunchedEffect(restaurantsf) {
-        if (!user.restaurateur) {
-            restaurants = restaurantsf.filter { restaurant ->
+        restaurants = if (!user.restaurateur) {
+            restaurantsf.filter { restaurant ->
                 usersViewModel.filter.filterDistance(
                     restaurant,
                     user,
@@ -85,7 +84,7 @@ fun HomeScreen(
                 )
             }
         } else {
-            restaurants = restaurantsf
+            restaurantsf
         }
 
         restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
