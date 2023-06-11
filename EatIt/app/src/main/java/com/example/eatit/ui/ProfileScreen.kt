@@ -39,6 +39,7 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.util.*
 
@@ -125,41 +126,11 @@ fun ProfileScreen(
                             fontWeight = Bold
                         )
                         // Creazione del modello dei dati per il grafico
-                        val chartEntryModel = entryModelOf(
-                            giorni[0].toFloat(),
-                            giorni[1].toFloat(),
-                            giorni[2].toFloat(),
-                            giorni[3].toFloat(),
-                            giorni[4].toFloat(),
-                            giorni[5].toFloat(),
-                            giorni[6].toFloat(),
-                            giorni[7].toFloat(),
-                            giorni[8].toFloat(),
-                            giorni[9].toFloat(),
-                            giorni[10].toFloat(),
-                            giorni[11].toFloat(),
-                            giorni[12].toFloat(),
-                            giorni[13].toFloat(),
-                            giorni[14].toFloat(),
-                            giorni[15].toFloat(),
-                            giorni[16].toFloat(),
-                            giorni[17].toFloat(),
-                            giorni[18].toFloat(),
-                            giorni[19].toFloat(),
-                            giorni[20].toFloat(),
-                            giorni[21].toFloat(),
-                            giorni[22].toFloat(),
-                            giorni[23].toFloat(),
-                            giorni[24].toFloat(),
-                            giorni[25].toFloat(),
-                            giorni[26].toFloat(),
-                            giorni[27].toFloat(),
-                            giorni[28].toFloat(),
-                            giorni[29].toFloat()
-                        )
                         Chart(
                             chart = lineChart(),
-                            model = chartEntryModel,
+                            model = entryModelOf(giorni.take(30).mapIndexed { index, value ->
+                                FloatEntry(index.toFloat() + 1, value.toFloat())
+                            }),
                             startAxis = startAxis(),
                             bottomAxis = bottomAxis()
                         )

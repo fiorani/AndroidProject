@@ -7,7 +7,9 @@ import com.example.eatit.model.Product
 import com.example.eatit.model.Rating
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -41,29 +43,11 @@ class RestaurantsRepository(eatItApp: EatItApp) {
         }
     }
 
-    suspend fun getRestaurantsByFavorite(userId: String): List<Restaurant> =
-        withContext(Dispatchers.IO) {
-            try {
-                var list = mutableListOf<Restaurant>()
-                FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", userId).get()
-                    .await()
-                    .documents.mapNotNull { documentSnapshot ->
-                        val user = documentSnapshot.toObject(User::class.java)
-                        user?.favouriteRestaurants?.forEach() { restaurantId ->
-                            list.add(getRestaurant(restaurantId))
-                        }
-                    }
-                list
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
-    suspend fun getRestaurantsByUserId(userId: String): List<Restaurant> =
+    suspend fun getRestaurantsByUserId(): List<Restaurant> =
         withContext(Dispatchers.IO) {
             try {
                 FirebaseFirestore.getInstance().collection("restaurants")
-                    .whereEqualTo("userId", userId).get().await()
+                    .whereEqualTo("userId",  Firebase.auth.currentUser?.uid.toString()).get().await()
                     .documents.mapNotNull { documentSnapshot ->
                         val restaurant = documentSnapshot.toObject(Restaurant::class.java)
                         restaurant?.id = documentSnapshot.id
@@ -113,6 +97,7 @@ class RestaurantsRepository(eatItApp: EatItApp) {
             }
         }
 
+
     fun setProduct(product: Product, restaurantId: String, productId: String) {
         FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId)
             .collection("products")
@@ -140,12 +125,5 @@ class RestaurantsRepository(eatItApp: EatItApp) {
 
     fun deleteRestaurant(restaurantId: String) {
         FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).delete()
-    }
-
-    fun setRestaurant(restaurant: Restaurant, restaurantId: String) {
-        FirebaseFirestore.getInstance().collection("restaurants").document(restaurantId).update(
-            "name", restaurant.name, "address", restaurant.address,
-            "photo", restaurant.photo, "userId", restaurant.userId
-        )
     }
 }

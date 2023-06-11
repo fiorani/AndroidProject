@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.example.eatit.model.Restaurant
 import com.example.eatit.model.User
 import com.example.eatit.ui.components.AddRestaurantScreen
@@ -53,42 +52,27 @@ fun HomeScreen(
     cartViewModel.resetOrder()
     var restaurants by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     var user by remember { mutableStateOf(User()) }
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         usersViewModel.setUser(usersViewModel.getUser())
         user = usersViewModel.user
     }
-    var restaurantsf by remember { mutableStateOf<List<Restaurant>>(emptyList()) }
     LaunchedEffect(user) {
-        if (user.restaurateur) {
-            restaurantsf =
-                restaurantsViewModel.getRestaurantsByUserId(Firebase.auth.currentUser!!.uid)
+        restaurants = if (user.restaurateur) {
+            restaurantsViewModel.getRestaurantsByUserId()
+        } else {
+            restaurantsViewModel.getRestaurants()
         }
     }
-    LaunchedEffect(usersViewModel.filter.favorite) {
+    LaunchedEffect(restaurants) {
         if (usersViewModel.filter.favorite) {
-            restaurantsf =
-                restaurantsViewModel.getRestaurantsByFavorite(Firebase.auth.currentUser!!.uid)
-        } else {
-            restaurantsf = restaurantsViewModel.getRestaurants()
-
+            restaurants = usersViewModel.filter.filterFavorite(
+                restaurants,
+                usersViewModel.user.favouriteRestaurants
+            )
         }
-    }
-    LaunchedEffect(restaurantsf) {
-        if (!user.restaurateur) {
-            restaurants = restaurantsf.filter { restaurant ->
-                usersViewModel.filter.filterDistance(
-                    restaurant,
-                    user,
-                    usersViewModel.filter.distance,
-                    context
-                )
-            }
-        } else {
-            restaurants = restaurantsf
+        if (usersViewModel.filter.sort == "Alfabetico") {
+            restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
         }
-
-        restaurants = usersViewModel.filter.sort(restaurants, usersViewModel.filter.sort)
     }
 
 

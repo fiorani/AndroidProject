@@ -31,7 +31,15 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
     val timePicker = TimePickerDialog(
         LocalContext.current,
         { _, hourOfDay, minute ->
-            time = "$hourOfDay:$minute"
+            time = if (minute.toString().length > 1 && hourOfDay.toString().length > 1) {
+                "$hourOfDay:$minute"
+            } else if (minute.toString().length > 1) {
+                "0$hourOfDay:$minute"
+            } else if (hourOfDay.toString().length > 1) {
+                "$hourOfDay:0$minute"
+            } else {
+                "0$hourOfDay:0$minute"
+            }
         },
         14,
         30,
