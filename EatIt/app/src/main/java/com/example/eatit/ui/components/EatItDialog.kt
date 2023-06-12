@@ -62,7 +62,7 @@ fun AddRestaurantScreen(
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var address by rememberSaveable { usersViewModel.position }
-    var photo by rememberSaveable { mutableStateOf("") }
+    val photo = remember { mutableStateOf("") }
     val numRatings = 0
     val avgRating = 0.0f
     Card {
@@ -162,7 +162,7 @@ fun AddRestaurantScreen(
 
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 LaunchedEffect(Unit) {
-                    photo = restaurantsViewModel.uploadPhoto(
+                    photo.value = restaurantsViewModel.uploadPhoto(
                         saveImage(
                             context.applicationContext.contentResolver,
                             capturedImageUri
@@ -177,7 +177,7 @@ fun AddRestaurantScreen(
                         Restaurant(
                             name = name,
                             address = address,
-                            photo = photo,
+                            photo = photo.value,
                             numRatings = numRatings,
                             avgRating = avgRating,
                             userId = Firebase.auth.uid!!
@@ -356,7 +356,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
     val restaurant = restaurantsViewModel.restaurantSelected
     var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
     var phone by rememberSaveable { mutableStateOf("") }
-    var photo by rememberSaveable { mutableStateOf("") }
+    val photo = remember { mutableStateOf("") }
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier
@@ -407,7 +407,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     }.filterNotNull()
                 }
                 ImageCard(
-                    restaurant.photo,
+                    photo.value,
                     modifier = Modifier
                         .padding(20.dp)
                         .height(160.dp)
@@ -442,7 +442,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     )
                     if (selectedFiles.isNotEmpty()) {
                         LaunchedEffect(Unit) {
-                            photo = restaurantsViewModel.uploadPhoto(
+                            photo.value = restaurantsViewModel.uploadPhoto(
                                 saveImage(
                                     context.applicationContext.contentResolver,
                                     selectedFiles[0].uri
@@ -464,7 +464,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     function = {
                         if (txtName != "") restaurant.name = txtName
                         if (phone != "") restaurant.phone = phone
-                        if (photo != "") restaurant.photo = photo
+                        if (photo.value != "") restaurant.photo = photo.value
                         restaurantsViewModel.setRestaurant()
                         onDismissRequest()
                     },
