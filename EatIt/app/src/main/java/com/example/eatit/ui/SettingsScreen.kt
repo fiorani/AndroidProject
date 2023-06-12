@@ -74,9 +74,9 @@ fun SettingsScreen(
 ) {
     val user: User = usersViewModel.user
     val name = remember { mutableStateOf(user.name) }
+    val photo = remember { mutableStateOf(user.name) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
-
     val showDialog2 = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val changedThing = remember { mutableStateOf("") }
@@ -124,150 +124,140 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(10.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = stringResource(R.string.settings_profile),
-                fontSize = 30.sp,
-                fontWeight = Bold,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            OutlinedTextField(
-                value = name.value,
-                onValueChange = { newText -> name.value = newText },
-                label = { Text(stringResource(R.string.name)) },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.Save,
-                        contentDescription = stringResource(R.string.save2),
-                        Modifier
-                            .clickable(onClick = {
-                                showDialog.value = true
-                                focusManager.clearFocus()
-                                user.name = name.value
-                                usersViewModel.setUser(user)
-                                changedThing.value = "username"
-                            })
+            Card(elevation = CardDefaults.cardElevation(3.dp),
+            modifier = Modifier.padding(10.dp),) {
+                Column(
+                    modifier = Modifier.padding(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ){
+                    Text(
+                        text = stringResource(R.string.settings_profile),
+                        fontSize = 30.sp,
+                        fontWeight = Bold,
+                        modifier = Modifier.fillMaxWidth()
                     )
-                }
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            OutlinedTextField(
-                value = address,
-                onValueChange = { newText -> address = newText },
-                label = { Text(stringResource(R.string.address_sett)) },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = stringResource(R.string.localized_sett),
-                        Modifier
-                            .clickable(onClick = {
-                                showDialog.value = true
-                                focusManager.clearFocus()
-                                startLocationUpdates()
-                                changedThing.value = "position"
-                            })
+                    OutlinedTextField(
+                        value = name.value,
+                        onValueChange = { newText -> name.value = newText },
+                        label = { Text(stringResource(R.string.name)) },
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                }
-            )
-            Spacer(modifier = Modifier.size(20.dp))
-            Card(elevation = CardDefaults.cardElevation(3.dp)) {
-                Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    text = stringResource(R.string.change_img),
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = Bold
-                )
-                ImageCard(
-                    user.photo,
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .height(160.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .fillMaxWidth()
-                        .drawWithContent {
-                            drawContent()
-                            drawRect(
-                                color = Color.Black.copy(alpha = 0.5f)
+                    OutlinedTextField(
+                        value = address,
+                        onValueChange = { newText -> address = newText },
+                        label = { Text(stringResource(R.string.address_sett)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            Icon(
+                                Icons.Filled.LocationOn,
+                                contentDescription = stringResource(R.string.localized_sett),
+                                Modifier
+                                    .clickable(onClick = {
+                                        showDialog.value = true
+                                        focusManager.clearFocus()
+                                        startLocationUpdates()
+                                        changedThing.value = "position"
+                                    })
                             )
                         }
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp), horizontalArrangement = Arrangement.Center
-                ) {
-                    EatItButton(
+                    )
+                    Text(
+                        text = stringResource(R.string.change_img),
+                        fontSize = 20.sp,
                         modifier = Modifier
-                            .width(150.dp)
-                            .padding(2.dp),
-                        text = stringResource(R.string.camera),
-                        function = {
-                            val permissionCheckResult =
-                                ContextCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.CAMERA
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                        textAlign = TextAlign.Center,
+                        fontWeight = Bold
+                    )
+                    ImageCard(
+                        user.photo,
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .height(160.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .fillMaxWidth()
+                            .drawWithContent {
+                                drawContent()
+                                drawRect(
+                                    color = Color.Black.copy(alpha = 0.5f)
                                 )
-                            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                                cameraLauncher.launch(uri)
-                            } else {
-                                permissionLauncher.launch(Manifest.permission.CAMERA)
                             }
-                        },
-                        icon = Icons.Filled.PhotoCamera
                     )
-                    if (capturedImageUri.path?.isNotEmpty() == true) {
-                        LaunchedEffect(Unit) {
-                            user.photo =
-                                usersViewModel.uploadPhoto(
-                                    saveImage(
-                                        context.applicationContext.contentResolver,
-                                        capturedImageUri
-                                    )!!
-                                ).toString()
-                            usersViewModel.setUser(user)
-                        }
-                    }
-                    EatItButton(
+                    Row(
                         modifier = Modifier
-                            .width(150.dp)
-                            .padding(2.dp),
-                        text = stringResource(R.string.gallery),
-                        function = {
-                            photoPicker.launch(
-                                PhotoPicker.Args(
-                                    PhotoPicker.Type.IMAGES_ONLY,
-                                    1
+                            .fillMaxWidth()
+                            .padding(10.dp), horizontalArrangement = Arrangement.Center
+                    ) {
+                        EatItButton(
+                            modifier = Modifier
+                                .width(150.dp)
+                                .padding(2.dp),
+                            text = stringResource(R.string.camera),
+                            function = {
+                                val permissionCheckResult =
+                                    ContextCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.CAMERA
+                                    )
+                                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                                    cameraLauncher.launch(uri)
+                                } else {
+                                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                                }
+                            },
+                            icon = Icons.Filled.PhotoCamera
+                        )
+                        if (capturedImageUri.path?.isNotEmpty() == true) {
+                            LaunchedEffect(Unit) {
+                                photo.value =
+                                    usersViewModel.uploadPhoto(
+                                        saveImage(
+                                            context.applicationContext.contentResolver,
+                                            capturedImageUri
+                                        )!!
+                                    ).toString()
+                            }
+                        }
+                        EatItButton(
+                            modifier = Modifier
+                                .width(150.dp)
+                                .padding(2.dp),
+                            text = stringResource(R.string.gallery),
+                            function = {
+                                photoPicker.launch(
+                                    PhotoPicker.Args(
+                                        PhotoPicker.Type.IMAGES_ONLY,
+                                        1
+                                    )
                                 )
-                            )
-                        },
-                        icon = Icons.Filled.Photo
-                    )
-                    if (selectedFiles.isNotEmpty()) {
-                        LaunchedEffect(Unit) {
-                            user.photo =
-                                usersViewModel.uploadPhoto(
-                                    saveImage(
-                                        context.applicationContext.contentResolver,
-                                        selectedFiles[0].uri
-                                    )!!
-                                ).toString()
-                            usersViewModel.setUser(user)
+                            },
+                            icon = Icons.Filled.Photo
+                        )
+                        if (selectedFiles.isNotEmpty()) {
+                            LaunchedEffect(Unit) {
+                                photo.value =
+                                    usersViewModel.uploadPhoto(
+                                        saveImage(
+                                            context.applicationContext.contentResolver,
+                                            selectedFiles[0].uri
+                                        )!!
+                                    ).toString()
+                            }
                         }
                     }
+                    EatItButton(text = "save", function = {
+                        user.name = name.value
+                        user.photo = photo.value
+                        usersViewModel.setUser(user)
+                    })
                 }
-                Spacer(modifier = Modifier.size(10.dp))
+
             }
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = stringResource(R.string.change_password), function = {
