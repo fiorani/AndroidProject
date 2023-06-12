@@ -110,13 +110,13 @@ fun RestaurantCard(
                         if (isFavorite) {
                             EatItIconButton(icon = Icons.Filled.Favorite, function = {
                                 user.favouriteRestaurants.remove(restaurant.id)
-                                usersViewModel.setRestaurants(user.favouriteRestaurants)
+                                usersViewModel.setUser(user)
                                 setFavorite(false)
                             })
                         } else {
                             EatItIconButton(icon = Icons.Default.FavoriteBorder, function = {
                                 user.favouriteRestaurants.add(restaurant.id!!)
-                                usersViewModel.setRestaurants(user.favouriteRestaurants)
+                                usersViewModel.setUser(user)
                                 setFavorite(true)
                             })
                         }
@@ -445,7 +445,7 @@ fun OrderProfileCard(
                             text = statusText.value,
                             function = {
                                 order.changeState()
-                                cartViewModel.updateOrder(order)
+                                cartViewModel.setOrder(order)
                                 statusText.value = order.status
                                 if (order.isOrderDelivered()) {
                                     buttonClickable = false

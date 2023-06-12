@@ -150,7 +150,8 @@ fun SettingsScreen(
                             .clickable(onClick = {
                                 showDialog.value = true
                                 focusManager.clearFocus()
-                                usersViewModel.setName(name.value)
+                                user.name = name.value
+                                usersViewModel.setUser(user)
                                 changedThing.value = "username"
                             })
                     )
@@ -228,14 +229,14 @@ fun SettingsScreen(
                     )
                     if (capturedImageUri.path?.isNotEmpty() == true) {
                         LaunchedEffect(Unit) {
-                            usersViewModel.setPhoto(
+                            user.photo =
                                 usersViewModel.uploadPhoto(
                                     saveImage(
                                         context.applicationContext.contentResolver,
                                         capturedImageUri
                                     )!!
                                 ).toString()
-                            )
+                            usersViewModel.setUser(user)
                         }
                     }
                     EatItButton(
@@ -255,14 +256,14 @@ fun SettingsScreen(
                     )
                     if (selectedFiles.isNotEmpty()) {
                         LaunchedEffect(Unit) {
-                            usersViewModel.setPhoto(
+                            user.photo =
                                 usersViewModel.uploadPhoto(
                                     saveImage(
                                         context.applicationContext.contentResolver,
                                         selectedFiles[0].uri
                                     )!!
                                 ).toString()
-                            )
+                            usersViewModel.setUser(user)
                         }
                     }
                 }

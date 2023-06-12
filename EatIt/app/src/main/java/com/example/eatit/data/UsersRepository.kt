@@ -19,35 +19,14 @@ class UsersRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("users").add(user)
     }
 
-    fun setPosition(position: String) {
+    fun setUser(user:User){
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("position", position)
-            }
-    }
-
-    fun setName(name: String) {
-        FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
-            .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("name", name)
-            }
-    }
-
-    fun setRestaurants(restaurants: ArrayList<String>) {
-        FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
-            .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("favouriteRestaurants", restaurants)
-            }
-    }
-
-    fun setPhoto(photo: String) {
-        FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
-            .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("photo", photo)
+                it.documents.firstOrNull()?.reference?.update("name", user.name,
+                    "position", user.position,
+                    "favouriteRestaurants", user.favouriteRestaurants,
+                    "photo", user.photo)
             }
     }
 
@@ -60,7 +39,7 @@ class UsersRepository(eatItApp: EatItApp) {
         }
     }
 
-    suspend fun changePsw() {
+    suspend fun setPassword() {
         FirebaseAuth.getInstance().sendPasswordResetEmail(
             withContext(Dispatchers.IO) {
                 try {

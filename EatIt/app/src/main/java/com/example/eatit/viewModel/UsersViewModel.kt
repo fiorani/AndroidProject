@@ -38,28 +38,18 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     }
 
     fun setPosition(position: String) {
-        _user.position = position
         _position.value = position
-        repository.setPosition(position)
-    }
-
-    fun setName(name: String) {
-        _user.name = name
-        repository.setName(name)
-    }
-
-    fun setPhoto(photo: String) {
-        _user.photo = photo
-        repository.setPhoto(photo)
+        _user.position = position
+        setUser(_user)
     }
 
     fun setUser(user: User) {
-        _user = user
+        repository.setUser(user)
     }
 
     fun changePsw() {
         viewModelScope.launch {
-            repository.changePsw()
+            repository.setPassword()
         }
     }
 
@@ -69,11 +59,6 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
 
     suspend fun uploadPhoto(uri: Uri): Uri {
         return repository.uploadPhoto(uri)
-    }
-
-    fun setRestaurants(restaurants: ArrayList<String>) {
-        _user.favouriteRestaurants = restaurants
-        repository.setRestaurants(restaurants)
     }
 
     fun deleteUser() {
