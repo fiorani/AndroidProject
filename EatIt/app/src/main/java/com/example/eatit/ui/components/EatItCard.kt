@@ -24,6 +24,7 @@ import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -252,7 +253,7 @@ fun ShoppingCard(product: Product, order: Order) {
                 )
                 Text(
                     modifier = Modifier.padding(17.dp, 7.dp),
-                    text = product.price.toString() + stringResource(R.string.euro_x) + order.listQuantity[
+                    text = DecimalFormat("0.00").format(product.price) + stringResource(R.string.euro_x) + order.listQuantity[
                             order.listProductId.indexOf(product.id)
                     ].toString(),
                     fontSize = 17.sp

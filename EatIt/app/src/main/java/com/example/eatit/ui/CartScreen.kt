@@ -20,6 +20,7 @@ import com.example.eatit.model.Product
 import com.example.eatit.ui.components.BackgroundImage
 import com.example.eatit.ui.components.SectionShoppingCard
 import com.example.eatit.viewModel.CartViewModel
+import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +68,7 @@ fun CartScreen(cartViewModel: CartViewModel, onNextButtonClicked: () -> Unit) {
                     )
                     Text(
                         modifier = Modifier.padding(20.dp, 0.dp),
-                        text = order.totalPrice.toString() + stringResource(R.string.Euro),
+                        text = DecimalFormat("0.00").format(order.totalPrice) + stringResource(R.string.Euro),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
