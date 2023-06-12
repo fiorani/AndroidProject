@@ -32,9 +32,9 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
     }
 
     suspend fun getUser(): User {
-        val user = repository.getUser()
-        _position = mutableStateOf(user.position)
-        return user
+        _user = repository.getUser()
+        _position = mutableStateOf(_user.position)
+        return _user
     }
 
     fun setPosition(position: String) {
@@ -45,6 +45,7 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
 
     fun setUser(user: User) {
         repository.setUser(user)
+        _user = user
     }
 
     fun changePsw() {

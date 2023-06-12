@@ -23,7 +23,8 @@ class UsersRepository(eatItApp: EatItApp) {
         FirebaseFirestore.getInstance().collection("users")
             .whereEqualTo("id", Firebase.auth.currentUser?.uid.toString()).get()
             .addOnSuccessListener {
-                it.documents.firstOrNull()?.reference?.update("name", user.name,
+                it.documents.firstOrNull()?.reference?.update(
+                    "name", user.name,
                     "position", user.position,
                     "favouriteRestaurants", user.favouriteRestaurants,
                     "photo", user.photo)
