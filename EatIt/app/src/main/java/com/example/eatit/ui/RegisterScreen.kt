@@ -157,8 +157,7 @@ fun RegisterScreen(
                                     TextButton(
                                         onClick = {
                                             openDialog.value = false
-                                            birth =
-                                                TextFieldValue(getDate(datePickerState.selectedDateMillis)).toString()
+                                            birth = TextFieldValue(getDate(datePickerState.selectedDateMillis)).text
                                         },
                                         enabled = confirmEnabled.value
                                     ) {
