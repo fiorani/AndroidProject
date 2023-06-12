@@ -48,9 +48,9 @@ class UsersViewModel @Inject constructor(private val repository: UsersRepository
         _user = user
     }
 
-    fun changePsw() {
+    fun changePassword() {
         viewModelScope.launch {
-            repository.setPassword()
+            repository.changePassword()
         }
     }
 

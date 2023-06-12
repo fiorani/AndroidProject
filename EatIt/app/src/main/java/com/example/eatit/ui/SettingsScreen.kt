@@ -272,7 +272,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.size(10.dp))
             EatItButton(text = stringResource(R.string.change_password), function = {
                 showChangedPsw.value = true
-                usersViewModel.changePsw()
+                usersViewModel.changePassword()
             })
             if (showChangedPsw.value) {
                 AlertDialog(

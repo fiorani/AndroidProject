@@ -40,7 +40,7 @@ class UsersRepository(eatItApp: EatItApp) {
         }
     }
 
-    suspend fun setPassword() {
+    suspend fun changePassword() {
         FirebaseAuth.getInstance().sendPasswordResetEmail(
             withContext(Dispatchers.IO) {
                 try {
