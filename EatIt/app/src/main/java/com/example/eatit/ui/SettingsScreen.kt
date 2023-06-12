@@ -74,7 +74,7 @@ fun SettingsScreen(
 ) {
     val user: User = usersViewModel.user
     val name = remember { mutableStateOf(user.name) }
-    val photo = remember { mutableStateOf(user.name) }
+    val photo = remember { mutableStateOf(user.photo) }
     var address by rememberSaveable { usersViewModel.position }
     val showDialog = remember { mutableStateOf(false) }
     val showDialog2 = remember { mutableStateOf(false) }
@@ -176,7 +176,7 @@ fun SettingsScreen(
                         fontWeight = Bold
                     )
                     ImageCard(
-                        user.photo,
+                        photo.value,
                         modifier = Modifier
                             .padding(20.dp)
                             .height(160.dp)
@@ -252,8 +252,9 @@ fun SettingsScreen(
                         }
                     }
                     EatItButton(text = "save", function = {
-                        user.name = name.value
-                        user.photo = photo.value
+                        if(name.value!="")user.name = name.value
+                        if(name.value!="")user.photo = photo.value
+                        if(name.value!="")user.position = address
                         usersViewModel.setUser(user)
                     })
                 }
