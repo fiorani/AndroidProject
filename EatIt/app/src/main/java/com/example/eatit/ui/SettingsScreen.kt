@@ -362,7 +362,7 @@ fun ShowAlertDialog(showDialog: MutableState<Boolean>, changedThing: String) {
             showDialog.value = false
         },
         title = { Text(stringResource(R.string.modify_user)) },
-        text = { Text(stringResource(R.string.your) + changedThing + stringResource(R.string.your2)) },
+        text = { Text(stringResource(R.string.your) + " " + changedThing + "  " + stringResource(R.string.your2)) },
         confirmButton = {
             TextButton(
                 onClick = {

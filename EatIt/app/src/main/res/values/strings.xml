@@ -216,8 +216,8 @@
     <string name="settings_app">Settings App:</string>
     <string name="dark_theme2">Dark Theme:</string>
     <string name="modify_user">Modify user</string>
-    <string name="your">Your</string>
-    <string name="your2">\" has been changed.\"</string>
+    <string name="your">Your </string>
+    <string name="your2"> has been changed.</string>
     <string name="ok4">OK</string>
     <string name="Euro2">€</string>
     <string name="delete_product">Are you sure you want to delete this product?</string>
