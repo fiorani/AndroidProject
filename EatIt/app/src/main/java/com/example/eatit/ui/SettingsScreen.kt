@@ -98,7 +98,6 @@ fun SettingsScreen(
             if (isSuccess) {
                 capturedImageUri = uri
                 showDialog.value = true
-                changedThing.value = "profile photo"
             }
         }
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -161,7 +160,6 @@ fun SettingsScreen(
                                         showDialog.value = true
                                         focusManager.clearFocus()
                                         startLocationUpdates()
-                                        changedThing.value = "position"
                                     })
                             )
                         }
@@ -251,12 +249,14 @@ fun SettingsScreen(
                             }
                         }
                     }
-                    EatItButton(text = "save", function = {
+                    EatItButton(text = stringResource(R.string.save), function = {
                         if(name.value!="")user.name = name.value
                         if(name.value!="")user.photo = photo.value
                         if(name.value!="")user.position = address
                         usersViewModel.setUser(user)
-                    })
+                        showDialog.value = true
+                    },
+                    icon = Icons.Default.Save)
                 }
 
             }
@@ -333,7 +333,7 @@ fun SettingsScreen(
             }
 
             if (showDialog.value) {
-                ShowAlertDialog(showDialog = showDialog, changedThing = changedThing.value)
+                ShowAlertDialog(showDialog = showDialog)
             }
             if (showDialog2.value) {
                 ShowImportantAlertDialog(usersViewModel, showDialog = showDialog2, changedThing = changedThing.value, onNextButtonClicked)
@@ -347,13 +347,13 @@ fun SettingsScreen(
 }
 
 @Composable
-fun ShowAlertDialog(showDialog: MutableState<Boolean>, changedThing: String) {
+fun ShowAlertDialog(showDialog: MutableState<Boolean>) {
     AlertDialog(
         onDismissRequest = {
             showDialog.value = false
         },
         title = { Text(stringResource(R.string.modify_user)) },
-        text = { Text(stringResource(R.string.your) + " " + changedThing + "  " + stringResource(R.string.your2)) },
+        text = { Text(stringResource(R.string.modify_user_text)) },
         confirmButton = {
             TextButton(
                 onClick = {

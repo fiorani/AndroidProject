@@ -251,4 +251,5 @@
     <string name="important_edit">Warning!</string>
     <string name="important_edit_phrase">"You're trying to "</string>
     <string name="important_edit_phrase1">. Do you want to continue?</string>
+    <string name="modify_user_text">Your changes have been saved.</string>
 </resources>
