@@ -109,65 +109,59 @@ fun AddRestaurantScreen(
             )
 
             Spacer(modifier = Modifier.size(20.dp))
-
             val context = LocalContext.current
-            val file = context.createImageFile()
-            val uri = FileProvider.getUriForFile(
-                Objects.requireNonNull(context),
-                context.packageName + ".provider", file
+            val fileSystem = AndroidFileSystem(LocalContext.current)
+            var selectedFiles by remember { mutableStateOf<List<FileDetails>>(emptyList()) }
+            val photoPicker = rememberLauncherForActivityResult(PhotoPicker()) { uris ->
+                selectedFiles = uris.map { uri ->
+                    val path = uri.toOkioPath()
+                    val metadata = fileSystem.metadataOrNull(path) ?: return@map null
+                    FileDetails(uri, path, metadata)
+                }.filterNotNull()
+            }
+            ImageCard(
+                photo.value,
+                modifier = Modifier
+                    .padding(20.dp)
+                    .height(160.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .fillMaxWidth()
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(
+                            color = Color.Black.copy(alpha = 0.5f)
+                        )
+                    }
             )
-
-            var capturedImageUri by remember {
-                mutableStateOf<Uri>(Uri.EMPTY)
-            }
-
-            val cameraLauncher =
-                rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-                    if (isSuccess) {
-                        capturedImageUri = uri
-                    }
-                }
-
-            val permissionLauncher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp), horizontalArrangement = Arrangement.Center
             ) {
-                if (it) {
-                    cameraLauncher.launch(uri)
-                } else {
-                    Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            FilledTonalButton(
-                onClick = {
-                    val permissionCheckResult =
-                        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                        cameraLauncher.launch(uri)
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-            ) {
-                Icon(
-                    Icons.Filled.PhotoCamera,
-                    contentDescription = "Camera icon",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                EatItButton(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .padding(2.dp),
+                    text = stringResource(R.string.gallery),
+                    function = {
+                        photoPicker.launch(
+                            PhotoPicker.Args(
+                                PhotoPicker.Type.IMAGES_ONLY,
+                                1
+                            )
+                        )
+                    },
+                    icon = Icons.Filled.Photo
                 )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(stringResource(R.string.take_picture))
-            }
-
-
-            if (capturedImageUri.path?.isNotEmpty() == true) {
-                LaunchedEffect(Unit) {
-                    photo.value = restaurantsViewModel.uploadPhoto(
-                        saveImage(
-                            context.applicationContext.contentResolver,
-                            capturedImageUri
-                        )!!
-                    ).toString()
+                if (selectedFiles.isNotEmpty()) {
+                    LaunchedEffect(Unit) {
+                        photo.value = restaurantsViewModel.uploadPhoto(
+                            saveImage(
+                                context.applicationContext.contentResolver,
+                                selectedFiles[0].uri
+                            )!!
+                        ).toString()
+                    }
                 }
             }
 
@@ -356,7 +350,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
     val restaurant = restaurantsViewModel.restaurantSelected
     var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
     var phone by rememberSaveable { mutableStateOf(restaurant.phone) }
-    val photo = remember { mutableStateOf("") }
+    val photo = remember { mutableStateOf(restaurant.photo) }
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier
