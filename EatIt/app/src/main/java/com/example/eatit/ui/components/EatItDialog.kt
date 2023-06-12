@@ -1,16 +1,13 @@
 package com.example.eatit.ui.components
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -36,22 +33,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.example.eatit.R
 import com.example.eatit.data.AndroidFileSystem
 import com.example.eatit.data.PhotoPicker
 import com.example.eatit.model.FileDetails
 import com.example.eatit.model.Product
 import com.example.eatit.model.Restaurant
-import com.example.eatit.utilities.createImageFile
 import com.example.eatit.utilities.saveImage
 import com.example.eatit.utilities.toOkioPath
 import com.example.eatit.viewModel.RestaurantsViewModel
 import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import java.util.Objects
 @androidx.annotation.OptIn(androidx.core.os.BuildCompat.PrereleaseSdkCheck::class)
 @Composable
 fun AddRestaurantScreen(
@@ -65,7 +58,8 @@ fun AddRestaurantScreen(
     val photo = remember { mutableStateOf("") }
     val numRatings = 0
     val avgRating = 0.0f
-    Card {
+    Card (modifier = Modifier
+        .verticalScroll(rememberScrollState()),) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -182,6 +176,7 @@ fun AddRestaurantScreen(
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
             ) {
                 Text(text = stringResource(id = R.string.save))
+                Icon(Icons.Default.Save, stringResource(R.string.save))
             }
             Spacer(Modifier.size(25.dp))
         }

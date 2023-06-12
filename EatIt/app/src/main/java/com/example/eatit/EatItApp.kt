@@ -268,6 +268,9 @@ private fun NavigationGraph(
                 usersViewModel = usersViewModel,
                 onNextButtonClicked = {
                     navController.navigate(AppScreen.Cart.name)
+                },
+                onDeleteButtonClicked = {
+                    navController.navigate(AppScreen.Home.name)
                 }
             )
         }
