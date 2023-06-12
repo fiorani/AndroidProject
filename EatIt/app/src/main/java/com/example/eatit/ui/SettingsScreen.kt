@@ -164,6 +164,7 @@ fun SettingsScreen(
                             )
                         }
                     )
+                    Spacer(modifier = Modifier.size(20.dp))
                     Text(
                         text = stringResource(R.string.change_img),
                         fontSize = 20.sp,
@@ -176,7 +177,7 @@ fun SettingsScreen(
                     ImageCard(
                         photo.value,
                         modifier = Modifier
-                            .padding(20.dp)
+                            .padding(20.dp, 0.dp, 20.dp, 20.dp)
                             .height(160.dp)
                             .clip(RoundedCornerShape(16.dp))
                             .fillMaxWidth()

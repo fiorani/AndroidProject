@@ -47,6 +47,7 @@ fun DetailsRestaurantScreen(
     cartViewModel: CartViewModel,
     usersViewModel: UsersViewModel,
     onNextButtonClicked: () -> Unit,
+    onDeleteButtonClicked: () -> Unit
 ) {
     restaurantsViewModel.resetProduct()
 
@@ -137,7 +138,7 @@ fun DetailsRestaurantScreen(
                                     modifier = Modifier.size(25.dp),
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = stringResource(R.string.editRestaurant),
-                                    tint = MaterialTheme.colorScheme.background
+                                    tint = Color.White
                                 )
                             }
 
@@ -151,12 +152,14 @@ fun DetailsRestaurantScreen(
                             //Delete
                             val isDeleting = remember { mutableStateOf(false) }
 
-                            IconButton(onClick = { isDeleting.value = true }) {
+                            IconButton(onClick = {
+                                isDeleting.value = true
+                            }) {
                                 Icon(
                                     modifier = Modifier.size(25.dp),
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = stringResource(R.string.delete_restaurant),
-                                    tint = MaterialTheme.colorScheme.background
+                                    tint = Color.White
                                 )
                             }
 
@@ -167,7 +170,7 @@ fun DetailsRestaurantScreen(
                                     cancellingQuery = {
                                         restaurantsViewModel.deleteRestaurant()
                                         isDeleting.value = false
-
+                                        onDeleteButtonClicked()
                                     }
                                 )
                             }
