@@ -52,7 +52,7 @@ import com.example.eatit.viewModel.UsersViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.Objects
-
+@androidx.annotation.OptIn(androidx.core.os.BuildCompat.PrereleaseSdkCheck::class)
 @Composable
 fun AddRestaurantScreen(
     onNextButtonClicked: () -> Unit,
