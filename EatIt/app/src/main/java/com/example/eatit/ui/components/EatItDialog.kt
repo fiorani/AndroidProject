@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,6 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -349,7 +353,10 @@ fun AddProductScreen(
 @androidx.annotation.OptIn(androidx.core.os.BuildCompat.PrereleaseSdkCheck::class)
 @Composable
 fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
-    var restaurant = restaurantsViewModel.restaurantSelected
+    val restaurant = restaurantsViewModel.restaurantSelected
+    var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
+    var phone by rememberSaveable { mutableStateOf("") }
+    var photo by rememberSaveable { mutableStateOf("") }
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier
@@ -372,13 +379,11 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                     .padding(20.dp, 5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
                 OutlinedTextField(
                     value = txtName,
                     onValueChange = { txtName = it },
                     label = { Text(stringResource(R.string.rest_name)) }
                 )
-                var phone by rememberSaveable { mutableStateOf("") }
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
@@ -391,6 +396,7 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                 )
 
                 //Photo
+                val context = LocalContext.current
                 val fileSystem = AndroidFileSystem(LocalContext.current)
                 var selectedFiles by remember { mutableStateOf<List<FileDetails>>(emptyList()) }
                 val photoPicker = rememberLauncherForActivityResult(PhotoPicker()) { uris ->
@@ -400,30 +406,50 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
                         FileDetails(uri, path, metadata)
                     }.filterNotNull()
                 }
-
-                ChangeImageButton(
+                ImageCard(
                     restaurant.photo,
-                    onClick = {
-                        photoPicker.launch(
-                            PhotoPicker.Args(
-                                PhotoPicker.Type.IMAGES_ONLY,
-                                1
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .height(160.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .fillMaxWidth()
+                        .drawWithContent {
+                            drawContent()
+                            drawRect(
+                                color = Color.Black.copy(alpha = 0.5f)
                             )
-                        )
-                    }
+                        }
                 )
-                //TODO: Salvare immagine, aiuto
-                if (selectedFiles.isNotEmpty()) {
-                    /*LaunchedEffect(Unit) {
-                        restaurantsViewModel.selectRestaurant.setPhoto(
-                            usersViewModel.uploadPhoto(
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp), horizontalArrangement = Arrangement.Center
+                ) {
+                    EatItButton(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .padding(2.dp),
+                        text = stringResource(R.string.gallery),
+                        function = {
+                            photoPicker.launch(
+                                PhotoPicker.Args(
+                                    PhotoPicker.Type.IMAGES_ONLY,
+                                    1
+                                )
+                            )
+                        },
+                        icon = Icons.Filled.Photo
+                    )
+                    if (selectedFiles.isNotEmpty()) {
+                        LaunchedEffect(Unit) {
+                            photo = restaurantsViewModel.uploadPhoto(
                                 saveImage(
                                     context.applicationContext.contentResolver,
                                     selectedFiles[0].uri
                                 )!!
                             ).toString()
-                        )
-                    }*/
+                        }
+                    }
                 }
             }
 
@@ -436,7 +462,10 @@ fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: Res
             ) {
                 EatItButton(
                     function = {
-                        //TODO: Aggiorna info ristorante
+                        if (txtName != "") restaurant.name = txtName
+                        if (phone != "") restaurant.phone = phone
+                        if (photo != "") restaurant.photo = photo
+                        restaurantsViewModel.setRestaurant()
                         onDismissRequest()
                     },
                     text = stringResource(R.string.save3),

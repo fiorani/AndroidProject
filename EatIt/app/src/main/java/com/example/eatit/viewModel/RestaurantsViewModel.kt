@@ -80,4 +80,8 @@ class RestaurantsViewModel @Inject constructor(
         repository.deleteRestaurant(_restaurantSelected.id!!)
     }
 
+    fun setRestaurant() {
+        repository.setRestaurant(_restaurantSelected)
+    }
+
 }

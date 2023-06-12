@@ -108,6 +108,14 @@ class RestaurantsRepository(eatItApp: EatItApp) {
 
     }
 
+    fun setRestaurant(restaurant: Restaurant) {
+        FirebaseFirestore.getInstance().collection("restaurants").document(restaurant.id!!).update(
+                "name", restaurant.name, "phone", restaurant.phone,
+                "photo", restaurant.photo
+            )
+
+    }
+
     suspend fun uploadPhoto(uri: Uri): Uri = withContext(Dispatchers.IO) {
         try {
             Firebase.storage.reference.child("images/${uri.lastPathSegment}").putFile(uri)
