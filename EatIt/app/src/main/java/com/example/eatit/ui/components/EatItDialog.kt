@@ -355,7 +355,7 @@ fun AddProductScreen(
 fun EditRestaurantDialog(onDismissRequest: () -> Unit, restaurantsViewModel: RestaurantsViewModel) {
     val restaurant = restaurantsViewModel.restaurantSelected
     var txtName by rememberSaveable { mutableStateOf(restaurant.name) }
-    var phone by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf(restaurant.phone) }
     val photo = remember { mutableStateOf("") }
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
